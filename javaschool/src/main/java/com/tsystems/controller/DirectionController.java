@@ -1,0 +1,38 @@
+package com.tsystems.controller;
+
+import com.tsystems.service.api.DirectionService;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+
+@Controller
+@RequestMapping("/admin")
+public class DirectionController {
+    @Autowired
+    DirectionService directionService;
+
+    private static final Logger log = Logger.getLogger(DirectionController.class);
+
+    @GetMapping("/directions/map")
+    public String directionsMapPage() {
+        return "/admin/rails_map";
+    }
+
+    @PostMapping("/direction/add")
+    public @ResponseBody void addDirectionBetweenStations(
+            @RequestParam("stationFromName") String stationFromName,
+            @RequestParam("stationToName") String stationToName) {
+        log.info("Add new direction between: " + stationFromName + " and " + stationToName + ". [" + stationFromName + " -> " + stationToName + "]");
+        directionService.addDirectionBetweenStations(stationFromName, stationToName);
+    }
+
+    @PostMapping("/direction/remove")
+    public @ResponseBody void removeDirectionBetweenStations(
+            @RequestParam("stationFromName") String stationFromName,
+            @RequestParam("stationToName") String stationToName) {
+        log.info("Remove direction between: " + stationFromName + " and " + stationToName + ". [" + stationFromName + " -> " + stationToName + "]");
+        directionService.removeDirectionBetweenStations(stationFromName, stationToName);
+    }
+
+}

@@ -1,0 +1,105 @@
+#adminNav {
+    border-bottom: 1px solid rgba(33, 37, 41, 0.1);
+    background-color: rgba(0,0,0,0.7);
+    font-family: 'Lato', sans-serif;
+    -webkit-transition: all 0.2s;
+    -moz-transition: all 0.2s;
+    transition: all 0.2s;
+}
+
+nav {
+    position: static;
+}
+
+#adminNav .navbar-brand {
+    font-weight: 700;
+    color: #FF5A5F;
+    font-family: 'Sacramento', cursive;
+}
+
+#adminNav .navbar-brand:focus, #adminNav .navbar-brand:hover {
+    color: #FF5A5F;
+}
+
+#adminNav .navbar-nav > li.nav-item > a.nav-link,
+#adminNav .navbar-nav > li.nav-item > a.nav-link:focus {
+    font-size: .9rem;
+    width: 90px;
+    font-weight: 700;
+    color: #fff;
+}
+
+#adminNav .navbar-nav > li.nav-item > a.nav-link:hover,
+#adminNav .navbar-nav > li.nav-item > a.nav-link:focus:hover {
+    color: #FF5A5F;
+}
+
+#adminNav .navbar-nav > li.nav-item > a.nav-link.active,
+#adminNav .navbar-nav > li.nav-item > a.nav-link:focus.active {
+    color: #FF5A5F !important;
+    background-color: transparent;
+}
+
+#adminNav .navbar-nav > li.nav-item > a.nav-link.active:hover,
+#adminNav .navbar-nav > li.nav-item > a.nav-link:focus.active:hover {
+    background-color: transparent;
+}
+
+#adminNav .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,255,255, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+}
+
+#adminNav .navbar-toggler {
+    border-color: #FF5A5F;
+}
+
+#adminNav .navbar-toggler:focus {
+    outline-color: #FF5A5F;
+}
+
+@media (min-width: 992px) {
+
+    #adminNav {
+        border-color: #C9C9C9;
+        background-color: #fff;
+    }
+
+    #adminNav .navbar-brand {
+        color: #FF5A5F;
+        font-family: 'Sacramento', cursive;
+        text-transform: none;
+    }
+
+    #adminNav .navbar-nav > li.nav-item > a.nav-link {
+        padding: 0rem 1.5rem;
+        width: 140px;
+    }
+
+    #adminNav .navbar-nav > li.nav-item > a.nav-link,
+    #adminNav .navbar-nav > li.nav-item > a.nav-link:focus {
+        color: #414141;
+    }
+
+    #adminNav.navbar-shrink {
+        border-bottom: 1px solid rgba(33, 37, 41, 0.1);
+        background-color: #fff;
+    }
+
+    #adminNav.navbar-shrink .navbar-brand {
+        color: #FF5A5F;
+    }
+
+    #adminNav.navbar-shrink .navbar-brand:focus, #adminNav.navbar-shrink .navbar-brand:hover {
+        color: #FF5A5F;
+    }
+
+    #adminNav.navbar-shrink .navbar-nav > li.nav-item > a.nav-link,
+    #adminNav.navbar-shrink .navbar-nav > li.nav-item > a.nav-link:focus {
+        color: #212529;
+    }
+
+    #adminNav.navbar-shrink .navbar-nav > li.nav-item > a.nav-link:hover,
+    #adminNav.navbar-shrink .navbar-nav > li.nav-item > a.nav-link:focus:hover {
+        color: #FF5A5F;
+    }
+}

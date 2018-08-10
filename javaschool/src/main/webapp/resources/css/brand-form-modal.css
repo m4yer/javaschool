@@ -1,0 +1,77 @@
+/* The Modal (background) */
+.brand-form-modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.66); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.brand-form-modal-content {
+    background-color: #fefefe;
+    margin: 2% auto; /* 2% from the top and centered */
+    border: 1px solid #C9C9C9;
+    width: 90%; /* Could be more or less, depending on screen size */
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.3s;
+    animation-name: animatetop;
+    animation-duration: 0.3s;
+    font-family: 'Lato', sans-serif;
+    border-radius: 2px;
+}
+
+.brand-form-modal-header {
+    border-bottom: 1px solid #C9C9C9;
+    padding: 6px 0;
+    padding-bottom: 12px;
+}
+
+.brand-form-modal-header .caption {
+    border-bottom: 4px solid #FF5A5F;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: #414141;
+}
+
+/* Modal Body */
+.brand-form-modal-body {
+    padding: 15px;
+    padding-top: 0;
+}
+
+/* Add Animation */
+@-webkit-keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+}
+
+@keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+}
+
+/* The Close Button */
+.close {
+    color: #FF5A5F;
+    opacity: 1;
+    float: right;
+    font-size: 24px;
+    font-weight: bold;
+    padding-right: 12px;
+    padding-top: 2px;
+}
+
+.close:hover,
+.close:focus {
+    color: #414141;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Above - for SCHEDULE MODAL FORM */

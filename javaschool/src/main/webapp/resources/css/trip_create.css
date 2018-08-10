@@ -1,0 +1,163 @@
+.brand-panel {
+    width: 100%;
+    margin: 2% auto;
+    border-radius: 2px;
+    font-family: 'Lato', sans-serif;
+}
+
+.brand-panel input {
+    font-size: 14px;
+    padding: 10px;
+    font-weight: 700;
+}
+
+.brand-panel .header {
+    font-weight: 700;
+    border-bottom: 1px solid #C9C9C9;
+    padding: 12px;
+    text-transform: uppercase;
+}
+
+.brand-panel .header-caption {
+    border-bottom: 4px solid #FF5A5F;
+}
+
+.left-side {
+    display: inline-block;
+    width: 55%;
+    margin: 0 auto;
+    border: 1px solid #C9C9C9;
+    border-radius: 2px;
+}
+
+.left-side .left-content {
+    padding: 12px;
+}
+
+.left-side .left-content form {
+    margin: 0;
+}
+
+.left-side .input-group {
+    margin-bottom: 12px;
+}
+
+.trains-table {
+    margin: 0 auto;
+    width: 100%;
+    border: 1px solid #C9C9C9;
+    margin-bottom: 12px;
+}
+
+.trains-table thead {
+    text-align: center;
+    border-bottom: 1px solid #C9C9C9;
+}
+
+.trains-table thead th {
+    padding: 12px 0;
+}
+
+.trains-table thead tr th {
+    border-right: 1px solid #C9C9C9;
+}
+
+.trains-table thead tr th:last-child {
+    border: 0;
+}
+
+
+.trains-table tbody {
+    text-align: center;
+}
+
+.trains-table tbody tr td {
+    padding: 8px 0;
+    border-bottom: 1px solid #C9C9C9;
+    border-right: 1px solid #C9C9C9;
+}
+
+.trains-table tbody tr td:last-child {
+    border: 0;
+    border-bottom: 1px solid #C9C9C9;
+}
+
+.right-side {
+    float: right;
+    width: 35%;
+    overflow: hidden;
+    border: 1px solid #C9C9C9;
+    border-radius: 2px;
+}
+
+.right-side .right-content {
+    margin: 12px 0;
+}
+
+.right-side .input-group-text {
+    font-size: 14px; !important;
+    font-weight: 700;
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+}
+
+.datepicker-border-0 {
+    border-radius: 0;
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+    width: 120px;
+    background: url("../img/rsz_calendar-cropped-large.png") no-repeat scroll 94px 12px;
+    background-color: white;
+}
+
+.clockpicker-border-0 {
+    border-radius: 0;
+    width: 60px;
+}
+
+.clock-icon-border-0 {
+    color: #414141;
+    background: #FF5A5F;
+    border: 0;
+    border-bottom: 2px solid red;
+}
+
+.station-input {
+    min-width: 160px;
+}
+
+@media (max-width: 992px) {
+    .station-input {
+        min-width: 125px;
+    }
+    .right-side .input-group-text {
+        font-size: 12px; !important;
+    }
+    .trains-table {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 670px) {
+    .station-input {
+        min-width: 108px;
+    }
+    .right-side .input-group-text {
+        font-size: 10px; !important;
+    }
+    .trains-table {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 624px) {
+    .station-input {
+        min-width: 92px;
+    }
+    .right-side .input-group-text {
+        font-size: 8px; !important;
+    }
+    .trains-table {
+        font-size: 10px;
+    }
+}
