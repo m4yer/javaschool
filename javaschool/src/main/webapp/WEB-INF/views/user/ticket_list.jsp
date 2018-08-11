@@ -46,7 +46,7 @@
                         <span class="ticket-line ticket-right"><a class="brand-pink-button"
                                                                   href="/user/ticket/{{ ticket.id }}.pdf"
                                                                   target="_blank"><span class="bold"><i
-                                class="fa fa-download"></i> GET PDF</span></a></span>
+                                class="fa fa-download"></i> DETAILS</span></a></span>
                         <span class="ticket-line"><span class="bold">Carriage</span> \#{{ ticket.carriage_num }}</span>
                     </div>
                 </div>
