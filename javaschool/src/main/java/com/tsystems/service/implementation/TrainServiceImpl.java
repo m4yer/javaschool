@@ -1,6 +1,6 @@
 package com.tsystems.service.implementation;
 
-import com.tsystems.controller.converter.Converter;
+import com.tsystems.entity.converter.Converter;
 import com.tsystems.dao.api.TrainDAO;
 import com.tsystems.dto.TrainDTO;
 import com.tsystems.entity.Train;

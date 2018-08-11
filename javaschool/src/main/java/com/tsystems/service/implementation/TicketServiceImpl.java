@@ -1,6 +1,6 @@
 package com.tsystems.service.implementation;
 
-import com.tsystems.controller.converter.Converter;
+import com.tsystems.entity.converter.Converter;
 import com.tsystems.dao.api.*;
 import com.tsystems.dto.TicketDTO;
 import com.tsystems.entity.Route;

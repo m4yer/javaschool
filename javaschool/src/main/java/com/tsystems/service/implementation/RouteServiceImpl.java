@@ -1,7 +1,7 @@
 package com.tsystems.service.implementation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tsystems.controller.converter.Converter;
+import com.tsystems.entity.converter.Converter;
 import com.tsystems.dao.api.RouteDAO;
 import com.tsystems.dao.api.StationDAO;
 import com.tsystems.dto.RouteDTO;

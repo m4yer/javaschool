@@ -27,6 +27,23 @@
                 margin-top: -60px;
             }
         }
+        .button-wrapper button {
+            margin: 0 auto;
+        }
+        .input-warning {
+            float: right;
+            color: red;
+            font-weight: 700;
+            font-size: 12px;
+            margin-top: 3px;
+        }
+        .input-success {
+            float: right;
+            color: #0dff00;
+            font-weight: 700;
+            font-size: 12px;
+            margin-top: 3px;
+        }
     </style>
     <title>RW | Register</title>
 </head>
@@ -34,7 +51,7 @@
 
 <div id="loader"></div>
 
-<div id="pageContent">
+<div id="pageContent" ng-app="registerApp">
     <!-- Navigation -->
     <%@ include file="navigation.jsp" %>
 
@@ -53,29 +70,71 @@
                             </c:when>
                         </c:choose>
                         <div class="form-content text-left">
-                            <form:form action="/register" method="post" modelAttribute="user">
+                            <form:form action="/register" method="post" modelAttribute="user" name="registerForm">
+
+
+                                <div ngShow="registerForm.username.$dirty && !registerForm.username.$valid" ng-messages="registerForm.username.$error">
+                                    <div class="input-warning" ng-message="required">Field is required</div>
+                                    <div class="input-warning" ng-message="minlength">Too short</div>
+                                </div>
+                                <div ngShow="registerForm.username.$dirty && !registerForm.username.$valid" ng-messages="registerForm.username">
+                                    <div class="input-success" ng-message="$valid">&#10004;</div>
+                                </div>
                                 <label for="username">Username</label>
                                 <form:input path="username" type="text" placeholder="Username" id="username"
-                                            autocomplete="off" required="required"/>
+                                            autocomplete="false" ng-model="username" ng-minlength="4" required="required"/>
+
+                                <div ngShow="registerForm.email.$dirty && !registerForm.email.$valid" ng-messages="registerForm.email">
+                                    <div class="input-success" ng-message="$valid">&#10004;</div>
+                                </div>
+                                <div ngShow="registerForm.email.$dirty && !registerForm.email.$valid" ng-messages="registerForm.email.$error">
+                                    <div class="input-warning" ng-message="required">Field is required</div>
+                                    <div class="input-warning" ng-message="email">Invalid Email</div>
+                                </div>
                                 <label for="email">Email</label>
-                                <form:input path="email" type="text" placeholder="Email" id="email" autocomplete="off"
-                                            required="required"/>
+                                <form:input path="email" type="email" placeholder="Email" id="email" autocomplete="false"
+                                            required="required" ng-model="email"/>
+
+                                <div ngShow ng-show="registerForm.password.$dirty && !registerForm.password.$valid" ng-messages="registerForm.password">
+                                    <div class="input-success" ng-message="$valid">&#10004;</div>
+                                </div>
+                                <div ngShow="registerForm.password.$dirty && !registerForm.password.$valid" ng-messages="registerForm.password.$error">
+                                    <div class="input-warning" ng-message="required">Field is required</div>
+                                    <div class="input-warning" ng-message="minlength">At least 6 symbols</div>
+                                </div>
                                 <label for="password">Password</label>
-                                <form:input path="password" type="password" placeholder="Password" id="password"
-                                            autocomplete="off" required="required"/>
-                                <label for="re-password">Retype password</label>
-                                <input type="password" placeholder="Password again" id="re-password" autocomplete="off"
-                                       required/>
+                                <form:input path="password" type="password" placeholder="Password" id="password" name="password"
+                                            autocomplete="off" required="required" ng-model="password" ng-minlength="6"/>
+
+                                <div ngShow="registerForm.rePassword.$dirty && !registerForm.rePassword.$valid" ng-messages="registerForm.rePassword">
+                                    <div class="input-success" ng-message="$valid">&#10004;</div>
+                                </div>
+                                <div ngShow="registerForm.rePassword.$dirty && !registerForm.rePassword.$valid" ng-messages="registerForm.rePassword.$error">
+                                    <div class="input-warning" ng-message="required">Field is required</div>
+                                    <div class="input-warning" ng-message="pattern">Passwords don't match</div>
+                                </div>
+                                <label for="rePassword">Retype password</label>
+                                <input type="password" placeholder="Password again" id="rePassword" autocomplete="off"
+                                       required ng-model="rePassword" name="rePassword" ng-pattern="\b{{ password }}\b"/>
+
+                                <div ngShow="registerForm.rePassword.$dirty && !registerForm.rePassword.$valid" ng-messages="registerForm">
+                                    <div class="input-success" ng-message="$valid">&#10004;</div>
+                                </div>
+                                <div ngShow="registerForm.rePassword.$dirty && !registerForm.rePassword.$valid" ng-messages="registerForm.$error">
+                                    <div class="input-warning" ng-message="required">Fields are required</div>
+                                </div>
                                 <label for="lastname">Personal information</label>
                                 <div class="personal-information">
-                                    <form:input path="firstname" type="text" placeholder="Firstname" id="firstname"
-                                                autocomplete="off" required="required"/>
-                                    <form:input path="lastname" type="text" placeholder="Lastname" id="lastname"
-                                                autocomplete="off" required="required"/>
-                                    <form:input path="birthday" type="text" placeholder="Birthday" id="birthday"
-                                                autocomplete="off" required="required"/>
+                                    <form:input path="firstname" type="text" placeholder="Firstname" id="firstname" name="firstname"
+                                                autocomplete="off" required="required" ng-model="firstname"/>
+                                    <form:input path="lastname" type="text" placeholder="Lastname" id="lastname" name="lastname"
+                                                autocomplete="off" required="required" ng-model="lastname"/>
+                                    <form:input path="birthday" type="text" placeholder="Birthday" id="birthday" name="birthday"
+                                                autocomplete="off" required="required" ng-model="birthday" readonly="true"/>
                                 </div>
-                                <input type="submit" value="Sign Up" class="mx-auto"/>
+                                <div class="button-wrapper text-center">
+                                    <button disabled class="brand-pink-button" ng-disabled="!registerForm.$valid">Sign Up</button>
+                                </div>
                             </form:form>
                         </div>
                     </div>
@@ -89,10 +148,12 @@
 <script src="<c:url value="/resources/js/bootstrap-datepicker.min.js" />"></script>
 <script src="<c:url value="/resources/js/creative.js" />"></script>
 <script src="<c:url value="/resources/js/loading.js" />"></script>
+<script src="<c:url value="/resources/js/angular/angular.min.js" />"></script>
+<script src="<c:url value="/resources/js/angular/angular-messages.min.js" />"></script>
+<script src="<c:url value="/resources/js/angular/registerApp.js" />"></script>
 <script>
     $("#birthday").datepicker();
     $("nav").addClass("fixed-top");
-    pageLoaded();
 </script>
 </body>
 

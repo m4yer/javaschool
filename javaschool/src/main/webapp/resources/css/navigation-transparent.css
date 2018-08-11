@@ -108,3 +108,36 @@
         color: #FF5A5F;
     }
 }
+
+.brand-pink-button {
+    border: 0;
+    border-bottom: 2px solid red;
+    background: #FF5A5F;
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    color: white;
+    border-radius: 2px;
+    padding: 6px 12px;
+    -webkit-transition: all 0.2s;
+    -moz-transition: all 0.2s;
+    transition: all 0.2s;
+}
+
+.brand-pink-button:hover {
+    cursor: pointer;
+    color: black;
+}
+
+.brand-pink-button:focus {
+    outline-color: #FF5A5F;
+}
+
+.brand-pink-button:disabled {
+    color: #414141;
+    background: #DDDDDD;
+    border-color: #414141;
+}
+
+.brand-pink-button:disabled:hover {
+    cursor: not-allowed;
+}

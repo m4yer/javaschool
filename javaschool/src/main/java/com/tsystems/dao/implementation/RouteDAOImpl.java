@@ -1,6 +1,6 @@
 package com.tsystems.dao.implementation;
 
-import com.tsystems.controller.converter.Converter;
+import com.tsystems.entity.converter.Converter;
 import com.tsystems.dao.api.RouteDAO;
 import com.tsystems.entity.Route;
 import com.tsystems.entity.Station;

@@ -3,7 +3,7 @@ package com.tsystems.service.implementation;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 
-public class MailService {
+public class MailService extends Thread {
 
     private MailSender mailSender;
 
@@ -13,13 +13,20 @@ public class MailService {
 
     public void sendMail(String from, String to, String subject, String msg) {
 
-        SimpleMailMessage message = new SimpleMailMessage();
+        Thread sendMail = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SimpleMailMessage message = new SimpleMailMessage();
 
-        message.setFrom(from);
-        message.setTo(to);
-        message.setSubject(subject);
-        message.setText(msg);
-        mailSender.send(message);
+                message.setFrom(from);
+                message.setTo(to);
+                message.setSubject(subject);
+                message.setText(msg);
+                mailSender.send(message);
+            }
+        });
+        sendMail.start();
+
     }
 
 }

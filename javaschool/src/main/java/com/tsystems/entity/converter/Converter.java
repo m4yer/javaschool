@@ -1,4 +1,4 @@
-package com.tsystems.controller.converter;
+package com.tsystems.entity.converter;
 
 import com.tsystems.dto.*;
 import com.tsystems.entity.*;

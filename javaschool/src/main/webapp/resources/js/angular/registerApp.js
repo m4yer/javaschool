@@ -1,0 +1,2 @@
+var app = angular.module("registerApp", ['ngMessages']);
+app.directive('ngShow', function() { return function(scope, elem, attrs) { var doShow = scope.$eval(attrs.ngShow); elem[doShow ? 'removeClass' : 'addClass']('ng-hide'); pageLoaded() }; })

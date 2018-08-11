@@ -19,12 +19,10 @@
     <!-- DB configuration -->
     <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-        <!-- javaschool = name of MySQL Database -->
         <property name="url" value="jdbc:mysql://localhost:3306/javaschool"/>
         <property name="username" value="root"/>
         <property name="password" value="mysqlpass"/>
     </bean>
-
 
     <bean id="viewResolver1" class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
         <property name="order" value="1"/>
@@ -37,7 +35,6 @@
         <property name="prefix" value="/WEB-INF/views/"/>
         <property name="suffix" value=".jsp"/>
     </bean>
-
 
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="persistenceUnitName" value="javaschool"/>
@@ -125,7 +122,5 @@
 
     <bean id="userDetailsServiceImpl"
           class="com.tsystems.service.implementation.UserDetailsServiceImpl"/>
-
-    <bean id="TicketPdfView" class="com.tsystems.controller.TicketPdfView"></bean>
 
 </beans>
