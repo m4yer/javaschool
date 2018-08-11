@@ -25,7 +25,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
         grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
 
-        return new com.tsystems.service.implementation.UserDetails(user.getUsername(),
+        return new com.tsystems.service.implementation.UserDetails(
+                user.getId(),
+                user.getUsername(),
                 user.getPassword(),
                 grantedAuthorities,
                 user.getEmail(),

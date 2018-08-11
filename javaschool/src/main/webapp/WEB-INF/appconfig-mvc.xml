@@ -9,7 +9,7 @@
             http://www.springframework.org/schema/tx
             http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-    <!-- Enables the Spring MVC @Controller programming com.tsystems.entityy -->
+    <!-- Enables the Spring MVC @Controller programming com.tsystems.entity -->
     <mvc:annotation-driven/>
 
     <!-- Handles HTTP GET requests for /resources/** -->
@@ -25,11 +25,19 @@
         <property name="password" value="mysqlpass"/>
     </bean>
 
+
+    <bean id="viewResolver1" class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
+        <property name="order" value="1"/>
+        <property name="basename" value="views"/>
+    </bean>
+
     <!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
-    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <bean id="viewResolver2" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="order" value="2"/>
         <property name="prefix" value="/WEB-INF/views/"/>
         <property name="suffix" value=".jsp"/>
     </bean>
+
 
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="persistenceUnitName" value="javaschool"/>
@@ -117,5 +125,7 @@
 
     <bean id="userDetailsServiceImpl"
           class="com.tsystems.service.implementation.UserDetailsServiceImpl"/>
+
+    <bean id="TicketPdfView" class="com.tsystems.controller.TicketPdfView"></bean>
 
 </beans>

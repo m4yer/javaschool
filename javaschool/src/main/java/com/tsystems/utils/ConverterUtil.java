@@ -12,11 +12,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.time.temporal.TemporalAccessor;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class ConverterUtil {
 
@@ -33,6 +31,14 @@ public class ConverterUtil {
         LocalDateTime localDateTime = LocalDateTime.from(temporalAccessor);
         ZonedDateTime zonedDateTime = ZonedDateTime.of(localDateTime, ZoneId.systemDefault());
         return Instant.from(zonedDateTime);
+    }
+
+    public static String getFormattedString(Instant input){
+        DateTimeFormatter formatter =
+                DateTimeFormatter.ofLocalizedDateTime( FormatStyle.SHORT )
+                        .withLocale( Locale.UK )
+                        .withZone( ZoneId.systemDefault());
+        return formatter.format(input);
     }
 
     public static List<Long> parseMilliseconds(List<String> hoursAndMinutes) {

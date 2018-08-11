@@ -9,7 +9,7 @@ import java.util.Map;
 
 public interface TicketService {
 
-    Ticket findById(Integer id);
+    TicketDTO findById(Integer id);
 
     List<Ticket> getAll();
 
@@ -18,5 +18,9 @@ public interface TicketService {
     String buyTicket(Integer tripId, String userName, Integer seatId, String stationFromName, String stationToName, Integer carriageNum);
 
     Map<Integer, Integer> getBookedTicketsAmountForTrip(Integer tripId, String stationFromName, String stationToName);
+
+    List<TicketDTO> getUserTicketList(Integer userId);
+
+    boolean generatePdf(Integer ticketId, Integer userId);
 
 }

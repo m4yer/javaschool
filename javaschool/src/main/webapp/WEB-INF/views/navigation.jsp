@@ -27,7 +27,7 @@
                     <li class="nav-item">
                         <a class="nav-link js-scroll-trigger" href="/logout"><i class="fa fa-user-circle"></i> <sec:authentication property="principal.firstname" /></a>
                         <div class="dropdown-content dropdown-upper">
-                            <a href="#">My Tickets</a>
+                            <a href="/user/ticket/list">My Tickets</a>
                             <a href="/logout">Logout</a>
                         </div>
                     </li>

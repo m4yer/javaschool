@@ -1,0 +1,37 @@
+.ticket-wrapper {
+    border: 1px solid #ddd;
+    width: 560px;
+    border-radius: 2px;
+    margin: 0 auto;
+    margin-top: 12px;
+}
+
+.ticket-header {
+    border-bottom: 1px solid #ddd;
+    padding-top: 8px;
+    padding-bottom: 12px;
+}
+
+.ticket-header-caption {
+    border-bottom: 4px solid #FF5A5F;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.ticket-body {
+    padding: 8px 16px;
+    text-align: left;
+}
+
+.ticket-right {
+    float: right;
+}
+
+.ticket-line {
+    display: block;
+}
+
+.bold {
+    font-weight: 700;
+}

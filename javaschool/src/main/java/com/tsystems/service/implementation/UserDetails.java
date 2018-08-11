@@ -8,6 +8,7 @@ import java.util.Set;
 public class UserDetails implements org.springframework.security.core.userdetails.UserDetails {
 
     private static final long serialVersionUID = 1L;
+    private final Integer id;
     private final String username;
     private final String password;
     private final Set<GrantedAuthority> authorities;
@@ -20,7 +21,8 @@ public class UserDetails implements org.springframework.security.core.userdetail
     private final boolean credentialsNonExpired;
     private final boolean enabled;
 
-    public UserDetails(String username, String password, Set<GrantedAuthority> authorities, String email, String firstname, String lastname, Date birthday) {
+    public UserDetails(Integer id, String username, String password, Set<GrantedAuthority> authorities, String email, String firstname, String lastname, Date birthday) {
+        this.id = id;
         this.username = username;
         this.password = password;
         this.authorities = authorities;
@@ -32,6 +34,10 @@ public class UserDetails implements org.springframework.security.core.userdetail
         this.accountNonLocked = true;
         this.credentialsNonExpired = true;
         this.enabled = true;
+    }
+
+    public Integer getId() {
+        return id;
     }
 
     @Override

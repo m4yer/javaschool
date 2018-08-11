@@ -10,4 +10,6 @@ public interface TicketDAO extends GenericDAO<Ticket, Integer> {
 
     Integer getBookedTicketAmountForTripAndCarriageNum(Integer tripId, Integer carriageNum);
 
+    List<Ticket> getUserTicketList(Integer userId);
+
 }

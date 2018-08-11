@@ -25,12 +25,12 @@ public class RouteDAOImpl extends GenericDAOImpl<Route, Integer> implements Rout
     @Override
     public List<Route> getFirstAndLastRouteRows(Integer routeId) {
         List<Route> resultList = new ArrayList<>();
-        Query first = entityManager.createQuery("select route from Route route where route_id=:id order by route.station_order asc");
+        Query first = entityManager.createQuery("select route from Route route where route.route_id=:id order by route.station_order asc");
         first.setMaxResults(1);
         first.setParameter("id", routeId);
         resultList.addAll(first.getResultList());
         // Get the last row by route_id (to get the START station)
-        Query last = entityManager.createQuery("select route from Route route where route_id=:id order by route.station_order desc");
+        Query last = entityManager.createQuery("select route from Route route where route.route_id=:id order by route.station_order desc");
         last.setMaxResults(1);
         last.setParameter("id", routeId);
         resultList.addAll(last.getResultList());

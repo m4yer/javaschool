@@ -28,4 +28,10 @@ public class TicketDAOImpl extends GenericDAOImpl<Ticket, Integer> implements Ti
         return getAmount.getResultList().size();
     }
 
+    public List<Ticket> getUserTicketList(Integer userId) {
+        Query getTickets = entityManager.createQuery("select ticket from Ticket ticket where ticket.user.id=:userId");
+        getTickets.setParameter("userId", userId);
+        return (List<Ticket>) getTickets.getResultList();
+    }
+
 }

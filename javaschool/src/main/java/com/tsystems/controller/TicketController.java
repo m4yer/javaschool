@@ -1,17 +1,18 @@
 package com.tsystems.controller;
 
+import com.tsystems.dto.TicketDTO;
 import com.tsystems.dto.TripDTO;
+import com.tsystems.service.api.ScheduleService;
 import com.tsystems.service.api.TicketService;
 import com.tsystems.service.api.TripService;
+import com.tsystems.service.implementation.UserDetails;
+import com.tsystems.utils.ConverterUtil;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 
@@ -21,8 +22,38 @@ public class TicketController {
     TicketService ticketService;
     @Autowired
     TripService tripService;
+    @Autowired
+    ScheduleService scheduleService;
 
     private static final Logger log = Logger.getLogger(TicketController.class);
+
+    @GetMapping("/user/ticket/list")
+    public String ticketListPage() {
+        return "user/ticket_list";
+    }
+
+    @GetMapping("/user/ticket/{ticket}.pdf")
+    public ModelAndView getTicketPdf(
+            @PathVariable("ticket") Integer ticketId)
+    {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Integer userId = userDetails.getId();
+        if (ticketService.generatePdf(ticketId, userId)) {
+            ModelAndView model = new ModelAndView("pdfView");
+            TicketDTO ticket = ticketService.findById(ticketId);
+            model.addObject("ticket", ticket);
+            model.addObject("schedules", scheduleService.getSchedulesByTripId(ticket.getTrip().getId()));
+            return model;
+        } else {
+            return new ModelAndView("index");
+        }
+    }
+
+    @GetMapping("/user/ticket/list/get/")
+    public @ResponseBody
+    String getUserTicketList(@RequestParam("userId") Integer userId) {
+        return ConverterUtil.parseJson(ticketService.getUserTicketList(userId));
+    }
 
     @GetMapping("/user/ticket/buy/")
     public ModelAndView buyTicketPage(ModelAndView model,

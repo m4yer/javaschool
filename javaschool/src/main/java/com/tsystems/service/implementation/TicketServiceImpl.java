@@ -31,8 +31,8 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Transactional
-    public Ticket findById(Integer id) {
-        return ticketDAO.findById(id);
+    public TicketDTO findById(Integer id) {
+        return Converter.getTicketDto(ticketDAO.findById(id));
     }
 
     @Transactional
@@ -109,6 +109,21 @@ public class TicketServiceImpl implements TicketService {
         }
 
         return resultMap;
+    }
+
+    @Transactional
+    public List<TicketDTO> getUserTicketList(Integer userId) {
+        return Converter.getTicketDtos(ticketDAO.getUserTicketList(userId));
+    }
+
+    @Transactional
+    public boolean generatePdf(Integer ticketId, Integer userId) {
+        Ticket ticket = ticketDAO.findById(ticketId);
+        if (!ticket.getUser().getId().equals(userId)) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
 }
