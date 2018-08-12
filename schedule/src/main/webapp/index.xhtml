@@ -15,9 +15,7 @@
 
         <h:form>
             Choose station to browse it's schedule: test
-            <h:selectOneMenu value="#{beanController.stationName}">
-                <f:selectItems value="#{beanController.getStations()}"  />
-            </h:selectOneMenu>
+
             <h:commandButton action="schedule" value="Show"/>
         </h:form>
 

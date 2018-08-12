@@ -35,6 +35,8 @@ public class ScheduleController {
     public @ResponseBody
     String getScheduleByStationNameForToday(@RequestParam("stationName") String stationName) {
         List<ScheduleDTO> schedules = scheduleService.getScheduleByStationNameForToday(stationName);
+        System.out.println("send schedules to second EJB application!!!!");
+        System.out.println("List<ScheduleDTO>.size(): " + schedules.size());
         return ConverterUtil.parseJson(schedules);
     }
 

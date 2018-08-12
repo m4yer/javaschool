@@ -22,9 +22,9 @@ public class ScheduleDAOImpl extends GenericDAOImpl<Schedule, Integer> implement
         return schedules;
     }
 
-    public List<Schedule> getScheduleByStationNameForToday(String stationName) {
-        Query findSchedules = entityManager.createQuery("select schedule from Schedule schedule where schedule.station.name=:stationName");
-        findSchedules.setParameter("stationName", stationName);
+    public List<Schedule> getScheduleByStationIdForToday(Integer stationId) {
+        Query findSchedules = entityManager.createQuery("select schedule from Schedule schedule where schedule.station.id=:stationId");
+        findSchedules.setParameter("stationId", stationId);
         return (List<Schedule>) findSchedules.getResultList();
     }
 

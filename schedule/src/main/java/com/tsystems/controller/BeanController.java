@@ -1,7 +1,7 @@
 package com.tsystems.controller;
 
-import com.tsystems.client.RestClient;
-import com.tsystems.client.RestClientImpl;
+import com.tsystems.client.ScheduleService;
+import com.tsystems.client.ScheduleServiceImpl;
 import com.tsystems.dto.ScheduleDTO;
 
 import javax.ejb.EJB;
@@ -20,8 +20,8 @@ import java.util.Locale;
 @SessionScoped
 public class BeanController {
 
-    @EJB(beanName = RestClientImpl.JNDI)
-    private RestClient restClient;
+    @EJB(beanName = ScheduleServiceImpl.JNDI)
+    private ScheduleService restClient;
 
     public String stationName;
 
@@ -35,7 +35,7 @@ public class BeanController {
 
     public List<ScheduleDTO> getScheduleForToday() {
         // TODO: here need to dynamically paste stationName from page
-        // TODO: catch IOException from RestClientImpl!
+        // TODO: catch IOException from ScheduleServiceImpl!
         try {
             System.out.println("BeanController getScheduleForToday():");
             System.out.println("Successfully invoked");
@@ -43,7 +43,7 @@ public class BeanController {
             System.out.println("List<ScheduleDTO>.size(): " + resultSchedules.size());
             return resultSchedules;
         } catch (IOException e) {
-            // TODO: Logging exception + what to do if occurs in RestClientImpl?
+            // TODO: Logging exception + what to do if occurs in ScheduleServiceImpl?
             e.printStackTrace();
         }
         return null;
@@ -53,7 +53,7 @@ public class BeanController {
         try {
             return restClient.getAllStations();
         } catch (IOException e) {
-            // TODO: Logging exception + what to do if occurs in RestClientImpl?
+            // TODO: Logging exception + what to do if occurs in ScheduleServiceImpl?
             e.printStackTrace();
         }
         return null;

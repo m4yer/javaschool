@@ -8,7 +8,7 @@ public interface ScheduleDAO extends GenericDAO<Schedule, Integer> {
 
     List<Schedule> findScheduleByStationId(Integer stationId);
 
-    List<Schedule> getScheduleByStationNameForToday(String stationName);
+    List<Schedule> getScheduleByStationIdForToday(Integer stationId);
 
     List<Schedule> getSchedulesByTripId(Integer tripId);
 

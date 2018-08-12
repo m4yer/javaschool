@@ -30,11 +30,20 @@
         </dependency>
 
         <!--JSF (include "jsf-api" and "jsf-impl")-->
+        <!-- https://mvnrepository.com/artifact/javax.faces/javax.faces-api -->
         <dependency>
-            <groupId>org.glassfish</groupId>
-            <artifactId>javax.faces</artifactId>
-            <version>2.2.13</version>
+            <groupId>javax.faces</groupId>
+            <artifactId>javax.faces-api</artifactId>
+            <version>2.3</version>
         </dependency>
+
+
+
+        <!--<dependency>-->
+            <!--<groupId>org.glassfish</groupId>-->
+            <!--<artifactId>javax.faces</artifactId>-->
+            <!--<version>2.4.0</version>-->
+        <!--</dependency>-->
 
         <!--Primefaces library-->
         <dependency>
@@ -54,19 +63,7 @@
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
-            <version>7.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.sun.faces</groupId>
-            <artifactId>jsf-api</artifactId>
-            <version>2.1.7</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.7</version>
+            <version>8.0</version>
         </dependency>
 
         <!-- Include ActiveMQ -->

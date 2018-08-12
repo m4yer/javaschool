@@ -4,21 +4,27 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.tsystems.dto.ScheduleDTO;
+import com.tsystems.dto.TrainDTO;
+import com.tsystems.dto.TripDTO;
 import com.tsystems.util.ScheduleDeserializer;
 
+import javax.ejb.Remote;
 import javax.ejb.Stateless;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.spi.BeanManager;
+import javax.inject.Inject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.Instant;
 import java.util.List;
 
-@Stateless(name = RestClientImpl.JNDI)
-public class RestClientImpl implements RestClient {
+@Stateless(name = ScheduleServiceImpl.JNDI)
+public class ScheduleServiceImpl implements ScheduleService {
 
     public static final String JNDI = "restClientBean";
-
     private static ObjectMapper objectMapper = new ObjectMapper();
 
     /**

@@ -1,10 +1,7 @@
 package com.tsystems.service.implementation;
 
+import com.tsystems.dao.api.*;
 import com.tsystems.entity.converter.Converter;
-import com.tsystems.dao.api.RouteDAO;
-import com.tsystems.dao.api.ScheduleDAO;
-import com.tsystems.dao.api.TrainDAO;
-import com.tsystems.dao.api.TripDAO;
 import com.tsystems.dto.ScheduleDTO;
 import com.tsystems.entity.*;
 import com.tsystems.jms.SimpleMessageSender;
@@ -29,6 +26,8 @@ public class ScheduleServiceImpl implements ScheduleService {
     TripDAO tripDAO;
     @Autowired
     TrainDAO trainDAO;
+    @Autowired
+    StationDAO stationDAO;
     @Autowired
     SimpleMessageSender messageSender;
 
@@ -55,8 +54,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Transactional
     public List<ScheduleDTO> getScheduleByStationNameForToday(String stationName) {
+        Station station = stationDAO.findByName(stationName);
         // TODO: Here now schedule fetching by ALL days. Need to change it for TODAY.
-        List<Schedule> schedules = scheduleDAO.getScheduleByStationNameForToday(stationName);
+        List<Schedule> schedules = scheduleDAO.getScheduleByStationIdForToday(station.getId());
         return Converter.getScheduleDtos(schedules);
     }
 
