@@ -18,12 +18,16 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class TicketController {
+    private TicketService ticketService;
+    private TripService tripService;
+    private ScheduleService scheduleService;
+
     @Autowired
-    TicketService ticketService;
-    @Autowired
-    TripService tripService;
-    @Autowired
-    ScheduleService scheduleService;
+    public TicketController(TicketService ticketService, TripService tripService, ScheduleService scheduleService) {
+        this.ticketService = ticketService;
+        this.tripService = tripService;
+        this.scheduleService = scheduleService;
+    }
 
     private static final Logger log = Logger.getLogger(TicketController.class);
 
@@ -78,8 +82,7 @@ public class TicketController {
             @RequestParam("seatId") Integer seatId,
             @RequestParam("stationFromName") String stationFromName,
             @RequestParam("stationToName") String stationToName,
-            @RequestParam("carriageNum") Integer carriageNum
-    ) {
+            @RequestParam("carriageNum") Integer carriageNum) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String name = auth.getName();
         log.info("User: " + name + " bought a ticket!");

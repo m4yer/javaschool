@@ -7,21 +7,21 @@ import com.tsystems.entity.Direction;
 import com.tsystems.entity.Station;
 import com.tsystems.service.api.DirectionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class DirectionServiceImpl implements DirectionService {
+    private DirectionDAO directionDAO;
+    private StationDAO stationDAO;
 
     @Autowired
-    DirectionDAO directionDAO;
-
-    @Autowired
-    StationDAO stationDAO;
-
-    public void setDirectionDAO(DirectionDAO directionDAO) {
+    public DirectionServiceImpl(DirectionDAO directionDAO, StationDAO stationDAO) {
         this.directionDAO = directionDAO;
+        this.stationDAO = stationDAO;
     }
 
     @Transactional

@@ -15,10 +15,12 @@ import java.util.List;
 
 @RestController
 public class StationRestController {
+    private StationService stationService;
+
     @Autowired
-    StationService stationService;
-    @Autowired
-    DirectionService directionService;
+    public StationRestController(StationService stationService) {
+        this.stationService = stationService;
+    }
 
     private static final Logger log = Logger.getLogger(StationRestController.class);
 
@@ -27,16 +29,12 @@ public class StationRestController {
         log.info("REST: Getting all stations [names]");
         List<StationDTO> allStations = stationService.getAll();
         List<String> stationNames = new ArrayList<>();
-        for (StationDTO stationDTO : allStations) {
-            stationNames.add(stationDTO.getName());
-        }
+        allStations.forEach(station -> stationNames.add(station.getName()));
         return ConverterUtil.parseJson(stationNames);
     }
 
     @GetMapping("/route/get/station/list/")
-    public String getAllRouteStations(
-            @RequestParam("routeId") Integer routeId
-    ) {
+    public String getAllRouteStations(@RequestParam("routeId") Integer routeId) {
         log.info("REST: Getting all stations [StationDTO] for Route with ID: " + routeId);
         return ConverterUtil.parseJson(stationService.getRouteStations(routeId));
     }

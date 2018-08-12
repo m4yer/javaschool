@@ -17,14 +17,14 @@ import java.util.Date;
 
 @Service
 public class UserServiceImpl implements UserService {
-    @Autowired
     private UserDAO userDAO;
 
-    private static final Logger log = Logger.getLogger(UserServiceImpl.class);
-
-    public void setUserDAO(UserDAO userDAO) {
+    @Autowired
+    public UserServiceImpl(UserDAO userDAO) {
         this.userDAO = userDAO;
     }
+
+    private static final Logger log = Logger.getLogger(UserServiceImpl.class);
 
     @Transactional
     public void addUser(User user, String birthday) {

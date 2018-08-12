@@ -14,26 +14,28 @@ import com.tsystems.jms.SimpleMessageSender;
 import com.tsystems.service.api.TripService;
 import com.tsystems.utils.ConverterUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class TripServiceImpl implements TripService {
-    @Autowired
-    TripDAO tripDAO;
-    @Autowired
-    RouteDAO routeDAO;
-    @Autowired
-    StationDAO stationDAO;
-    @Autowired
-    TrainDAO trainDAO;
-    @Autowired
-    SimpleMessageSender messageSender;
+    private TripDAO tripDAO;
+    private RouteDAO routeDAO;
+    private StationDAO stationDAO;
+    private TrainDAO trainDAO;
+    private SimpleMessageSender messageSender;
 
-    public void setTripDAO(TripDAO tripDAO) {
+    @Autowired
+    public TripServiceImpl(TripDAO tripDAO, RouteDAO routeDAO, StationDAO stationDAO, TrainDAO trainDAO, SimpleMessageSender messageSender) {
         this.tripDAO = tripDAO;
+        this.routeDAO = routeDAO;
+        this.stationDAO = stationDAO;
+        this.trainDAO = trainDAO;
+        this.messageSender = messageSender;
     }
 
     @Transactional

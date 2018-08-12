@@ -8,21 +8,21 @@ import com.tsystems.entity.Route;
 import com.tsystems.entity.Station;
 import com.tsystems.service.api.StationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class StationServiceImpl implements StationService {
+    private StationDAO stationDAO;
+    private RouteDAO routeDAO;
 
     @Autowired
-    StationDAO stationDAO;
-
-    @Autowired
-    RouteDAO routeDAO;
-
-    public void setStationDAO(StationDAO stationDAO) {
+    public StationServiceImpl(StationDAO stationDAO, RouteDAO routeDAO) {
         this.stationDAO = stationDAO;
+        this.routeDAO = routeDAO;
     }
 
     @Transactional

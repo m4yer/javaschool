@@ -9,25 +9,27 @@ import com.tsystems.entity.Ticket;
 import com.tsystems.entity.Trip;
 import com.tsystems.service.api.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.*;
 
+@Service
 public class TicketServiceImpl implements TicketService {
-    @Autowired
-    TicketDAO ticketDAO;
-    @Autowired
-    TripDAO tripDAO;
-    @Autowired
-    UserDAO userDAO;
-    @Autowired
-    StationDAO stationDAO;
-    @Autowired
-    RouteDAO routeDAO;
+    private TicketDAO ticketDAO;
+    private TripDAO tripDAO;
+    private UserDAO userDAO;
+    private StationDAO stationDAO;
+    private RouteDAO routeDAO;
 
-    public void setTicketDAO(TicketDAO ticketDAO) {
+    @Autowired
+    public TicketServiceImpl(TicketDAO ticketDAO, TripDAO tripDAO, UserDAO userDAO, StationDAO stationDAO, RouteDAO routeDAO) {
         this.ticketDAO = ticketDAO;
+        this.tripDAO = tripDAO;
+        this.userDAO = userDAO;
+        this.stationDAO = stationDAO;
+        this.routeDAO = routeDAO;
     }
 
     @Transactional

@@ -14,16 +14,14 @@ import java.util.List;
 
 @Controller
 public class TripController {
+    private TripService tripService;
+    private ScheduleService scheduleService;
+
     @Autowired
-    TripService tripService;
-    @Autowired
-    RouteService routeService;
-    @Autowired
-    TrainService trainService;
-    @Autowired
-    ScheduleService scheduleService;
-    @Autowired
-    StationService stationService;
+    public TripController(TripService tripService, ScheduleService scheduleService) {
+        this.tripService = tripService;
+        this.scheduleService = scheduleService;
+    }
 
     private static final Logger log = Logger.getLogger(TripController.class);
 

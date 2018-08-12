@@ -6,16 +6,17 @@ import com.tsystems.dto.TrainDTO;
 import com.tsystems.entity.Train;
 import com.tsystems.service.api.TrainService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Service
 public class TrainServiceImpl implements TrainService {
-
-    @Autowired
     TrainDAO trainDAO;
 
-    public void setTrainDAO(TrainDAO trainDAO) {
+    @Autowired
+    public TrainServiceImpl(TrainDAO trainDAO) {
         this.trainDAO = trainDAO;
     }
 

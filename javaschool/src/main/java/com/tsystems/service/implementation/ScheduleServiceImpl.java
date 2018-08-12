@@ -10,6 +10,7 @@ import com.tsystems.utils.ConverterUtil;
 import com.tsystems.utils.HaversineUtil;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
@@ -17,25 +18,26 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@Service
 public class ScheduleServiceImpl implements ScheduleService {
+    private ScheduleDAO scheduleDAO;
+    private RouteDAO routeDAO;
+    private TripDAO tripDAO;
+    private TrainDAO trainDAO;
+    private StationDAO stationDAO;
+    private SimpleMessageSender messageSender;
+
     @Autowired
-    ScheduleDAO scheduleDAO;
-    @Autowired
-    RouteDAO routeDAO;
-    @Autowired
-    TripDAO tripDAO;
-    @Autowired
-    TrainDAO trainDAO;
-    @Autowired
-    StationDAO stationDAO;
-    @Autowired
-    SimpleMessageSender messageSender;
+    public ScheduleServiceImpl(ScheduleDAO scheduleDAO, RouteDAO routeDAO, TripDAO tripDAO, TrainDAO trainDAO, StationDAO stationDAO, SimpleMessageSender messageSender) {
+        this.scheduleDAO = scheduleDAO;
+        this.routeDAO = routeDAO;
+        this.tripDAO = tripDAO;
+        this.trainDAO = trainDAO;
+        this.stationDAO = stationDAO;
+        this.messageSender = messageSender;
+    }
 
     private static final Logger log = Logger.getLogger(ScheduleServiceImpl.class);
-
-    public void setScheduleDAO(ScheduleDAO scheduleDAO) {
-        this.scheduleDAO = scheduleDAO;
-    }
 
     @Transactional
     public Schedule findById(Integer id) {

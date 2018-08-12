@@ -8,14 +8,14 @@
                 <td valign="center">
                     <div class="separate-horizontal"></div>
                     <div id="<c:out value="${i*2+1}"/>" class="seat seat-luxe bottom"
-                         onclick="chooseSeat(this.id)"><c:out value="${i*2+1}"/></div>
+                         onclick="chooseSeat(this.id)" ng-click="chooseSeat($event)"><c:out value="${i*2+1}"/></div>
                 </td>
                 <td class="separate-vertical"></td>
                 <td class="empty-block"></td>
                 <td class="separate-vertical"></td>
                 <td valign="center">
                     <div id="<c:out value="${i*2+2}"/>" class="seat seat-luxe bottom"
-                         onclick="chooseSeat(this.id)"><c:out value="${i*2+2}"/></div>
+                         onclick="chooseSeat(this.id)" ng-click="chooseSeat($event)"><c:out value="${i*2+2}"/></div>
                 </td>
                 <td class="line-block"></td>
             </c:forEach>

@@ -17,12 +17,12 @@ import java.util.List;
 
 @Controller
 public class ScheduleController {
+    private ScheduleService scheduleService;
+
     @Autowired
-    StationService stationService;
-    @Autowired
-    ScheduleService scheduleService;
-    @Autowired
-    SimpleMessageSender messageSender;
+    public ScheduleController(ScheduleService scheduleService) {
+        this.scheduleService = scheduleService;
+    }
 
     private static final Logger log = Logger.getLogger(ScheduleController.class);
 

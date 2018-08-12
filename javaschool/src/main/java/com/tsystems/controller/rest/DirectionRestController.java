@@ -10,8 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class DirectionRestController {
+    private DirectionService directionService;
+
     @Autowired
-    DirectionService directionService;
+    public DirectionRestController(DirectionService directionService) {
+        this.directionService = directionService;
+    }
 
     private static final Logger log = Logger.getLogger(DirectionRestController.class);
 

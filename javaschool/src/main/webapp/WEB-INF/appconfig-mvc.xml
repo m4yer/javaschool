@@ -9,11 +9,7 @@
             http://www.springframework.org/schema/tx
             http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-    <!-- Enables the Spring MVC @Controller programming com.tsystems.entity -->
     <mvc:annotation-driven/>
-
-    <!-- Handles HTTP GET requests for /resources/** -->
-    <!-- by efficiently serving up static resources in the ${webappRoot}/resources directory -->
     <mvc:resources mapping="/resources/**" location="/resources/"/>
 
     <!-- DB configuration -->
@@ -28,7 +24,6 @@
         <property name="order" value="1"/>
         <property name="basename" value="views"/>
     </bean>
-
     <!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
     <bean id="viewResolver2" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="order" value="2"/>
@@ -53,54 +48,6 @@
         <property name="entityManagerFactory" ref="entityManagerFactory"/>
     </bean>
     <tx:annotation-driven transaction-manager="transactionManager"/>
-
-    <!-- UserDAO & UserService beans -->
-    <bean id="userDAO" class="com.tsystems.dao.implementation.UserDAOImpl"></bean>
-    <bean id="userService" class="com.tsystems.service.implementation.UserServiceImpl">
-        <property name="userDAO" ref="userDAO"/>
-    </bean>
-
-    <!-- StationDAO & StationService beans -->
-    <bean id="stationDAO" class="com.tsystems.dao.implementation.StationDAOImpl"></bean>
-    <bean id="stationService" class="com.tsystems.service.implementation.StationServiceImpl">
-        <property name="stationDAO" ref="stationDAO"/>
-    </bean>
-
-    <!-- TrainDAO & TrainService beans -->
-    <bean id="trainDAO" class="com.tsystems.dao.implementation.TrainDAOImpl"></bean>
-    <bean id="trainService" class="com.tsystems.service.implementation.TrainServiceImpl">
-        <property name="trainDAO" ref="trainDAO"/>
-    </bean>
-
-    <!-- RouteDAO & RouteService beans -->
-    <bean id="routeDAO" class="com.tsystems.dao.implementation.RouteDAOImpl"></bean>
-    <bean id="routeService" class="com.tsystems.service.implementation.RouteServiceImpl">
-        <property name="routeDAO" ref="routeDAO"/>
-    </bean>
-
-    <!-- TripDAO & TripService beans -->
-    <bean id="tripDAO" class="com.tsystems.dao.implementation.TripDAOImpl"></bean>
-    <bean id="tripService" class="com.tsystems.service.implementation.TripServiceImpl">
-        <property name="tripDAO" ref="tripDAO"/>
-    </bean>
-
-    <!-- ScheduleDAO & ScheduleService beans -->
-    <bean id="scheduleDAO" class="com.tsystems.dao.implementation.ScheduleDAOImpl"></bean>
-    <bean id="scheduleService" class="com.tsystems.service.implementation.ScheduleServiceImpl">
-        <property name="scheduleDAO" ref="scheduleDAO"/>
-    </bean>
-
-    <!-- TicketDAO & TicketService beans -->
-    <bean id="ticketDAO" class="com.tsystems.dao.implementation.TicketDAOImpl"></bean>
-    <bean id="ticketService" class="com.tsystems.service.implementation.TicketServiceImpl">
-        <property name="ticketDAO" ref="ticketDAO"/>
-    </bean>
-
-    <!-- DirectionDAO & DirectionService beans -->
-    <bean id="directionDAO" class="com.tsystems.dao.implementation.DirectionDAOImpl"></bean>
-    <bean id="directionService" class="com.tsystems.service.implementation.DirectionServiceImpl">
-        <property name="directionDAO" ref="directionDAO"/>
-    </bean>
 
     <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
         <property name="host" value="smtp.gmail.com"/>

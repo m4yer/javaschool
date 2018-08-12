@@ -9,26 +9,27 @@ import com.tsystems.entity.Route;
 import com.tsystems.service.api.RouteService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@Service
 public class RouteServiceImpl implements RouteService {
 
     private static final Logger log = Logger.getLogger(RouteServiceImpl.class);
 
     private static ObjectMapper objectMapper = new ObjectMapper();
 
-    @Autowired
     private RouteDAO routeDAO;
-
-    @Autowired
     private StationDAO stationDAO;
 
-    public void setRouteDAO(RouteDAO routeDAO) {
+    @Autowired
+    public RouteServiceImpl(RouteDAO routeDAO, StationDAO stationDAO) {
         this.routeDAO = routeDAO;
+        this.stationDAO = stationDAO;
     }
 
     @Transactional

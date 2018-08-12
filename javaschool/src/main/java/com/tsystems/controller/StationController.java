@@ -12,8 +12,12 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/admin")
 public class StationController {
+    private StationService stationService;
+
     @Autowired
-    StationService stationService;
+    public StationController(StationService stationService) {
+        this.stationService = stationService;
+    }
 
     private static final Logger log = Logger.getLogger(StationController.class);
 

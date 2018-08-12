@@ -9,8 +9,13 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/admin")
 public class DirectionController {
+
+    private DirectionService directionService;
+
     @Autowired
-    DirectionService directionService;
+    public DirectionController(DirectionService directionService) {
+        this.directionService = directionService;
+    }
 
     private static final Logger log = Logger.getLogger(DirectionController.class);
 

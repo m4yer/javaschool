@@ -12,8 +12,12 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequestMapping("/admin")
 public class TrainController {
-    @Autowired
     TrainService trainService;
+
+    @Autowired
+    public TrainController(TrainService trainService) {
+        this.trainService = trainService;
+    }
 
     @GetMapping("/train/list")
     public String allTrainsPage() {

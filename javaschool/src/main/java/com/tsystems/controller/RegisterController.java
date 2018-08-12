@@ -18,12 +18,17 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class RegisterController {
-    @Autowired
+
     private UserService userService;
-    @Autowired
     private SecurityService securityService;
-    @Autowired
     private MailService mailService;
+
+    @Autowired
+    public RegisterController(UserService userService, SecurityService securityService, MailService mailService) {
+        this.userService = userService;
+        this.securityService = securityService;
+        this.mailService = mailService;
+    }
 
     private static final Logger log = Logger.getLogger(RegisterController.class);
 

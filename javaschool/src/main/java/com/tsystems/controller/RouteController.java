@@ -17,10 +17,14 @@ import java.util.List;
 @Controller
 @RequestMapping("/admin")
 public class RouteController {
+    private RouteService routeService;
+    private StationService stationService;
+
     @Autowired
-    RouteService routeService;
-    @Autowired
-    StationService stationService;
+    public RouteController(RouteService routeService, StationService stationService) {
+        this.routeService = routeService;
+        this.stationService = stationService;
+    }
 
     private static final Logger log = Logger.getLogger(RouteController.class);
 
@@ -47,9 +51,7 @@ public class RouteController {
     String getRouteStationsById(@PathVariable("id") Integer id) {
         List<RouteDTO> routes = routeService.findRouteByRouteId(id);
         List<String> stations = new ArrayList<>();
-        for (RouteDTO routeElement : routes) {
-            stations.add(routeElement.getStationDto().getName());
-        }
+        routes.forEach(route -> stations.add(route.getStationDto().getName()));
         return ConverterUtil.parseJson(stations);
     }
 
@@ -75,8 +77,7 @@ public class RouteController {
     @PostMapping("/route/edit")
     public String editRoutePost(
             @RequestParam("routeId") Integer routeId,
-            @RequestParam("stationSequence") String stationSequence
-    ) {
+            @RequestParam("stationSequence") String stationSequence) {
         routeService.editRoute(routeId, stationSequence);
         return "redirect:/admin/route/list";
     }
