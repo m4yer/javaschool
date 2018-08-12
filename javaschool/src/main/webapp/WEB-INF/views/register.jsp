@@ -89,11 +89,11 @@
                                 </div>
                                 <div ngShow="registerForm.email.$dirty && !registerForm.email.$valid" ng-messages="registerForm.email.$error">
                                     <div class="input-warning" ng-message="required">Field is required</div>
-                                    <div class="input-warning" ng-message="email">Invalid Email</div>
+                                    <div class="input-warning" ng-message="pattern">Invalid Email</div>
                                 </div>
                                 <label for="email">Email</label>
                                 <form:input path="email" type="email" placeholder="Email" id="email" autocomplete="false"
-                                            required="required" ng-model="email"/>
+                                            required="required" ng-model="email" ng-pattern="/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/"/>
 
                                 <div ngShow ng-show="registerForm.password.$dirty && !registerForm.password.$valid" ng-messages="registerForm.password">
                                     <div class="input-success" ng-message="$valid">&#10004;</div>

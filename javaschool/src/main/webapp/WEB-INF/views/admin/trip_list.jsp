@@ -16,7 +16,25 @@
 <script src="<c:url value="/resources/js/angular/angular.min.js" />"></script>
 <script src="<c:url value="/resources/js/angular/angular-datatables.min.js" />"></script>
 <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/angular-datatables.custom.css" />"/>
-
+<style>
+    .clockpicker-modal-form {
+        width: 68px;
+    }
+    .save-button-modal-form {
+        font-size: 12px;
+    }
+    @media (max-width: 802px) {
+        .clockpicker-modal-form {
+            width: 60px;
+        }
+    }
+    @media (max-width: 666px) {
+        .clockpicker-modal-form {
+            font-size: 10px;
+            width: 52px;
+        }
+    }
+</style>
 <title>RW | Trips</title>
 <body>
 
@@ -46,7 +64,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="trip in trips">
+                        <tr ng-repeat="trip in trips" trip-row="">
                             <td>{{ trip.trainDto.id }}</td>
                             <td>{{ trip.route_id }}</td>
                             <td>{{ trip.start_time.epochSecond * 1000 | date:'dd/MM/yyyy HH:mm' }}</td>
@@ -112,17 +130,17 @@
                             <span ng-if="schedule.time_departure">{{ (schedule.time_departure.epochSecond + getLate($index)) * 1000  | date:'dd/MM/yyyy HH:mm' }}</span>
                             <font color="#FF5A5F" style="font-weight: 700;" ng-if="!schedule.time_departure">Finish</font>
                         </td>
-                        <td class="justify-content-center">
+                        <td>
 
                             <div class="input-group" clockpicker ng-attr-id="schedule{{ schedule.id }}">
 
                                 <div class="input-group-prepend">
                                     <div class="clockpicker text-center">
-                                        <input id="timepicker" type="text" class="form-control clockpicker-border-0" value="{{ schedule.time_late }}" readonly style="background-color: white;width: 68px;" />
+                                        <input id="timepicker" type="text" class="form-control clockpicker-border-0 clockpicker-modal-form" value="{{ schedule.time_late }}" readonly style="background-color: white; border-radius: 0;font-size: 12px;border-bottom-left-radius: 2px;border-top-left-radius: 2px;" />
                                     </div>
                                 </div>
 
-                                <button type="submit" class="input-group-append brand-pink-button">
+                                <button type="submit" class="input-group-append brand-pink-button save-button-modal-form">
                                     <span class="fa fa-save fa-lg"></span>
                                 </button>
 

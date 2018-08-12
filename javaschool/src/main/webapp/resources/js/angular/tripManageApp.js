@@ -3,6 +3,8 @@ var app = angular.module("tripManageApp", ['datatables']);
 var counter = 0;
 var clickedManageButton;
 
+var tripRow = [];
+
 app.directive('clockpicker', ['$http', '$timeout', function($http, $timeout){
 
     return {
@@ -55,4 +57,17 @@ app.directive('clockpicker', ['$http', '$timeout', function($http, $timeout){
             counter++;
         }
     }
+}]);
+
+app.directive('tripRow', ['$http', function ($http) {
+
+    return {
+        link: function(scope, elm, attr){
+            console.log('elm: ', elm);
+            var arrivalCellValue = elm[0]['cells'][3]['innerHTML'];
+            console.log('4rd column value: ', arrivalCellValue);
+            tripRow.push(elm);
+        }
+    }
+
 }]);
