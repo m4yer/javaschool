@@ -21,6 +21,6 @@ public interface TicketService {
 
     List<TicketDTO> getUserTicketList(Integer userId);
 
-    boolean generatePdf(Integer ticketId, Integer userId);
+    boolean isTripBelongsUser(Integer ticketId, Integer userId);
 
 }

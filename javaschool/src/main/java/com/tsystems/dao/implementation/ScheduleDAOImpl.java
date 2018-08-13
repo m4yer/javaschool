@@ -11,17 +11,6 @@ import java.util.List;
 @Repository
 public class ScheduleDAOImpl extends GenericDAOImpl<Schedule, Integer> implements ScheduleDAO {
 
-    public List<Schedule> findScheduleByStationId(Integer stationId) {
-        Query findSchedule = entityManager.createQuery("select schedule from Schedule schedule where schedule.station.id=:stationId order by schedule.time_arrival asc");
-        findSchedule.setParameter("stationId", stationId);
-        List<Schedule> schedules = findSchedule.getResultList();
-        for (Schedule schedule : schedules) {
-            Hibernate.initialize(schedule.getTrip());
-            Hibernate.initialize(schedule.getTrip().getTrain());
-        }
-        return schedules;
-    }
-
     public List<Schedule> getScheduleByStationIdForToday(Integer stationId) {
         Query findSchedules = entityManager.createQuery("select schedule from Schedule schedule where schedule.station.id=:stationId");
         findSchedules.setParameter("stationId", stationId);

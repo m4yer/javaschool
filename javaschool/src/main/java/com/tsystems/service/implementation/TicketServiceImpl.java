@@ -125,7 +125,7 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Transactional
-    public boolean generatePdf(Integer ticketId, Integer userId) {
+    public boolean isTripBelongsUser(Integer ticketId, Integer userId) {
         Ticket ticket = ticketDAO.findById(ticketId);
         if (!ticket.getUser().getId().equals(userId)) {
             return false;

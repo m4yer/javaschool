@@ -6,8 +6,6 @@ import java.util.List;
 
 public interface ScheduleDAO extends GenericDAO<Schedule, Integer> {
 
-    List<Schedule> findScheduleByStationId(Integer stationId);
-
     List<Schedule> getScheduleByStationIdForToday(Integer stationId);
 
     List<Schedule> getSchedulesByTripId(Integer tripId);

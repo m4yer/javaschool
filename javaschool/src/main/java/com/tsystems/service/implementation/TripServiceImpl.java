@@ -13,6 +13,7 @@ import com.tsystems.entity.Trip;
 import com.tsystems.jms.SimpleMessageSender;
 import com.tsystems.service.api.TripService;
 import com.tsystems.utils.ConverterUtil;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +38,8 @@ public class TripServiceImpl implements TripService {
         this.trainDAO = trainDAO;
         this.messageSender = messageSender;
     }
+
+    private static final Logger log = Logger.getLogger(TripServiceImpl.class);
 
     @Transactional
     public void addTrip(Trip trip) {
@@ -120,6 +123,10 @@ public class TripServiceImpl implements TripService {
      */
     @Transactional
     public Integer createTrip(Integer trainId, Integer routeId, String tripStartTime) {
+        log.info("Creating new trip");
+        log.info("trainId: " + trainId);
+        log.info("routeId: " + routeId);
+        log.info("tripStartTime: " + tripStartTime);
         Trip newTrip = new Trip(trainDAO.findById(trainId), routeId, ConverterUtil.parseInstant(tripStartTime), true);
         tripDAO.add(newTrip);
         return tripDAO.getLastId();
@@ -131,18 +138,11 @@ public class TripServiceImpl implements TripService {
 
         // Entire code below is to send messages to ActiveMQ
         Trip currentTrip = tripDAO.findById(tripId);
-
         Integer routeId = currentTrip.getRoute_id();
         List<Route> routes = routeDAO.findRouteByRouteId(routeId);
-
         List<Station> routeStations = new ArrayList<>();
-        for (Route route : routes) {
-            routeStations.add(route.getStation());
-        }
-
-        for (Station station : routeStations) {
-            messageSender.sendMessage(station.getName());
-        }
+        routes.forEach(route -> routeStations.add(route.getStation()));
+        routeStations.forEach(station -> messageSender.sendMessage(station.getName()));
 
     }
 
@@ -152,18 +152,11 @@ public class TripServiceImpl implements TripService {
 
         // Entire code below is to send messages to ActiveMQ
         Trip currentTrip = tripDAO.findById(tripId);
-
         Integer routeId = currentTrip.getRoute_id();
         List<Route> routes = routeDAO.findRouteByRouteId(routeId);
-
         List<Station> routeStations = new ArrayList<>();
-        for (Route route : routes) {
-            routeStations.add(route.getStation());
-        }
-
-        for (Station station : routeStations) {
-            messageSender.sendMessage(station.getName());
-        }
+        routes.forEach(route -> routeStations.add(route.getStation()));
+        routeStations.forEach(station -> messageSender.sendMessage(station.getName()));
     }
 
     @Transactional
@@ -176,6 +169,7 @@ public class TripServiceImpl implements TripService {
         return tripDAO.getArrivalTime(tripId, stationToName);
     }
 
+    @Transactional
     public List<TicketDTO> getTicketsByTripAndCarriageNum(Integer tripId, Integer carriageNum) {
         return Converter.getTicketDtos(tripDAO.getTicketsByTripAndCarriageNum(tripId, carriageNum));
     }

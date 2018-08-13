@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.Instant;
 import java.util.List;
 
@@ -16,40 +17,33 @@ import java.util.List;
 public class TripController {
     private TripService tripService;
     private ScheduleService scheduleService;
+    private RouteService routeService;
 
     @Autowired
-    public TripController(TripService tripService, ScheduleService scheduleService) {
+    public TripController(TripService tripService, ScheduleService scheduleService, RouteService routeService) {
         this.tripService = tripService;
         this.scheduleService = scheduleService;
+        this.routeService = routeService;
     }
 
     private static final Logger log = Logger.getLogger(TripController.class);
 
     @GetMapping("/trip/find/")
-    public ModelAndView findTripPage(
-            ModelAndView model,
+    public ModelAndView findTripPage(ModelAndView model,
             @RequestParam(value = "stationFrom", required = false) String stationFromName,
             @RequestParam(value = "stationTo", required = false) String stationToName,
             @RequestParam(value = "dateStart", required = false) String startSearchInterval,
             @RequestParam(value = "dateEnd", required = false) String endSearchInterval) {
         log.info("Searching trips.....");
-        if (stationFromName != null) {
-            model.addObject("stationFrom", stationFromName);
-        }
-        if (stationToName != null) {
-            model.addObject("stationTo", stationToName);
-        }
-        if (startSearchInterval != null) {
-            model.addObject("dateStart", startSearchInterval);
-        }
-        if (endSearchInterval != null) {
-            model.addObject("dateEnd", endSearchInterval);
-        }
+        if (stationFromName != null) {model.addObject("stationFrom", stationFromName);}
+        if (stationToName != null) {model.addObject("stationTo", stationToName);}
+        if (startSearchInterval != null) {model.addObject("dateStart", startSearchInterval);}
+        if (endSearchInterval != null) {model.addObject("dateEnd", endSearchInterval);}
         model.setViewName("search_trip");
         return model;
     }
 
-    @PostMapping("/trip/find/")
+    @GetMapping("/trip/get/")
     public @ResponseBody
     String findTrips(
             @RequestParam("stationFrom") String stationFromName,
@@ -75,12 +69,10 @@ public class TripController {
         return ConverterUtil.parseJson(tripService.getAll());
     }
 
-    // TODO: Проверка: а существует ли такой маршрут?
     @GetMapping("/admin/trip/create/{routeId}")
-    public ModelAndView createTripPageNew(ModelAndView model, @PathVariable("routeId") Integer routeId) {
-        model.addObject("routeId", routeId);
-        model.setViewName("admin/trip_create");
-        return model;
+    public ModelAndView createTripPageNew(@PathVariable("routeId") Integer routeId) {
+        if (routeService.findRouteByRouteId(routeId) != null) {return new ModelAndView("admin/trip_create", "routeId", routeId);}
+        else { throw new EntityNotFoundException(); }
     }
 
     @PostMapping("/admin/trip/create")
@@ -89,22 +81,13 @@ public class TripController {
             @RequestParam("routeId") Integer routeId,
             @RequestParam("stationStopTimes") String stationStopTimes,
             @RequestParam("startTime") String tripStartTime) {
-        // stationStopTimes = Time duration when train will stop at the station
-        // Example of that: 00:05,00:05,00:05,00:05
-        log.info("--------- Creating new trip ------------");
-        log.info("trainId: " + trainId);
-        log.info("routeId: " + routeId);
-        log.info("stationStopTimes: " + stationStopTimes);
-        log.info("tripStartTime: " + tripStartTime);
         Integer tripId = tripService.createTrip(trainId, routeId, tripStartTime);
         scheduleService.addScheduleForTrip(tripId, routeId, stationStopTimes, tripStartTime, trainId);
         return "redirect:/admin/trip/list";
     }
 
     @PostMapping("/admin/trip/cancel")
-    public String cancelTrip(
-            @RequestParam("tripId") Integer tripId
-    ) {
+    public String cancelTrip(@RequestParam("tripId") Integer tripId) {
         tripService.cancelTrip(tripId);
         return "redirect:/admin/trip/list";
     }
@@ -112,25 +95,20 @@ public class TripController {
     @PostMapping("/admin/trip/late/add")
     public String addLateTime(
             @RequestParam("tripId") Integer tripId,
-            @RequestParam("timeLate") String timeLate
-    ) {
+            @RequestParam("timeLate") String timeLate) {
         tripService.addLateTime(tripId, timeLate);
         return "redirect:/admin/trip/list";
     }
 
     @GetMapping("/trip/departure-time")
-    public @ResponseBody Instant getDepartureTime(
-            @RequestParam("tripId") Integer tripId
-    ) {
+    public @ResponseBody Instant getDepartureTime(@RequestParam("tripId") Integer tripId) {
         return tripService.getDepartureTime(tripId);
     }
 
     @GetMapping("/trip/arrival-time")
     public @ResponseBody Instant getArrivalTime(
             @RequestParam("tripId") Integer tripId,
-            @RequestParam("stationTo") String stationTo
-    )
-    {
+            @RequestParam("stationTo") String stationTo) {
         return tripService.getArrivalTime(tripId, stationTo);
     }
 
@@ -138,8 +116,7 @@ public class TripController {
     public ModelAndView passengersPage(
             ModelAndView model,
             @RequestParam("tripId") Integer tripId,
-            @RequestParam("carriageNum") Integer carriageNum
-    ) {
+            @RequestParam("carriageNum") Integer carriageNum) {
         model.addObject("trip", tripService.findById(tripId));
         model.addObject("carriageNum", carriageNum);
         model.setViewName("admin/passengers_list");

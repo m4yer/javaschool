@@ -21,7 +21,7 @@ public class ScheduleController {
     private static final Logger log = Logger.getLogger(ScheduleController.class);
 
     @GetMapping("/user/schedule")
-    public String browseStationSchedule() {
+    public String scheduleStationPage() {
         return "user/station_schedule";
     }
 

@@ -50,11 +50,6 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Transactional
-    public List<ScheduleDTO> findScheduleByStationId(Integer stationId) {
-        return Converter.getScheduleDtos(scheduleDAO.findScheduleByStationId(stationId));
-    }
-
-    @Transactional
     public List<ScheduleDTO> getScheduleByStationNameForToday(String stationName) {
         Station station = stationDAO.findByName(stationName);
         // TODO: Here now schedule fetching by ALL days. Need to change it for TODAY.
@@ -64,6 +59,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Transactional
     public void addScheduleForTrip(Integer tripId, Integer routeId, String stationStopTimes, String tripStartTime, Integer trainId) {
+        log.info("Adding schedule for new just created trip:");
+        log.info("stationStopTimes: " + stationStopTimes);
 
         Trip trip = tripDAO.findById(tripId);
         Train chosenTrain = trainDAO.findById(trainId);
@@ -75,9 +72,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         List<Route> routes = routeDAO.findRouteByRouteId(routeId);
         List<Station> routeStations = new ArrayList<>();
-        for (Route route : routes) {
-            routeStations.add(route.getStation());
-        }
+        routes.forEach(route -> routeStations.add(route.getStation()));
 
         Station tempStation = routeStations.get(0);
         Instant tempInstant = ConverterUtil.parseInstant(tripStartTime);
@@ -107,9 +102,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         }
 
         // This loop sends messages to ActiveMQ.
-        for (Station station : routeStations) {
-            messageSender.sendMessage(station.getName());
-        }
+        routeStations.forEach(station -> messageSender.sendMessage(station.getName()));
 
     }
 

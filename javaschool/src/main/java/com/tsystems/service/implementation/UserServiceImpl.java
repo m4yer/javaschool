@@ -1,6 +1,6 @@
 package com.tsystems.service.implementation;
 
-import com.tsystems.controller.validator;
+import com.tsystems.controller.validation.Validator;
 import com.tsystems.dao.api.UserDAO;
 import com.tsystems.dto.UserDTO;
 import com.tsystems.entity.User;
@@ -9,7 +9,6 @@ import com.tsystems.entity.enums.Role;
 import com.tsystems.exceptions.RegisterFailedException;
 import com.tsystems.service.api.UserService;
 import com.tsystems.utils.HashPasswordUtil;
-import org.apache.commons.validator.routines.EmailValidator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,7 +42,7 @@ public class UserServiceImpl implements UserService {
         if (user.getUsername().length() < 4 || user.getUsername() == null ||
             user.getPassword().length() < 6 || user.getPassword() == null ||
             user.getFirstname() == null || user.getLastname() == null ||
-                !validator.isValid(user.getEmail(), validator.EMAIL_PATTERN) ||
+                !Validator.isValid(user.getEmail(), Validator.EMAIL_PATTERN) ||
             userDAO.findByUsername(user.getUsername()) != null ||
             userDAO.findByEmail(user.getEmail()) != null) {
             throw new RegisterFailedException();

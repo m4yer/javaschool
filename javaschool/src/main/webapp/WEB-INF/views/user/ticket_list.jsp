@@ -125,7 +125,7 @@
                                 class="fa fa-download"></i> DOWNLOAD</span></a></span>
                         <a style="margin-right: 12px; margin-top: -4px; padding: 4px 12px; padding-top: 4px;"
                                 href="#" class="ticket-line ticket-right brand-pink-button" id="trip-{{ ticket.trip.id }}" ng-click="showRoute($event)" >
-                            ROUTE DETAILS</a>
+                            TRIP DETAILS</a>
 
                         <span class="ticket-line"><span class="bold">Carriage</span> \#{{ ticket.carriage_num }}</span>
                     </div>
@@ -142,7 +142,7 @@
         <div class="brand-form-modal-content">
             <div class="brand-form-modal-header" style="margin-bottom: 12px;">
                 <span class="close">&times;</span>
-                <span class="caption" style="margin-left: 32px;">Route stations</span>
+                <span class="caption" style="margin-left: 32px;">Trip details</span>
             </div>
             <div class="brand-form-modal-body">
                 <span ng-repeat="schedule in schedules" class="span-wrapper">

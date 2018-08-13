@@ -202,7 +202,9 @@
     });
 </script>
 <script>
-    $('#datepicker').datepicker();
+    $('#datepicker').datepicker({
+        startDate: 'now'
+    });
     $('.clockpicker').clockpicker();
 
     function prepareData() {

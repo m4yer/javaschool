@@ -81,27 +81,27 @@
                                 </div>
                                 <div ngShow="registerForm.password.$dirty && !registerForm.password.$valid" ng-messages="registerForm.password.$error">
                                     <div class="input-warning" ng-message="required">Field is required</div>
+                                    <div class="input-warning" ng-message="pattern">Only digits and characters</div>
                                     <div class="input-warning" ng-message="minlength">At least 6 symbols</div>
                                 </div>
                                 <label for="password">Password</label>
                                 <form:input path="password" type="password" placeholder="Password" id="password" name="password"
-                                            autocomplete="off" required="required" ng-model="password" ng-minlength="6"/>
+                                            autocomplete="off" required="required" ng-model="password" ng-minlength="6" pattern="[A-Za-z0-9]+"/>
 
                                 <div ngShow="registerForm.rePassword.$dirty && !registerForm.rePassword.$valid" ng-messages="registerForm.rePassword">
                                     <div class="input-success" ng-message="$valid">&#10004;</div>
                                 </div>
                                 <div ngShow="registerForm.rePassword.$dirty && !registerForm.rePassword.$valid" ng-messages="registerForm.rePassword.$error">
-                                    <div class="input-warning" ng-message="required">Field is required</div>
-                                    <div class="input-warning" ng-message="pattern">Passwords don't match</div>
+                                    <div class="input-warning">Passwords does not match</div>
                                 </div>
                                 <label for="rePassword">Retype password</label>
                                 <input type="password" placeholder="Password again" id="rePassword" autocomplete="off"
-                                       required ng-model="rePassword" name="rePassword" ng-pattern="\b{{ password }}\b"/>
+                                       required ng-model="rePassword" name="rePassword" compare-to="password"/>
 
-                                <div ngShow="registerForm.rePassword.$dirty && !registerForm.rePassword.$valid" ng-messages="registerForm">
+                                <div ngShow="registerForm.firstname.$dirty && !registerForm.firstname.$valid" ng-messages="registerForm">
                                     <div class="input-success" ng-message="$valid">&#10004;</div>
                                 </div>
-                                <div ngShow="registerForm.rePassword.$dirty && !registerForm.rePassword.$valid" ng-messages="registerForm.$error">
+                                <div ngShow="registerForm.firstname.$dirty && !registerForm.firstname.$valid" ng-messages="registerForm.$error">
                                     <div class="input-warning" ng-message="required">Fields are required</div>
                                 </div>
                                 <label for="lastname">Personal information</label>
@@ -175,7 +175,10 @@
             this.submit();
         }
     });
-    $("#birthday").datepicker();
+    $("#birthday").datepicker({
+        startDate: '-100y',
+        startView: 3
+    });
     $("nav").addClass("fixed-top");
 </script>
 </body>

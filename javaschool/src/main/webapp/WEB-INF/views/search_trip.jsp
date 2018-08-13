@@ -91,7 +91,7 @@
 
 <div id="loader"></div>
 
-<div id="pageContent" class="animate-bottom"  ng-app="searchTripApp" ng-controller="searchTripCtrl">
+<div id="pageContent" class="animate-bottom" ng-app="searchTripApp" ng-controller="searchTripCtrl">
 
     <!-- Navigation -->
     <%@ include file="navigation.jsp" %>
@@ -132,15 +132,15 @@
                 </div>
             </div>
 
-            <div ng-if="!userWasFindingTrips" >
+            <div ng-if="!userWasFindingTrips">
                 <div class="info-page-center">
-                    <img src="<c:url value="/resources/img/search-pic.png" />" /><br>
+                    <img src="<c:url value="/resources/img/search-pic.png" />"/><br>
                     Let's find a trip for you!<br><br>
                 </div>
             </div>
-            <div ng-if="userWasFindingTrips && trips == 0" >
+            <div ng-if="userWasFindingTrips && trips == 0">
                 <div class="info-page-center">
-                    <img src="<c:url value="/resources/img/nothing-found.png" />" /><br>
+                    <img src="<c:url value="/resources/img/nothing-found.png" />"/><br>
                     Nothing matched your search parameters was found.<br><br>
                 </div>
             </div>
@@ -158,14 +158,21 @@
                         <td>{{ trip.trainDto.id }}</td>
                         <td>{{ trip.start_time.epochSecond * 1000 | date:'dd/MM/yyyy HH:mm' }}</td>
                         <td>{{ trip.arrival_time.epochSecond * 1000 | date:'dd/MM/yyyy HH:mm' }}</td>
-                        <td><button style="font-size: 12px; padding: 4px 12px;" id="trip-{{ trip.id }}" class="brand-pink-button" ng-click="showTripDetails($event)">TRIP DETAILS</button></td>
+                        <td>
+                            <button style="font-size: 12px; padding: 4px 12px;" id="trip-{{ trip.id }}"
+                                    class="brand-pink-button" ng-click="showTripDetails($event)">TRIP DETAILS
+                            </button>
+                        </td>
                         <td>
                             <form action="/user/ticket/buy/" method="get">
-                                <input type="hidden" name="tripId" value="{{trip.id}}" />
-                                <input type="hidden" name="carriageNum" value="1" />
-                                <input type="hidden" name="stationFrom" value="{{stationFrom}}" />
-                                <input type="hidden" name="stationTo" value="{{ stationTo }}" />
-                                <button class="brand-pink-button" style="font-size: 12px; padding: 4px 12px;" href="/user/ticket/buy/?tripId={{trip.id}}&carriageNum=1&stationFrom={{stationFrom}}&stationTo={{stationTo}}">Buy!</button>
+                                <input type="hidden" name="tripId" value="{{trip.id}}"/>
+                                <input type="hidden" name="carriageNum" value="1"/>
+                                <input type="hidden" name="stationFrom" value="{{stationFrom}}"/>
+                                <input type="hidden" name="stationTo" value="{{ stationTo }}"/>
+                                <button class="brand-pink-button" style="font-size: 12px; padding: 4px 12px;"
+                                        href="/user/ticket/buy/?tripId={{trip.id}}&carriageNum=1&stationFrom={{stationFrom}}&stationTo={{stationTo}}">
+                                    Buy!
+                                </button>
                             </form>
                         </td>
                     </tr>
@@ -181,18 +188,20 @@
         <div class="brand-form-modal-content">
             <div class="brand-form-modal-header" style="margin-bottom: 12px;">
                 <span class="close">&times;</span>
-                <span class="caption" style="margin-left: 32px;">Route stations</span>
+                <span class="caption" style="margin-left: 32px;">Trip details</span>
             </div>
             <div class="brand-form-modal-body">
                 <span ng-repeat="schedule in schedules" class="span-wrapper">
-                    <span class="span-number">{{ $index + 1}}</span><span class="span-station">{{ schedule.stationDto.name }}</span><span ng-if="!schedule.time_arrival.epochSecond" class="span-time">-</span><span ng-if="schedule.time_arrival.epochSecond" class="span-time">{{ schedule.time_arrival.epochSecond * 1000 | date:'dd/MM/yyyy HH:mm' }}</span>
+                    <span class="span-number">{{ $index + 1}}</span><span class="span-station">{{ schedule.stationDto.name }}</span><span
+                        ng-if="!schedule.time_arrival.epochSecond" class="span-time">-</span><span
+                        ng-if="schedule.time_arrival.epochSecond" class="span-time">{{ schedule.time_arrival.epochSecond * 1000 | date:'dd/MM/yyyy HH:mm' }}</span>
                 </span>
             </div>
         </div>
 
     </div>
 
-<!-- div "pageContent" end -->
+    <!-- div "pageContent" end -->
 </div>
 
 <script src="<c:url value="/resources/js/bootstrap.bundle.min.js" />"></script>
@@ -212,73 +221,85 @@
         // Then we need to GET valid trips and paste it in result page
         <c:choose>
         <c:when test="${not empty stationFrom}">
-        $scope.stationFrom = '${stationFrom}';
-        $scope.stationTo = '${stationTo}';
-        $scope.dateStart = '${dateStart}';
-        $scope.dateEnd = '${dateEnd}';
-        $scope.userWasFindingTrips = true;
-        $http({
-            url: "/trip/find/",
-            method: "POST",
-            params: {
-                stationFrom: '${stationFrom}',
-                stationTo: '${stationTo}',
-                dateStart: '${dateStart} 00:00',
-                dateEnd: '${dateEnd} 00:00'
-            }
-        }).then(function success(response) {
-            console.log(response.data);
-            $scope.trips = response.data;
 
-            for (var i = 0; i < $scope.trips.length; i++) {
-                closure(i);
-            }
+            <c:choose>
+                <c:when test="${not empty stationTo}">
+                    <c:choose>
+                        <c:when test="${not empty dateStart}">
+                            <c:choose>
+                                <c:when test="${not empty dateEnd}">
+                                    $scope.stationFrom = '${stationFrom}';
+                                    $scope.stationTo = '${stationTo}';
+                                    $scope.dateStart = '${dateStart}';
+                                    $scope.dateEnd = '${dateEnd}';
+                                    $scope.userWasFindingTrips = true;
+                                    $http({
+                                        url: "/trip/get/",
+                                        method: "GET",
+                                        params: {
+                                            stationFrom: '${stationFrom}',
+                                            stationTo: '${stationTo}',
+                                            dateStart: '${dateStart} 00:00',
+                                            dateEnd: '${dateEnd} 00:00'
+                                        }
+                                    }).then(function success(response) {
+                                        console.log(response.data);
+                                        $scope.trips = response.data;
 
-            $http({
-                url: "/station/get/list/title",
-                method: "GET"
-            }).then(function success(response) {
-                var list = response.data;
-                console.log('list: ', list);
+                                        for (var i = 0; i < $scope.trips.length; i++) {
+                                            closure(i);
+                                        }
 
-                $http({
-                    url: "/station/get/list/title",
-                    method: "GET"
-                }).then(function success(response) {
-                    var list = response.data;
-                    console.log('list: ', list);
-                    new Awesomplete(document.querySelector(".autocomplete-from input"),{
-                        list: list,
-                        minChars: 1,
-                        maxItems: 8
-                    });
-                    new Awesomplete(document.querySelector(".autocomplete-to input"),{
-                        list: list,
-                        minChars: 1,
-                        maxItems: 8
-                    });
-                    pageLoaded();
-                });
+                                        $http({
+                                            url: "/station/get/list/title",
+                                            method: "GET"
+                                        }).then(function success(response) {
+                                            var list = response.data;
+                                            console.log('list: ', list);
 
-            });
+                                            $http({
+                                                url: "/station/get/list/title",
+                                                method: "GET"
+                                            }).then(function success(response) {
+                                                var list = response.data;
+                                                console.log('list: ', list);
+                                                new Awesomplete(document.querySelector(".autocomplete-from input"),{
+                                                    list: list,
+                                                    minChars: 1,
+                                                    maxItems: 8
+                                                });
+                                                new Awesomplete(document.querySelector(".autocomplete-to input"),{
+                                                    list: list,
+                                                    minChars: 1,
+                                                    maxItems: 8
+                                                });
+                                                pageLoaded();
+                                            });
 
-        });
+                                        });
+
+                                    });
+                                </c:when>
+                            </c:choose>
+                        </c:when>
+                    </c:choose>
+                </c:when>
+            </c:choose>
 
         </c:when>
         <c:otherwise>
-        console.log('otherwise jstl');
         $http({
             url: "/station/get/list/title",
             method: "GET"
         }).then(function success(response) {
             var list = response.data;
             console.log('list: ', list);
-            new Awesomplete(document.querySelector(".autocomplete-from input"),{
+            new Awesomplete(document.querySelector(".autocomplete-from input"), {
                 list: list,
                 minChars: 1,
                 maxItems: 8
             });
-            new Awesomplete(document.querySelector(".autocomplete-to input"),{
+            new Awesomplete(document.querySelector(".autocomplete-to input"), {
                 list: list,
                 minChars: 1,
                 maxItems: 8
@@ -290,8 +311,8 @@
         $scope.findTrips = function () {
             $scope.userWasFindingTrips = true;
             $http({
-                url: "/trip/find/",
-                method: "POST",
+                url: "/trip/get/",
+                method: "GET",
                 params: {
                     stationFrom: $scope.stationFrom,
                     stationTo: $scope.stationTo,

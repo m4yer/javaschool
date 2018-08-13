@@ -42,7 +42,7 @@ public class TicketController {
     {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Integer userId = userDetails.getId();
-        if (ticketService.generatePdf(ticketId, userId)) {
+        if (ticketService.isTripBelongsUser(ticketId, userId)) {
             ModelAndView model = new ModelAndView("pdfView");
             TicketDTO ticket = ticketService.findById(ticketId);
             model.addObject("ticket", ticket);
