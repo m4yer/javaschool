@@ -32,8 +32,7 @@ public class StationServiceImpl implements StationService {
 
     @Transactional
     public Station findById(Integer id) {
-        Station station = stationDAO.findById(id);
-        return station;
+        return stationDAO.findById(id);
     }
 
     @Transactional
@@ -51,12 +50,11 @@ public class StationServiceImpl implements StationService {
         return Converter.getStationDtos(stationDAO.getAll());
     }
 
+    @Transactional
     public List<StationDTO> getRouteStations(Integer routeId) {
         List<Route> routes = routeDAO.findRouteByRouteId(routeId);
         List<StationDTO> stations = new ArrayList<>();
-        for (Route route : routes) {
-            stations.add(Converter.getStationDto(route.getStation()));
-        }
+        routes.forEach(route -> stations.add(Converter.getStationDto(route.getStation())));
         return stations;
     }
 

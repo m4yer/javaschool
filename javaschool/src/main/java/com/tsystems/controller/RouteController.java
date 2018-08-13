@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,10 +51,11 @@ public class RouteController {
     }
 
     @GetMapping("/route/edit/{id}")
-    public ModelAndView editRoutePage(ModelAndView model, @PathVariable("id") Integer routeId) {
-        model.addObject("routeId", routeId);
-        model.setViewName("admin/route_edit");
-        return model;
+    public ModelAndView editRoutePage(@PathVariable("id") Integer routeId) {
+        if (routeService.findRouteByRouteId(routeId) != null) {
+            return new ModelAndView("admin/route_edit", "routeId", routeId); }
+        else {
+            throw new EntityNotFoundException();}
     }
 
     @PostMapping("/route/edit")

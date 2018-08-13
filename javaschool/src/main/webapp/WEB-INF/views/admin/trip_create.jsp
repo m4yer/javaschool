@@ -190,7 +190,7 @@
         });
 
         $http({
-            url: "/admin/train/get/available",
+            url: "/train/get/available",
             method: "GET"
         }).then(function success(response) {
             $scope.trains = response.data;

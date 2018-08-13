@@ -25,7 +25,7 @@ public class ScheduleRestController {
         return ConverterUtil.parseJson(schedules);
     }
 
-    @GetMapping("/admin/schedule/get/")
+    @GetMapping("/user/schedule/get/")
     public String getSchedulesByTripId(@RequestParam("tripId") Integer tripId) {
         return ConverterUtil.parseJson(scheduleService.getSchedulesByTripId(tripId));
     }

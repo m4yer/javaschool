@@ -144,7 +144,7 @@
                     <tr ng-repeat="schedule in schedules">
                         <td>{{ schedule.tripDto.trainDto.id }}</td>
                         <td>
-                            <button style="font-size: 12px;" class="brand-pink-button"
+                            <button style="font-size: 12px; padding: 4px 12px;" class="brand-pink-button"
                                     id="trip-{{ schedule.tripDto.id }}" ng-click="showRoute($event)">ROUTE
                             </button>
                         </td>

@@ -1,5 +1,6 @@
 package com.tsystems.service.implementation;
 
+import com.tsystems.controller.validator;
 import com.tsystems.dao.api.UserDAO;
 import com.tsystems.dto.UserDTO;
 import com.tsystems.entity.User;
@@ -42,7 +43,7 @@ public class UserServiceImpl implements UserService {
         if (user.getUsername().length() < 4 || user.getUsername() == null ||
             user.getPassword().length() < 6 || user.getPassword() == null ||
             user.getFirstname() == null || user.getLastname() == null ||
-            !EmailValidator.getInstance().isValid(user.getEmail()) ||
+                !validator.isValid(user.getEmail(), validator.EMAIL_PATTERN) ||
             userDAO.findByUsername(user.getUsername()) != null ||
             userDAO.findByEmail(user.getEmail()) != null) {
             throw new RegisterFailedException();

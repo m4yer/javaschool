@@ -12,6 +12,7 @@
     <modules>
         <module>javaschool</module>
         <module>schedule</module>
+        <module>dto</module>
     </modules>
 
 </project>

@@ -10,18 +10,88 @@
     <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/magnific-popup.css"/>"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/index.css"/>"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/loading.css"/>"/>
+    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/brand-form-modal.css"/>"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/navigation-white.css"/>"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/navigation-admin.css"/>"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/search-trip-results-table.css"/>"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/bootstrap-datepicker.min.css"/>"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/awesomplete.css"/>"/>
+
+    <script src="<c:url value="/resources/js/jquery-3.3.1.min.js"/>"></script>
+    <script src="<c:url value="/resources/js/datatables.js" />"></script>
+    <script src="<c:url value="/resources/js/angular/angular.min.js" />"></script>
+    <script src="<c:url value="/resources/js/angular/angular-datatables.min.js" />"></script>
+    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/angular-datatables.custom.css" />"/>
     <title>RW | Search trip</title>
+    <style>
+        .span-wrapper {
+            display: block;
+            margin-top: 9px;
+            font-weight: 700;
+        }
+
+        .span-number {
+            padding: 6px;
+            background: #FF5A5F;
+            display: inline-block;
+            font-size: 14px;
+            color: black;
+            border-bottom: 2px solid red;
+            margin: 0;
+            border-top-left-radius: 2px;
+            border-bottom-left-radius: 2px;
+            min-width: 36px;
+        }
+
+        .span-station {
+            background: #414141;
+            display: inline-block;
+            color: white;
+            border-bottom: 2px solid black;
+            min-width: 140px;
+            padding: 6px;
+            margin: 0 auto;
+            font-size: 14px;
+        }
+
+        .span-time {
+            background: #414141;
+            color: #FF5A5F;
+            min-width: 160px;
+            padding: 6px;
+            display: inline-block;
+            border-bottom-right-radius: 2px;
+            border-top-right-radius: 2px;
+            border-bottom: 2px solid black;
+            border-left: 2px solid black;
+            font-size: 14px;
+        }
+
+        .brand-form-modal-content {
+            width: 40%;
+            margin-top: 5%;
+        }
+
+        @media (max-width: 920px) {
+            .brand-form-modal-content {
+                width: 52%;
+                margin-top: 8%;
+            }
+        }
+
+        @media (max-width: 708px) {
+            .brand-form-modal-content {
+                width: 68%;
+                margin-top: 8%;
+            }
+        }
+    </style>
 </head>
 <body id="page-top">
 
 <div id="loader"></div>
 
-<div id="pageContent" class="animate-bottom">
+<div id="pageContent" class="animate-bottom"  ng-app="searchTripApp" ng-controller="searchTripCtrl">
 
     <!-- Navigation -->
     <%@ include file="navigation.jsp" %>
@@ -30,7 +100,7 @@
     </sec:authorize>
 
     <!-- Search line section -->
-    <div ng-app="searchTripApp" ng-controller="searchTripCtrl">
+    <div>
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-12" style="background-color: rgba(0,0,0,0.7); width: 100%;height: 100px;">
@@ -62,22 +132,41 @@
                 </div>
             </div>
 
+            <div ng-if="!userWasFindingTrips" >
+                <div class="info-page-center">
+                    <img src="<c:url value="/resources/img/search-pic.png" />" /><br>
+                    Let's find a trip for you!<br><br>
+                </div>
+            </div>
+            <div ng-if="userWasFindingTrips && trips == 0" >
+                <div class="info-page-center">
+                    <img src="<c:url value="/resources/img/nothing-found.png" />" /><br>
+                    Nothing matched your search parameters was found.<br><br>
+                </div>
+            </div>
+
             <div class="row">
                 <table class="search-trip-results-table">
                     <tr ng-show="trips.length > 0">
                         <th>Train #</th>
-                        <th>Route</th>
                         <th>Departing</th>
                         <th>Arriving</th>
+                        <th>Details</th>
                         <th>Book ticket</th>
                     </tr>
                     <tr ng-repeat="trip in trips">
                         <td>{{ trip.trainDto.id }}</td>
-                        <td>{{ trip.route_id }}</td>
                         <td>{{ trip.start_time.epochSecond * 1000 | date:'dd/MM/yyyy HH:mm' }}</td>
                         <td>{{ trip.arrival_time.epochSecond * 1000 | date:'dd/MM/yyyy HH:mm' }}</td>
+                        <td><button style="font-size: 12px; padding: 4px 12px;" id="trip-{{ trip.id }}" class="brand-pink-button" ng-click="showTripDetails($event)">TRIP DETAILS</button></td>
                         <td>
-                            <a href="/user/ticket/buy/?tripId={{trip.id}}&carriageNum=1&stationFrom={{stationFrom}}&stationTo={{stationTo}}">Buy!</a>
+                            <form action="/user/ticket/buy/" method="get">
+                                <input type="hidden" name="tripId" value="{{trip.id}}" />
+                                <input type="hidden" name="carriageNum" value="1" />
+                                <input type="hidden" name="stationFrom" value="{{stationFrom}}" />
+                                <input type="hidden" name="stationTo" value="{{ stationTo }}" />
+                                <button class="brand-pink-button" style="font-size: 12px; padding: 4px 12px;" href="/user/ticket/buy/?tripId={{trip.id}}&carriageNum=1&stationFrom={{stationFrom}}&stationTo={{stationTo}}">Buy!</button>
+                            </form>
                         </td>
                     </tr>
                 </table>
@@ -85,15 +174,32 @@
         </div>
     </div>
 
+    <!-- Route Modal Form -->
+    <div id="brand-form-modal" class="brand-form-modal">
+
+        <!-- Modal content -->
+        <div class="brand-form-modal-content">
+            <div class="brand-form-modal-header" style="margin-bottom: 12px;">
+                <span class="close">&times;</span>
+                <span class="caption" style="margin-left: 32px;">Route stations</span>
+            </div>
+            <div class="brand-form-modal-body">
+                <span ng-repeat="schedule in schedules" class="span-wrapper">
+                    <span class="span-number">{{ $index + 1}}</span><span class="span-station">{{ schedule.stationDto.name }}</span><span ng-if="!schedule.time_arrival.epochSecond" class="span-time">-</span><span ng-if="schedule.time_arrival.epochSecond" class="span-time">{{ schedule.time_arrival.epochSecond * 1000 | date:'dd/MM/yyyy HH:mm' }}</span>
+                </span>
+            </div>
+        </div>
+
+    </div>
+
 <!-- div "pageContent" end -->
 </div>
 
-<script src="<c:url value="/resources/js/jquery-3.3.1.min.js"/>"></script>
 <script src="<c:url value="/resources/js/bootstrap.bundle.min.js" />"></script>
 <script src="<c:url value="/resources/js/bootstrap-datepicker.min.js" />"></script>
 <script src="<c:url value="/resources/js/loading.js" />"></script>
+<script src="<c:url value="/resources/js/brand-form-modal.js" />"></script>
 <script src="<c:url value="/resources/js/awesomplete.js" />"></script>
-<script src="<c:url value="/resources/js/angular/angular.min.js" />"></script>
 <script src="<c:url value="/resources/js/angular/searchTripApp.js" />"></script>
 <script>
     $("#datepicker1").datepicker();
@@ -101,7 +207,7 @@
 </script>
 <script>
 
-    app.controller("searchTripCtrl", function ($scope, $http) {
+    app.controller("searchTripCtrl", function ($scope, $http, DTOptionsBuilder) {
         // If we have "GET" parameters (means that user came to this page from index and he filled all inputs)
         // Then we need to GET valid trips and paste it in result page
         <c:choose>
@@ -110,6 +216,7 @@
         $scope.stationTo = '${stationTo}';
         $scope.dateStart = '${dateStart}';
         $scope.dateEnd = '${dateEnd}';
+        $scope.userWasFindingTrips = true;
         $http({
             url: "/trip/find/",
             method: "POST",
@@ -150,7 +257,6 @@
                         minChars: 1,
                         maxItems: 8
                     });
-
                     pageLoaded();
                 });
 
@@ -177,12 +283,12 @@
                 minChars: 1,
                 maxItems: 8
             });
-
             pageLoaded();
         });
         </c:otherwise>
         </c:choose>
         $scope.findTrips = function () {
+            $scope.userWasFindingTrips = true;
             $http({
                 url: "/trip/find/",
                 method: "POST",
@@ -199,7 +305,30 @@
                     closure(i);
                 }
             });
-        }
+        };
+
+        $scope.showTripDetails = function (event) {
+            var chosenTripId = event.target.id.split('trip-').join('');
+            $http({
+                url: "/user/schedule/get/",
+                method: "GET",
+                params: {
+                    tripId: chosenTripId
+                }
+            }).then(function success(response) {
+                console.log('$scope.schedules: ', response.data);
+                $scope.schedules = response.data;
+                //create options
+                $scope.rtOptions = DTOptionsBuilder.newOptions()
+                    .withOption('scrollY', '300px')
+                    .withOption('scrollX', '100%')
+                    .withOption('scrollCollapse', true);
+
+                //initialize the dataTable
+                $scope.rtColumnsReady = true;
+                openModalForm();
+            });
+        };
 
         function closure(i) {
             $http({
@@ -214,7 +343,7 @@
                 console.log($scope.trips[i]);
                 $scope.trips[i].arrival_time = response.data;
             });
-        };
+        }
     });
 </script>
 </body>

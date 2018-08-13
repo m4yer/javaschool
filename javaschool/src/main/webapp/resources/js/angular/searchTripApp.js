@@ -1,1 +1,1 @@
-var app = angular.module("searchTripApp", []);
+var app = angular.module("searchTripApp", ['datatables']);

@@ -33,7 +33,7 @@ app.controller("stationScheduleCtrl", function($scope, $http, DTOptionsBuilder) 
         var chosenTripId = event.target.id.split('trip-').join('');
 
         $http({
-            url: "/admin/schedule/get/",
+            url: "/user/schedule/get/",
             method: "GET",
             params: {
                 tripId: chosenTripId

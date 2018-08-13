@@ -5,8 +5,6 @@ import com.tsystems.dto.TrainDTO;
 import com.tsystems.dto.TripDTO;
 
 import javax.ejb.Stateless;
-import javax.enterprise.context.ApplicationScoped;
-
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.inject.Named;

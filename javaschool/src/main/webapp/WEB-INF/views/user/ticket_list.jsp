@@ -29,10 +29,10 @@
         color: #414141;
     }
     .span-wrapper {
-        display: block;
-        margin-top: 9px;
-        font-weight: 700;
-    }
+         display: block;
+         margin-top: 9px;
+         font-weight: 700;
+     }
 
     .span-number {
         padding: 6px;
@@ -103,8 +103,14 @@
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-12" style="margin-top: 18px;">
-
+            <div class="col-lg-12" style="margin-top: 24px;">
+                <div ng-show="tickets.length == 0" >
+                    <div class="info-page-center">
+                        <img src="<c:url value="/resources/img/nothing-found.png" />" /><br>
+                        You haven't bought any tickets yet.<br><br>
+                        <a href="/trip/find/" class="brand-pink-button" >FIND TRIPS</a>
+                    </div>
+                </div>
                 <div ng-repeat="ticket in tickets" class="ticket-wrapper">
                     <div class="ticket-header"><span class="ticket-header-caption">Ticket</span></div>
                     <div class="ticket-body">
@@ -119,7 +125,7 @@
                                 class="fa fa-download"></i> DOWNLOAD</span></a></span>
                         <a style="margin-right: 12px; margin-top: -4px; padding: 4px 12px; padding-top: 4px;"
                                 href="#" class="ticket-line ticket-right brand-pink-button" id="trip-{{ ticket.trip.id }}" ng-click="showRoute($event)" >
-                            <i class="fa fa-download"></i> ROUTE</a>
+                            ROUTE DETAILS</a>
 
                         <span class="ticket-line"><span class="bold">Carriage</span> \#{{ ticket.carriage_num }}</span>
                     </div>
@@ -160,7 +166,7 @@
         $scope.showRoute = function(event) {
             var chosenTripId = event.target.id.split('trip-').join('');
             $http({
-                url: "/admin/schedule/get/",
+                url: "/user/schedule/get/",
                 method: "GET",
                 params: {
                     tripId: chosenTripId
@@ -188,7 +194,6 @@
             }
         }).then(function success(response) {
             $scope.tickets = response.data;
-            console.log('$scope.tickets: ', $scope.tickets);
             pageLoaded();
         });
     });

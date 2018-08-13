@@ -4,7 +4,11 @@ import com.tsystems.dto.StationDTO;
 import com.tsystems.utils.HaversineUtil;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+@RunWith(MockitoJUnitRunner.class)
 public class HaversineUtilTest {
 
     @Test

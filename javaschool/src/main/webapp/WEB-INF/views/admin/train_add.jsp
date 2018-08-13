@@ -50,7 +50,7 @@
                                 <div class="input-success" ng-message="$valid">&#10004;</div>
                             </div>
                             <label for="carriage_amount">Amount of carriages</label>
-                            <form:input pattern="[0-9]+" path="carriage_amount" type="text" placeholder="Amount" name="carriage_amount" id="carriage_amount" autocomplete="false" required="required" ng-model="carriage_amount"/>
+                            <form:input pattern="^[1-3]{1}[0-9]{0,1}$|^[1-9]{1}" path="carriage_amount" type="text" placeholder="Amount" name="carriage_amount" id="carriage_amount" autocomplete="false" required="required" ng-model="carriage_amount"/>
 
                             <!-- Carriages type -->
                             <div class="input-success">&#10004;</div>
@@ -71,10 +71,10 @@
                                 <div class="input-success" ng-message="$valid">&#10004;</div>
                             </div>
                             <label for="speed">Train speed, <font color="#FF5A5F">km/h</font></label>
-                            <form:input pattern="[0-9]+" path="speed" type="text" placeholder="Speed" name="speed" id="speed" autocomplete="false" required="required" ng-model="speed"/>
+                            <form:input pattern="^[1-2]{1}[0-9]{2,2}|^[5-9]{1}[0-9]{1}" path="speed" type="text" placeholder="Speed" name="speed" id="speed" autocomplete="false" required="required" ng-model="speed"/>
 
                             <div class="button-wrapper text-center">
-                                <button disabled ng-disabled="!trainAddForm.$valid" class="brand-pink-button">Add station</button>
+                                <button disabled ng-disabled="!trainAddForm.$valid" class="brand-pink-button">Add train</button>
                             </div>
 
                         </form:form>

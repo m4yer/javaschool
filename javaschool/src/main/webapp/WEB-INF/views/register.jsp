@@ -74,7 +74,7 @@
                                 </div>
                                 <label for="email">Email</label>
                                 <form:input path="email" type="email" placeholder="Email" id="email" autocomplete="false"
-                                            required="required" ng-model="email" ng-pattern="/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/"/>
+                                            required="required" ng-model="email" ng-pattern="/^[a-zA-Z]+[a-zA-Z0-9._]+@[a-zA-Z]+\.[a-zA-Z.]{2,5}$/"/>
 
                                 <div ngShow ng-show="registerForm.password.$dirty && !registerForm.password.$valid" ng-messages="registerForm.password">
                                     <div class="input-success" ng-message="$valid">&#10004;</div>

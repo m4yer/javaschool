@@ -1,7 +1,7 @@
 app.controller("trainManageCtrl", function($scope, $http, DTOptionsBuilder, DTColumnBuilder) {
 
     $http({
-        url: "/admin/train/list/get",
+        url: "/train/list/get",
         method: "GET"
     }).then(function success(response) {
         $scope.trains = response.data;
