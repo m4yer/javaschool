@@ -33,10 +33,6 @@ public class RouteController {
         return "admin/route_list";
     }
 
-    @GetMapping("/route/list/get")
-    public @ResponseBody String getAllRoutes() {
-        return ConverterUtil.parseJson(routeService.getFirstAndLastRoutesRows());
-    }
 
     @GetMapping("/route/add")
     public ModelAndView addRoutePage(ModelAndView model) {
@@ -44,20 +40,6 @@ public class RouteController {
         model.addObject("id", routeService.getLastRouteId());
         model.setViewName("admin/route_add");
         return model;
-    }
-
-    @GetMapping("/route/get/{id}")
-    public @ResponseBody
-    String getRouteStationsById(@PathVariable("id") Integer id) {
-        List<RouteDTO> routes = routeService.findRouteByRouteId(id);
-        List<String> stations = new ArrayList<>();
-        routes.forEach(route -> stations.add(route.getStationDto().getName()));
-        return ConverterUtil.parseJson(stations);
-    }
-
-    @GetMapping("/route/distance/{id}")
-    public @ResponseBody double getRouteDistanceById(@PathVariable("id") Integer id) {
-        return RoundUtil.round(routeService.getRouteDistanceById(id), 2);
     }
 
     @PostMapping("/route/create")

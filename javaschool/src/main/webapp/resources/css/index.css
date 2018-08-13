@@ -223,3 +223,22 @@ header.masthead p {
     height: 65vh;
     margin-bottom: 36px;
 }
+
+.button-wrapper button {
+    margin: 0 auto;
+}
+
+.input-warning {
+    float: right;
+    color: red;
+    font-weight: 700;
+    font-size: 12px;
+    margin-top: 3px;
+}
+.input-success {
+    float: right;
+    color: #0dff00;
+    font-weight: 700;
+    font-size: 12px;
+    margin-top: 3px;
+}

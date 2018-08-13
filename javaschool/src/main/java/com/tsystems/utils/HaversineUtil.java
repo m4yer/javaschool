@@ -3,7 +3,6 @@ package com.tsystems.utils;
 import com.tsystems.dto.StationDTO;
 
 public class HaversineUtil {
-
     private static final int PI_VALUE_IN_DEGREES = 180;
 
     private HaversineUtil() {

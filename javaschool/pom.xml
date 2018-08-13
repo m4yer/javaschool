@@ -55,6 +55,12 @@
             <version>${spring.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>commons-validator</groupId>
+            <artifactId>commons-validator</artifactId>
+            <version>1.6</version>
+        </dependency>
+
         <!-- For E-mail support -->
         <dependency>
             <groupId>org.springframework</groupId>

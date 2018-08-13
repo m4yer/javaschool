@@ -18,11 +18,8 @@ import java.util.List;
 
 @Service
 public class RouteServiceImpl implements RouteService {
-
     private static final Logger log = Logger.getLogger(RouteServiceImpl.class);
-
     private static ObjectMapper objectMapper = new ObjectMapper();
-
     private RouteDAO routeDAO;
     private StationDAO stationDAO;
 

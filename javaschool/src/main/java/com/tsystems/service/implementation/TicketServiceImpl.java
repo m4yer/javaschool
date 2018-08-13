@@ -22,14 +22,16 @@ public class TicketServiceImpl implements TicketService {
     private UserDAO userDAO;
     private StationDAO stationDAO;
     private RouteDAO routeDAO;
+    private MailService mailService;
 
     @Autowired
-    public TicketServiceImpl(TicketDAO ticketDAO, TripDAO tripDAO, UserDAO userDAO, StationDAO stationDAO, RouteDAO routeDAO) {
+    public TicketServiceImpl(TicketDAO ticketDAO, TripDAO tripDAO, UserDAO userDAO, StationDAO stationDAO, RouteDAO routeDAO, MailService mailService) {
         this.ticketDAO = ticketDAO;
         this.tripDAO = tripDAO;
         this.userDAO = userDAO;
         this.stationDAO = stationDAO;
         this.routeDAO = routeDAO;
+        this.mailService = mailService;
     }
 
     @Transactional
@@ -82,14 +84,18 @@ public class TicketServiceImpl implements TicketService {
             // Let's check - has user already bought tickets to this trip?
             if (tripDAO.isTripAvailableForUser(tripId, userName)) {
                 // We can sell ticket to him because he hasn't bought ticket yet
-
-                ticketDAO.add(new Ticket(
+                Ticket ticket = new Ticket(
                         chosenTrip,
                         userDAO.findByUsername(userName),
                         seatId,
                         stationDAO.findByName(stationFromName),
                         stationDAO.findByName(stationToName),
-                        carriageNum));
+                        carriageNum);
+                ticketDAO.add(ticket);
+                mailService.sendMail("from@from.ru",
+                        "aspid888@gmail.com", "RW | Ticket details", "" +
+                                "Congratulations! You've just bought a ticket for a trip!\n" +
+                                "Details: " + ticket.toString());
                 return "success";
             } else {
                 return "alreadybought";

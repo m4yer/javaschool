@@ -2,12 +2,13 @@ package com.tsystems.service.implementation;
 
 import com.tsystems.service.api.SecurityService;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Service;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
+@Service
 public class SecurityServiceImpl implements SecurityService {
-
     private static final Logger log = Logger.getLogger(SecurityServiceImpl.class);
 
     @Override

@@ -1,5 +1,5 @@
 .brand-form-wrapper {
-    margin-top: 28px;
+    margin-top: 56px;
     width: 380px;
     color: #414141;
     font-family: 'Lato', sans-serif;
@@ -22,6 +22,7 @@
 }
 
 .form-error-message {
+    display: none;
     background: #FF5A5F;
     color: #414141;
     font-weight: 700;

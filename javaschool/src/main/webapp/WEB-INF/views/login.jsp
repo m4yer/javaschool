@@ -19,11 +19,11 @@
           rel='stylesheet' type='text/css'>
     <style>
         .brand-form-wrapper {
-            margin-top: 168px;
+            margin-top: 186px;
         }
         @media (max-width: 991px) {
             .brand-form-wrapper {
-                margin-top: 10px;
+                margin-top: 0;
             }
         }
     </style>

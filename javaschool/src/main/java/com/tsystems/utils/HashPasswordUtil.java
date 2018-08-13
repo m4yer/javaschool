@@ -8,7 +8,6 @@ import java.security.NoSuchAlgorithmException;
 
 @Service
 public class HashPasswordUtil {
-
     private static final Logger log = Logger.getLogger(HashPasswordUtil.class);
 
     private HashPasswordUtil() {

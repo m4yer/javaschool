@@ -5,6 +5,7 @@ import com.tsystems.entity.User;
 import com.tsystems.entity.enums.Role;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Query;
 import java.text.ParseException;
@@ -22,6 +23,7 @@ public class UserDAOImpl extends GenericDAOImpl<User, Integer> implements UserDA
         return (User) findUser.getSingleResult();
     }
 
+    @Transactional
     public User findByUsername(String username) {
         Query findByUsername = entityManager.createQuery("select user from User user where user.username=:username");
         findByUsername.setParameter("username", username);

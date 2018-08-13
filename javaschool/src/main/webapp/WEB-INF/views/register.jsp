@@ -19,7 +19,7 @@
           rel='stylesheet' type='text/css'>
     <style>
         .brand-form-wrapper {
-            margin-top: 68px;
+            margin-top: 84px;
         }
 
         @media (max-width: 991px) {
@@ -27,23 +27,7 @@
                 margin-top: -60px;
             }
         }
-        .button-wrapper button {
-            margin: 0 auto;
-        }
-        .input-warning {
-            float: right;
-            color: red;
-            font-weight: 700;
-            font-size: 12px;
-            margin-top: 3px;
-        }
-        .input-success {
-            float: right;
-            color: #0dff00;
-            font-weight: 700;
-            font-size: 12px;
-            margin-top: 3px;
-        }
+
     </style>
     <title>RW | Register</title>
 </head>
@@ -64,18 +48,15 @@
                         <div class="form-header">
                             <span class="header-caption">Sign Up</span>
                         </div>
-                        <c:choose>
-                            <c:when test="${param.status == 'error'}">
-                                <div class="form-error-message">Something went wrong ;(</div>
-                            </c:when>
-                        </c:choose>
+
+                        <div class="form-error-message">xaxa</div>
                         <div class="form-content text-left">
-                            <form:form action="/register" method="post" modelAttribute="user" name="registerForm">
+                            <form:form action="/register" method="post" modelAttribute="user" name="registerForm" id="registerForm">
 
 
                                 <div ngShow="registerForm.username.$dirty && !registerForm.username.$valid" ng-messages="registerForm.username.$error">
                                     <div class="input-warning" ng-message="required">Field is required</div>
-                                    <div class="input-warning" ng-message="minlength">Too short</div>
+                                    <div class="input-warning" ng-message="minlength">At least 4 symbols</div>
                                 </div>
                                 <div ngShow="registerForm.username.$dirty && !registerForm.username.$valid" ng-messages="registerForm.username">
                                     <div class="input-success" ng-message="$valid">&#10004;</div>
@@ -152,6 +133,48 @@
 <script src="<c:url value="/resources/js/angular/angular-messages.min.js" />"></script>
 <script src="<c:url value="/resources/js/angular/registerApp.js" />"></script>
 <script>
+    var needCheck = true;
+    $("#registerForm").submit(function (e) {
+        if (needCheck) {
+            e.preventDefault();
+            var username = $("#username").val();
+            $.ajax({
+                url: "/register/is-allowed/username",
+                method: "GET",
+                data: {
+                    username: username
+                }
+            }).done(function (response) {
+                if (response == false) {
+                    // sorry such username already exist in db
+                    $('.form-error-message').html("Such username already exist.");
+                    $('.form-error-message').css('display', 'block');
+                } else if (response == true) {
+                    $('.form-error-message').css('display', 'none');
+                    var email = $("#email").val();
+                    $.ajax({
+                        url: "/register/is-allowed/email",
+                        method: "GET",
+                        data: {
+                            email: email
+                        }
+                    }).done(function (response) {
+                        if (response == false) {
+                            $('.form-error-message').html("Such email already exist.");
+                            $('.form-error-message').css('display', 'block');
+                        } else if (response == true) {
+                            // allow registration
+                            $('.form-error-message').css('display', 'none');
+                            needCheck = false;
+                            $('#registerForm').submit();
+                        }
+                    });
+                }
+            });
+        } else {
+            this.submit();
+        }
+    });
     $("#birthday").datepicker();
     $("nav").addClass("fixed-top");
 </script>

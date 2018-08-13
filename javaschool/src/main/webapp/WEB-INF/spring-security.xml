@@ -15,7 +15,7 @@
 
         <form-login login-page="/login"
                     login-processing-url="/signin"
-                    default-target-url="/"
+                    default-target-url="/login-forward"
                     authentication-failure-url="/login?status=error"
                     username-parameter="username"
                     password-parameter="password"/>
@@ -35,13 +35,8 @@
         </authentication-provider>
     </authentication-manager>
 
-    <beans:bean id="userDetailsServiceImpl"
-                class="com.tsystems.service.implementation.UserDetailsServiceImpl"/>
-    <beans:bean id="encoder"
-                class="com.tsystems.utils.Md5PasswordEncoder">
-    </beans:bean>
-
-    <beans:bean id="securityService" class="com.tsystems.service.implementation.SecurityServiceImpl">
-    </beans:bean>
+    <beans:bean id="userDetailsServiceImpl" class="com.tsystems.service.implementation.UserDetailsServiceImpl" />
+    <beans:bean id="encoder" class="com.tsystems.utils.Md5PasswordEncoder" />
+    <beans:bean id="securityService" class="com.tsystems.service.implementation.SecurityServiceImpl" />
 
 </beans:beans>

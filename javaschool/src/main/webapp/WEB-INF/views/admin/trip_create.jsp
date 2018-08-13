@@ -102,7 +102,7 @@
 
                                                 <div class="input-group-prepend">
                                                     <input type="text" id="datepicker"
-                                                           class="form-control datepicker-border-0" placeholder="Date" required autocomplete="off">
+                                                           class="form-control datepicker-border-0" placeholder="Date" required autocomplete="off" onkeydown="return false;" style="background: white;">
                                                 </div>
 
                                                 <div class="clockpicker text-center" data-placement="bottom"

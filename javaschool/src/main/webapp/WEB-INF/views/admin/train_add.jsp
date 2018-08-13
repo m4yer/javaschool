@@ -12,7 +12,7 @@
 
 <div id="loader"></div>
 
-<div id="pageContent">
+<div id="pageContent" ng-app="trainAddApp">
 
     <%@ include file="../navigation.jsp" %>
     <sec:authorize access="hasRole('ROLE_ADMIN')">
@@ -28,14 +28,32 @@
                     </div>
                     <div class="form-content text-left">
 
-                        <form:form modelAttribute="train" action="/admin/train/add" method="post" >
+                        <form:form modelAttribute="train" action="/admin/train/add" method="post" name="trainAddForm">
 
+                            <!-- Title check -->
+                            <div ngShow ng-show="trainAddForm.name.$error" ng-messages="trainAddForm.name.$error">
+                                <div class="input-warning" ng-message="required">Field is required</div>
+                                <div class="input-warning" ng-message="minlength">At least 3 symbols</div>
+                            </div>
+                            <div ngShow ng-show="trainAddForm.name.$error" ng-messages="trainAddForm.name">
+                                <div class="input-success" ng-message="$valid">&#10004;</div>
+                            </div>
                             <label for="name">Title</label>
-                            <form:input path="name" type="text" placeholder="Title" name="name" id="name" autocomplete="false"/>
+                            <form:input path="name" type="text" placeholder="Title" name="name" id="name" autocomplete="false" ng-model="name" required="required" ng-minlength="3"/>
 
+                            <!-- Amount check -->
+                            <div ngShow ng-show="trainAddForm.carriage_amount.$error" ng-messages="trainAddForm.carriage_amount.$error">
+                                <div class="input-warning" ng-message="required">Field is required</div>
+                                <div class="input-warning" ng-message="pattern">Invalid data</div>
+                            </div>
+                            <div ngShow ng-show="trainAddForm.carriage_amount.$error" ng-messages="trainAddForm.carriage_amount">
+                                <div class="input-success" ng-message="$valid">&#10004;</div>
+                            </div>
                             <label for="carriage_amount">Amount of carriages</label>
-                            <form:input path="carriage_amount" type="text" placeholder="Amount" name="carriage_amount" id="carriage_amount" autocomplete="false"/>
+                            <form:input pattern="[0-9]+" path="carriage_amount" type="text" placeholder="Amount" name="carriage_amount" id="carriage_amount" autocomplete="false" required="required" ng-model="carriage_amount"/>
 
+                            <!-- Carriages type -->
+                            <div class="input-success">&#10004;</div>
                             <label for="carriage_type">Carriage type</label>
                             <form:select path="seats_amount" id="carriage_type">
                                 <option value="36">Compartment</option>
@@ -44,10 +62,20 @@
                                 <option value="66">Seating</option>
                             </form:select>
 
-                            <label for="train_speed">Train speed, <font color="#FF5A5F">km/h</font></label>
-                            <form:input path="speed" type="text" placeholder="Speed" name="train_speed" id="train_speed" autocomplete="false"/>
+                            <!-- Speed check -->
+                            <div ngShow ng-show="trainAddForm.speed.$error" ng-messages="trainAddForm.speed.$error">
+                                <div class="input-warning" ng-message="required">Field is required</div>
+                                <div class="input-warning" ng-message="pattern">Invalid data</div>
+                            </div>
+                            <div ngShow ng-show="trainAddForm.speed.$error" ng-messages="trainAddForm.speed">
+                                <div class="input-success" ng-message="$valid">&#10004;</div>
+                            </div>
+                            <label for="speed">Train speed, <font color="#FF5A5F">km/h</font></label>
+                            <form:input pattern="[0-9]+" path="speed" type="text" placeholder="Speed" name="speed" id="speed" autocomplete="false" required="required" ng-model="speed"/>
 
-                            <input type="submit" value="Add" class="mx-auto"/>
+                            <div class="button-wrapper text-center">
+                                <button disabled ng-disabled="!trainAddForm.$valid" class="brand-pink-button">Add station</button>
+                            </div>
 
                         </form:form>
 
@@ -62,9 +90,14 @@
 <script src="<c:url value="/resources/js/jquery-3.3.1.min.js"/>"></script>
 <script src="<c:url value="/resources/js/bootstrap.bundle.min.js" />"></script>
 <script src="<c:url value="/resources/js/loading.js" />"></script>
+<script src="<c:url value="/resources/js/angular/angular.min.js" />"></script>
+<script src="<c:url value="/resources/js/angular/angular-messages.min.js" />"></script>
+<script>
+    var app = angular.module("trainAddApp", ['ngMessages']);
+    app.directive('ngShow', function() { return function(scope, elem, attrs) { pageLoaded(); var doShow = scope.$eval(attrs.ngShow); elem[doShow ? 'removeClass' : 'addClass']('ng-hide'); }; })
+</script>
 <script>
     $(".nav-link-trains").css('color', '#FF5A5F');
-    pageLoaded();
 </script>
 </body>
 </html>

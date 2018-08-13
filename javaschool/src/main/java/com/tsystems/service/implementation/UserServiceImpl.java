@@ -1,11 +1,14 @@
 package com.tsystems.service.implementation;
 
 import com.tsystems.dao.api.UserDAO;
+import com.tsystems.dto.UserDTO;
 import com.tsystems.entity.User;
+import com.tsystems.entity.converter.Converter;
 import com.tsystems.entity.enums.Role;
 import com.tsystems.exceptions.RegisterFailedException;
 import com.tsystems.service.api.UserService;
 import com.tsystems.utils.HashPasswordUtil;
+import org.apache.commons.validator.routines.EmailValidator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,29 +37,35 @@ public class UserServiceImpl implements UserService {
             user.setBirthday(new java.sql.Date(parsed.getTime()));
         } catch (ParseException e) {
             log.error(e.getMessage(), e);
+            throw new RegisterFailedException();
+        }
+        if (user.getUsername().length() < 4 || user.getUsername() == null ||
+            user.getPassword().length() < 6 || user.getPassword() == null ||
+            user.getFirstname() == null || user.getLastname() == null ||
+            !EmailValidator.getInstance().isValid(user.getEmail()) ||
+            userDAO.findByUsername(user.getUsername()) != null ||
+            userDAO.findByEmail(user.getEmail()) != null) {
+            throw new RegisterFailedException();
         }
         user.setRole(Role.USER);
         user.setPassword(HashPasswordUtil.getHash(user.getPassword()));
-        User foundByUsername = userDAO.findByUsername(user.getUsername());
-        if (foundByUsername != null) {
-            throw new RegisterFailedException("User with such username already exist.");
-        }
-        User foundByEmail = userDAO.findByEmail(user.getEmail());
-        if (foundByEmail != null) {
-            throw new RegisterFailedException("User with such E-mail already exist.");
-        }
         userDAO.add(user);
         log.info("User was successfully registered: " + user.toString());
     }
 
     @Transactional
-    public User getUser(String username) {
-        return userDAO.findByUsername(username);
+    public UserDTO findByUsername(String username) {
+        return Converter.getUserDto(userDAO.findByUsername(username));
     }
 
     @Transactional
-    public User findById(Integer id) {
-        return userDAO.findById(id);
+    public UserDTO findByEmail(String email) {
+        return Converter.getUserDto(userDAO.findByEmail(email));
+    }
+
+    @Transactional
+    public UserDTO findById(Integer id) {
+        return Converter.getUserDto(userDAO.findById(id));
     }
 
 }

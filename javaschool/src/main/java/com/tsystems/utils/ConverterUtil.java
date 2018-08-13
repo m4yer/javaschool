@@ -17,9 +17,7 @@ import java.time.temporal.TemporalAccessor;
 import java.util.*;
 
 public class ConverterUtil {
-
     private static final Logger log = Logger.getLogger(ConverterUtil.class);
-
     private static ObjectMapper objectMapper = new ObjectMapper();
 
     private ConverterUtil() {

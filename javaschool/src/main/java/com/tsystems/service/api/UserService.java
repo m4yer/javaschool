@@ -1,13 +1,16 @@
 package com.tsystems.service.api;
 
+import com.tsystems.dto.UserDTO;
 import com.tsystems.entity.User;
 
 public interface UserService {
 
     void addUser(User user, String birthday);
 
-    User getUser(String username);
+    UserDTO findByUsername(String username);
 
-    User findById(Integer id);
+    UserDTO findByEmail(String email);
+
+    UserDTO findById(Integer id);
 
 }

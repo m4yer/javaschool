@@ -12,7 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequestMapping("/admin")
 public class TrainController {
-    TrainService trainService;
+    private TrainService trainService;
 
     @Autowired
     public TrainController(TrainService trainService) {
@@ -22,16 +22,6 @@ public class TrainController {
     @GetMapping("/train/list")
     public String allTrainsPage() {
         return "admin/train_list";
-    }
-
-    @GetMapping("/train/list/get")
-    public @ResponseBody String getAllTrains() {
-        return ConverterUtil.parseJson(trainService.getAll());
-    }
-
-    @GetMapping("/train/get/speed/{id}")
-    public @ResponseBody double getTrainSpeed(@PathVariable("id") Integer id) {
-        return trainService.getTrainSpeedById(id);
     }
 
     @GetMapping("/train/add")
@@ -53,10 +43,5 @@ public class TrainController {
     }
 
     // TODO: Add @PostMapping delete train and implementation.
-
-    @GetMapping("/train/get/available")
-    public @ResponseBody String getAvailableTrainsForTrip() {
-        return ConverterUtil.parseJson(trainService.getAll());
-    }
 
 }

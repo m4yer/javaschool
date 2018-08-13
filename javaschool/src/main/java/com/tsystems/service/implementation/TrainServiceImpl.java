@@ -13,7 +13,7 @@ import java.util.List;
 
 @Service
 public class TrainServiceImpl implements TrainService {
-    TrainDAO trainDAO;
+    private TrainDAO trainDAO;
 
     @Autowired
     public TrainServiceImpl(TrainDAO trainDAO) {

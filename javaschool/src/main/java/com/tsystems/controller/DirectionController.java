@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/admin")
 public class DirectionController {
-
     private DirectionService directionService;
 
     @Autowired
@@ -25,7 +24,7 @@ public class DirectionController {
     }
 
     @PostMapping("/direction/add")
-    public @ResponseBody void addDirectionBetweenStations(
+    public void addDirectionBetweenStations(
             @RequestParam("stationFromName") String stationFromName,
             @RequestParam("stationToName") String stationToName) {
         log.info("Add new direction between: " + stationFromName + " and " + stationToName + ". [" + stationFromName + " -> " + stationToName + "]");
@@ -33,7 +32,7 @@ public class DirectionController {
     }
 
     @PostMapping("/direction/remove")
-    public @ResponseBody void removeDirectionBetweenStations(
+    public void removeDirectionBetweenStations(
             @RequestParam("stationFromName") String stationFromName,
             @RequestParam("stationToName") String stationToName) {
         log.info("Remove direction between: " + stationFromName + " and " + stationToName + ". [" + stationFromName + " -> " + stationToName + "]");

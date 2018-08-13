@@ -119,4 +119,17 @@ public class Ticket {
 
         return Objects.hash(id, trip, user, seat_id, carriage_num);
     }
+
+    @Override
+    public String toString() {
+        return "Ticket{" +
+                "id=" + id +
+                ", trip=" + trip +
+                ", user=" + user +
+                ", seat_id=" + seat_id +
+                ", station_from=" + station_from +
+                ", station_to=" + station_to +
+                ", carriage_num=" + carriage_num +
+                '}';
+    }
 }
