@@ -59,18 +59,36 @@
             padding: 6px;
             margin: 0 auto;
             font-size: 14px;
+        }
+
+        .span-time {
+            background: #414141;
+            color: #FF5A5F;
+            min-width: 160px;
+            padding: 6px;
+            display: inline-block;
             border-bottom-right-radius: 2px;
             border-top-right-radius: 2px;
+            border-bottom: 2px solid black;
+            border-left: 2px solid black;
+            font-size: 14px;
         }
 
         .brand-form-modal-content {
-            width: 24%;
+            width: 40%;
             margin-top: 5%;
         }
 
-        @media (max-width: 866px) {
+        @media (max-width: 920px) {
             .brand-form-modal-content {
-                width: 40%;
+                width: 52%;
+                margin-top: 8%;
+            }
+        }
+
+        @media (max-width: 708px) {
+            .brand-form-modal-content {
+                width: 68%;
                 margin-top: 8%;
             }
         }
@@ -127,7 +145,7 @@
                         <td>{{ schedule.tripDto.trainDto.id }}</td>
                         <td>
                             <button style="font-size: 12px;" class="brand-pink-button"
-                                    id="route-{{ schedule.tripDto.route_id }}" ng-click="showRoute($event)">Route
+                                    id="trip-{{ schedule.tripDto.id }}" ng-click="showRoute($event)">ROUTE
                             </button>
                         </td>
                         <td>
@@ -154,8 +172,8 @@
                 <span class="caption" style="margin-left: 32px;">Route stations</span>
             </div>
             <div class="brand-form-modal-body">
-                <span ng-repeat="station in routeStations" class="span-wrapper">
-                    <span class="span-number">{{ $index + 1}}</span><span class="span-station">{{ station.name }}</span>
+                <span ng-repeat="item in routeSchedule" class="span-wrapper">
+                    <span class="span-number">{{ $index + 1}}</span><span class="span-station">{{ item.stationDto.name }}</span><span ng-if="!item.time_arrival.epochSecond" class="span-time">-</span><span ng-if="item.time_arrival.epochSecond" class="span-time">{{ item.time_arrival.epochSecond * 1000 | date:'dd/MM/yyyy HH:mm' }}</span>
                 </span>
             </div>
         </div>

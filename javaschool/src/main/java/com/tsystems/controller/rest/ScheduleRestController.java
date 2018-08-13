@@ -29,4 +29,11 @@ public class ScheduleRestController {
     public String getSchedulesByTripId(@RequestParam("tripId") Integer tripId) {
         return ConverterUtil.parseJson(scheduleService.getSchedulesByTripId(tripId));
     }
+
+    @PostMapping("/admin/schedule/late")
+    public void editLateStationSchedule(
+            @RequestParam("scheduleId") Integer scheduleId,
+            @RequestParam("time_late") String time_late) {
+        scheduleService.editLateStationSchedule(scheduleId, time_late);
+    }
 }

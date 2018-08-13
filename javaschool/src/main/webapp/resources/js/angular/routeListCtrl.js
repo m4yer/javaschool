@@ -1,7 +1,7 @@
 app.controller("routeListCtrl", function($scope, $http, DTOptionsBuilder, DTColumnBuilder) {
 
     $http({
-        url: "/admin/route/list/get",
+        url: "/route/list/get",
         method: "GET"
     }).then(function success(response) {
         $scope.routes = response.data;

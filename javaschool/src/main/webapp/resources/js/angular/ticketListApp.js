@@ -1,1 +1,1 @@
-var app = angular.module("ticketListApp", []);
+var app = angular.module("ticketListApp", ['datatables']);

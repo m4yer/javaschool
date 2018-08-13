@@ -30,17 +30,17 @@ app.controller("stationScheduleCtrl", function($scope, $http, DTOptionsBuilder) 
     };
 
     $scope.showRoute = function (event) {
-        var chosenRouteId = event.target.id.split('route-').join('');
+        var chosenTripId = event.target.id.split('trip-').join('');
 
         $http({
-            url: "/route/get/station/list/",
+            url: "/admin/schedule/get/",
             method: "GET",
             params: {
-                routeId: chosenRouteId
+                tripId: chosenTripId
             }
         }).then(function success(response) {
-            console.log('$scope.routeStations: ', response.data);
-            $scope.routeStations = response.data;
+            console.log('$scope.routeSchedule: ', response.data);
+            $scope.routeSchedule = response.data;
             //create options
             $scope.rtOptions = DTOptionsBuilder.newOptions()
                 .withOption('scrollY', '300px')

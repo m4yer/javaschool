@@ -25,11 +25,4 @@ public class ScheduleController {
         return "user/station_schedule";
     }
 
-    @PostMapping("/admin/schedule/late")
-    public void editLateStationSchedule(
-            @RequestParam("scheduleId") Integer scheduleId,
-            @RequestParam("time_late") String time_late) {
-        scheduleService.editLateStationSchedule(scheduleId, time_late);
-    }
-
 }
