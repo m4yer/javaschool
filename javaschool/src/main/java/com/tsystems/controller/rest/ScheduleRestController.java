@@ -17,15 +17,7 @@ public class ScheduleRestController {
         this.scheduleService = scheduleService;
     }
 
-    @GetMapping("/schedule/get/")
-    public String getScheduleByStationNameForToday(@RequestParam("stationName") String stationName) {
-        List<ScheduleDTO> schedules = scheduleService.getScheduleByStationNameForToday(stationName);
-        System.out.println("send schedules to second EJB application!!!!");
-        System.out.println("List<ScheduleDTO>.size(): " + schedules.size());
-        return ConverterUtil.parseJson(schedules);
-    }
-
-    @GetMapping("/user/schedule/get/")
+    @GetMapping("/route/schedule/get/")
     public String getSchedulesByTripId(@RequestParam("tripId") Integer tripId) {
         return ConverterUtil.parseJson(scheduleService.getSchedulesByTripId(tripId));
     }

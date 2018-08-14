@@ -65,7 +65,7 @@ app.controller("tripManageCtrl", function($scope, $http, DTOptionsBuilder, DTCol
         pageLoading();
         console.log('Finding schedule for tripId: ', event.target.id);
         $http({
-            url: "/user/schedule/get/",
+            url: "/route/schedule/get/",
             method: "GET",
             params: {
                 tripId: event.target.id

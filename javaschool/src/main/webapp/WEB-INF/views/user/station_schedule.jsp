@@ -120,16 +120,28 @@
                                             <input type="text" placeholder="Station" class="input-place"
                                                    ng-model="stationName" style="
                                                    border-top-right-radius: 0px;
-                                                   border-bottom-right-radius: 0px;"/>
+                                                   border-bottom-right-radius: 0px;" id="stationNameInput"/>
                                         </span>
-                                        <input type="text" placeholder="Date" id="datepicker" class="input-date"
-                                               ng-model="searchDate" autocomplete="off"/>
-                                        <input type="submit" value="Schedule" ng-click="getSchedule()"/>
+                                        <input type="text" placeholder="Date" id="datepicker" class="input-date" ng-model="searchDate" autocomplete="off" ng-click="dateWasClicked()" readonly/>
+                                        <input type="button" id="searchScheduleButton" class="brand-pink-button" value="Schedule" ng-disabled="!stationWasTyped || !dateClicked" ng-click="getSchedule()"/>
                                     </div>
                                 </td>
                             </tr>
                         </table>
                     </div>
+                </div>
+            </div>
+
+            <div ng-if="!userWasFindingSchedule">
+                <div class="info-page-center">
+                    <img src="<c:url value="/resources/img/search-pic.png"/>"/><br>
+                    Select station to browse it's schedule!<br><br>
+                </div>
+            </div>
+            <div ng-if="userWasFindingSchedule && schedules == 0">
+                <div class="info-page-center">
+                    <img src="<c:url value="/resources/img/nothing-found.png" />"/><br>
+                    Nothing matched your search parameters was found.<br><br>
                 </div>
             </div>
 
@@ -191,8 +203,9 @@
 <script src="<c:url value="/resources/js/angular/stationScheduleApp.js" />"></script>
 <script src="<c:url value="/resources/js/angular/stationScheduleCtrl.js" />"></script>
 <script>
-    $("#datepicker").datepicker();
+$(function () {
     pageLoaded();
+});
 </script>
 </body>
 </html>

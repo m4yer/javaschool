@@ -177,6 +177,7 @@
     });
     $("#birthday").datepicker({
         startDate: '-100y',
+        endDate: '-8y',
         startView: 3
     });
     $("nav").addClass("fixed-top");

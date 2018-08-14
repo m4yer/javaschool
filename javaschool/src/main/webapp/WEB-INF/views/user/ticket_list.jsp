@@ -166,7 +166,7 @@
         $scope.showRoute = function(event) {
             var chosenTripId = event.target.id.split('trip-').join('');
             $http({
-                url: "/user/schedule/get/",
+                url: "/route/schedule/get/",
                 method: "GET",
                 params: {
                     tripId: chosenTripId

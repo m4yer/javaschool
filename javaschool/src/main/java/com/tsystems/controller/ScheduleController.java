@@ -20,7 +20,7 @@ public class ScheduleController {
 
     private static final Logger log = Logger.getLogger(ScheduleController.class);
 
-    @GetMapping("/user/schedule")
+    @GetMapping("/schedule")
     public String scheduleStationPage() {
         return "user/station_schedule";
     }

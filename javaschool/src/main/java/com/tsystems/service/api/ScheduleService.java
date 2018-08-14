@@ -14,6 +14,8 @@ public interface ScheduleService {
 
     List<ScheduleDTO> getScheduleByStationNameForToday(String stationName);
 
+    List<ScheduleDTO> getScheduleByStationNameForDate(String stationName, String date);
+
     void addScheduleForTrip(Integer tripId, Integer routeId, String stationStopTimes, String tripStartTime, Integer trainId);
 
     List<ScheduleDTO> getSchedulesByTripId(Integer tripId);

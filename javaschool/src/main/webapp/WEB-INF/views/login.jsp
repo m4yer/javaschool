@@ -86,6 +86,7 @@
 <script src="<c:url value="/resources/js/loading.js" />"></script>
 <script>
     $("nav").addClass("fixed-top");
+    $(".form-error-message").css('display', 'block');
     pageLoaded();
 </script>
 </body>

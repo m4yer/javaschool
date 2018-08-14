@@ -20,7 +20,7 @@ public class DirectionController {
 
     @GetMapping("/directions/map")
     public String directionsMapPage() {
-        return "/admin/rails_map";
+        return "admin/rails_map";
     }
 
     @PostMapping("/direction/add")

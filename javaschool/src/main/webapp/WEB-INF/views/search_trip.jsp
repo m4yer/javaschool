@@ -85,6 +85,10 @@
                 margin-top: 8%;
             }
         }
+        .brand-pink-button {
+            padding-left: 12px;
+            padding-right: 12px;
+        }
     </style>
 </head>
 <body id="page-top">
@@ -111,19 +115,20 @@
                                     <div class="input-group">
                                         <span class="autocomplete-from">
                                             <input type="text" placeholder="From" class="input-place"
-                                                   ng-model="stationFrom"/>
+                                                   ng-model="stationFrom" required/>
                                         </span>
                                         <span class="autocomplete-to">
                                             <input type="text" placeholder="To" class="input-place" ng-model="stationTo"
                                                    style="
                                                    border-top-left-radius: 0px;
-                                                   border-bottom-left-radius: 0px;"/>
+                                                   border-bottom-left-radius: 0px;" required/>
                                         </span>
                                         <input type="text" placeholder="Date" id="datepicker1" class="input-date"
-                                               ng-model="dateStart" autocomplete="off"/>
+                                               ng-model="dateStart" autocomplete="off" required/>
                                         <input type="text" placeholder="Date" id="datepicker2" class="input-date"
-                                               ng-model="dateEnd" autocomplete="off"/>
-                                        <input type="submit" value="Search" ng-click="findTrips()"/>
+                                               ng-model="dateEnd" autocomplete="off" required/>
+                                        <input class="brand-pink-button" type="button" value="Search" ng-click="findTrips()"
+                                               ng-disabled="!stationFrom || !stationTo || !dateStart || !dateEnd" />
                                     </div>
                                 </td>
                             </tr>
@@ -211,8 +216,14 @@
 <script src="<c:url value="/resources/js/awesomplete.js" />"></script>
 <script src="<c:url value="/resources/js/angular/searchTripApp.js" />"></script>
 <script>
-    $("#datepicker1").datepicker();
-    $("#datepicker2").datepicker();
+    $("#datepicker1").datepicker({
+        startDate: 'now',
+        endDate: '+1m'
+    });
+    $("#datepicker2").datepicker({
+        startDate: 'now',
+        endDate: '+1m'
+    });
 </script>
 <script>
 
@@ -310,14 +321,30 @@
         </c:choose>
         $scope.findTrips = function () {
             $scope.userWasFindingTrips = true;
+            var dateTimeFrom;
+            if ($scope.dateStart != null) {
+                dateTimeFrom = $scope.dateStart + ' 00:00';
+            } else {
+                var today = new Date();
+                var mm = today.getMonth() + 1; // january = 0
+                if (mm < 10) mm = '0' + mm;
+                var dd = today.getDate();
+                var yyyy = today.getFullYear();
+                dateTimeFrom = mm + '/' + dd + '/' + yyyy;
+                alert('date doesnot filled so use today(): ' + dateTimeFrom);
+            }
+            var dateTimeTo;
+            if($scope.dateEnd != null) {
+                dateTimeTo = $scope.dateEnd + ' 00:00'
+            }
             $http({
                 url: "/trip/get/",
                 method: "GET",
                 params: {
                     stationFrom: $scope.stationFrom,
                     stationTo: $scope.stationTo,
-                    dateStart: $scope.dateStart + ' 00:00',
-                    dateEnd: $scope.dateEnd + ' 00:00'
+                    dateStart: dateTimeFrom,
+                    dateEnd: dateTimeTo
                 }
             }).then(function success(response) {
                 console.log(response.data);
@@ -331,7 +358,7 @@
         $scope.showTripDetails = function (event) {
             var chosenTripId = event.target.id.split('trip-').join('');
             $http({
-                url: "/user/schedule/get/",
+                url: "/route/schedule/get/",
                 method: "GET",
                 params: {
                     tripId: chosenTripId

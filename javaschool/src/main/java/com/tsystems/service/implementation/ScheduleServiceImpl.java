@@ -13,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -52,8 +54,14 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Transactional
     public List<ScheduleDTO> getScheduleByStationNameForToday(String stationName) {
         Station station = stationDAO.findByName(stationName);
-        // TODO: Here now schedule fetching by ALL days. Need to change it for TODAY.
-        List<Schedule> schedules = scheduleDAO.getScheduleByStationIdForToday(station.getId());
+        List<Schedule> schedules = scheduleDAO.getScheduleByStationIdForToday(station.getId(), null);
+        return Converter.getScheduleDtos(schedules);
+    }
+
+    @Transactional
+    public List<ScheduleDTO> getScheduleByStationNameForDate(String stationName, String date) {
+        Station station = stationDAO.findByName(stationName);
+        List<Schedule> schedules = scheduleDAO.getScheduleByStationIdForToday(station.getId(), date);
         return Converter.getScheduleDtos(schedules);
     }
 

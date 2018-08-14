@@ -1,6 +1,17 @@
 app.controller("stationScheduleCtrl", function($scope, $http, DTOptionsBuilder) {
 
-    $scope.searchDate;
+    $("#datepicker").datepicker({
+        startDate: 'now',
+        endDate: '+1m'
+    }).on('changeDate', function(e) {
+        $scope.dateClicked = true;
+        if ($scope.stationWasTyped) $('#searchScheduleButton').prop('disabled', false);
+    });
+
+    $("#stationNameInput").keydown(function () {
+        $scope.stationWasTyped = true;
+        if ($scope.dateClicked) $('#searchScheduleButton').prop('disabled', false);
+    });
 
     // Requesting all stations
     $http({
@@ -17,11 +28,13 @@ app.controller("stationScheduleCtrl", function($scope, $http, DTOptionsBuilder) 
     });
 
     $scope.getSchedule = function () {
+        $scope.userWasFindingSchedule = true;
         $http({
-            url: "/schedule/get/",
+            url: "/schedule/get-by-date/",
             method: "GET",
             params: {
-                stationName: $scope.stationName
+                stationName: $scope.stationName,
+                desiredDate: $('#datepicker').val()
             }
         }).then(function success(response) {
             console.log('$scope.schedules: ', response.data);
@@ -33,7 +46,7 @@ app.controller("stationScheduleCtrl", function($scope, $http, DTOptionsBuilder) 
         var chosenTripId = event.target.id.split('trip-').join('');
 
         $http({
-            url: "/user/schedule/get/",
+            url: "/route/schedule/get/",
             method: "GET",
             params: {
                 tripId: chosenTripId
