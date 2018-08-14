@@ -11,6 +11,7 @@ app.controller("tripManageCtrl", function($scope, $http, DTOptionsBuilder, DTCol
             .withOption('autoWidth', true)
             .withOption('scrollX', '100%')
             .withOption('scrollY', '390px')
+            .withOption('order', [[2, 'desc']])
             .withOption('scrollCollapse', true);
 
         for (var i = 0; i < $scope.trips.length; i++) {

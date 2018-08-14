@@ -44,9 +44,9 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link js-scroll-trigger" href="#"><i class="fa fa-users"></i> Users</a>
+                    <a class="nav-link js-scroll-trigger nav-link-users" href="#"><i class="fa fa-users"></i> Users</a>
                     <div class="dropdown-content">
-                        <a href="#">Manage</a>
+                        <a href="/admin/user/list">Manage</a>
                     </div>
                 </li>
             </ul>

@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -66,6 +67,11 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserDTO findById(Integer id) {
         return Converter.getUserDto(userDAO.findById(id));
+    }
+
+    @Transactional
+    public List<UserDTO> getAllUsers() {
+        return Converter.getUserDtos(userDAO.getAll());
     }
 
 }

@@ -42,28 +42,13 @@ public class TripServiceImpl implements TripService {
     private static final Logger log = Logger.getLogger(TripServiceImpl.class);
 
     @Transactional
-    public void addTrip(Trip trip) {
-        tripDAO.add(trip);
-    }
-
-    @Transactional
     public TripDTO findById(Integer id) {
         return Converter.getTripDto(tripDAO.findById(id));
-    }
-
-    @Transactional
-    public void deleteTrip(Trip trip) {
-        tripDAO.delete(trip);
     }
 
     @Override
     public List<TripDTO> getAll() {
         return Converter.getTripDtos(tripDAO.getAll());
-    }
-
-    @Transactional
-    public Integer getLastId() {
-        return tripDAO.getLastId();
     }
 
     @Transactional

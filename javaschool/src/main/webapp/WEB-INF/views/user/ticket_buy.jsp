@@ -154,8 +154,7 @@
             } else if (response == "alreadybought") {
                 $("#error_msg").html("You've already bought a ticket for this trip!");
             } else if (response == "success") {
-                // TODO: When success - forward to 'My tickets' or something like 'You've bought! Great!'
-                window.location.reload();
+                window.location.replace("/user/ticket/list");
             }
         });
     });

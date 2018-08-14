@@ -8,15 +8,10 @@ import java.time.Instant;
 import java.util.List;
 
 public interface TripService {
-    void addTrip(Trip trip);
 
     TripDTO findById(Integer id);
 
-    void deleteTrip(Trip trip);
-
     List<TripDTO> getAll();
-
-    Integer getLastId();
 
     boolean isTripAvailableForUser(Integer tripId, String userName);
 

@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css?family=Sacramento');
 
 
-@import url('https://fonts.googleapis.com/css?family=Lato:400,700');
+@import url('https://fonts.googleapis.com/css?family=Lato:400,700,900');
 
 body,
 html {
@@ -253,4 +253,14 @@ header.masthead p {
 
 .info-page-center img {
     margin-bottom: 2%;
+}
+
+.site-path {
+    color: #FF5A5F;
+    font-size: 12px;
+    font-weight: 900;
+    font-family: 'Lato', sans-serif;
+    padding: 3px;
+    text-transform: uppercase;
+    border-bottom: 1px solid #C9C9C9;
 }

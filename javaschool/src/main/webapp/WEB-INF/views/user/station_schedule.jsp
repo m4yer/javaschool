@@ -123,7 +123,7 @@
                                                    border-bottom-right-radius: 0px;" id="stationNameInput"/>
                                         </span>
                                         <input type="text" placeholder="Date" id="datepicker" class="input-date" ng-model="searchDate" autocomplete="off" ng-click="dateWasClicked()" readonly/>
-                                        <input type="button" id="searchScheduleButton" class="brand-pink-button" value="Schedule" ng-disabled="!stationWasTyped || !dateClicked" ng-click="getSchedule()"/>
+                                        <input type="button" id="searchScheduleButton" class="brand-pink-button" value="Browse schedule" ng-disabled="!stationWasTyped || !dateClicked" ng-click="getSchedule()"/>
                                     </div>
                                 </td>
                             </tr>

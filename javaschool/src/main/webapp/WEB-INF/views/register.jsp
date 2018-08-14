@@ -90,7 +90,7 @@
 
                                 <div id="retypePasswordValid" class="input-success" style="display: none;">&#10004;</div>
                                 <div id="retypePasswordNotMatch" class="input-warning" style="display: none;">Passwords does not match</div>
-                                <div id="retypePasswordCheckFirstInput" class="input-warning" style="display: block;">Check first field validity</div>
+                                <div id="retypePasswordCheckFirstInput" class="input-warning" style="display: block;">Check PASSWORD validity</div>
                                 <label for="rePassword">Retype password</label>
                                 <input type="password" placeholder="Password again" id="rePassword" autocomplete="off"
                                        required ng-model="rePassword" name="rePassword" ng-keyup="checkPasswordMatching()" />
