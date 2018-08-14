@@ -31,11 +31,11 @@
     </style>
     <title>RW | Register</title>
 </head>
-<body id="page-top">
+<body id="page-top" ng-app="registerApp" >
 
 <div id="loader"></div>
 
-<div id="pageContent" ng-app="registerApp">
+<div id="pageContent" ng-controller="registerCtrl">
     <!-- Navigation -->
     <%@ include file="navigation.jsp" %>
 
@@ -86,17 +86,14 @@
                                 </div>
                                 <label for="password">Password</label>
                                 <form:input path="password" type="password" placeholder="Password" id="password" name="password"
-                                            autocomplete="off" required="required" ng-model="password" ng-minlength="6" pattern="[A-Za-z0-9]+"/>
+                                            autocomplete="off" required="required" ng-keyup="checkPasswordMatching()" ng-model="password" ng-minlength="6" pattern="[a-zA-Z0-9]+"/>
 
-                                <div ngShow="registerForm.rePassword.$dirty && !registerForm.rePassword.$valid" ng-messages="registerForm.rePassword">
-                                    <div class="input-success" ng-message="$valid">&#10004;</div>
-                                </div>
-                                <div ngShow="registerForm.rePassword.$dirty && !registerForm.rePassword.$valid" ng-messages="registerForm.rePassword.$error">
-                                    <div class="input-warning">Passwords does not match</div>
-                                </div>
+                                <div id="retypePasswordValid" class="input-success" style="display: none;">&#10004;</div>
+                                <div id="retypePasswordNotMatch" class="input-warning" style="display: none;">Passwords does not match</div>
+                                <div id="retypePasswordCheckFirstInput" class="input-warning" style="display: block;">Check first field validity</div>
                                 <label for="rePassword">Retype password</label>
                                 <input type="password" placeholder="Password again" id="rePassword" autocomplete="off"
-                                       required ng-model="rePassword" name="rePassword" compare-to="password"/>
+                                       required ng-model="rePassword" name="rePassword" ng-keyup="checkPasswordMatching()" />
 
                                 <div ngShow="registerForm.firstname.$dirty && !registerForm.firstname.$valid" ng-messages="registerForm">
                                     <div class="input-success" ng-message="$valid">&#10004;</div>
@@ -114,7 +111,7 @@
                                                 autocomplete="off" required="required" ng-model="birthday" readonly="true"/>
                                 </div>
                                 <div class="button-wrapper text-center">
-                                    <button disabled class="brand-pink-button" ng-disabled="!registerForm.$valid">Sign Up</button>
+                                    <button disabled class="brand-pink-button" ng-disabled="!registerForm.$valid || !retypeMatch">Sign Up</button>
                                 </div>
                             </form:form>
                         </div>
@@ -181,6 +178,7 @@
         startView: 3
     });
     $("nav").addClass("fixed-top");
+    // checkPasswordsMatching();
 </script>
 </body>
 

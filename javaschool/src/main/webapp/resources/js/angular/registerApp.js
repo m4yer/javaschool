@@ -1,22 +1,35 @@
 var app = angular.module("registerApp", ['ngMessages']);
 app.directive('ngShow', function() { return function(scope, elem, attrs) { var doShow = scope.$eval(attrs.ngShow); elem[doShow ? 'removeClass' : 'addClass']('ng-hide'); pageLoaded() }; })
-var compareTo = function() {
-    return {
-        require: "ngModel",
-        scope: {
-            otherModelValue: "=compareTo"
-        },
-        link: function(scope, element, attributes, ngModel) {
+app.controller("registerCtrl", function($scope, $http) {
 
-            ngModel.$validators.compareTo = function(modelValue) {
-                return modelValue == scope.otherModelValue;
-            };
+    $scope.checkPasswordMatching = function checkPasswordsMatching() {
+        $scope.retypeMatch = false;
+        var passInput = $('#password');
+        var passInputValue = $('#password').val();
+        var rePassInput = $('#rePassword');
+        var rePassInputValue = $('#rePassword').val();
 
-            scope.$watch("otherModelValue", function() {
-                ngModel.$validate();
-            });
+        var messageValid = $('#retypePasswordValid');
+        var doesntMatch = $('#retypePasswordNotMatch');
+        var checkFirstInput = $('#retypePasswordCheckFirstInput');
+        if (passInput.is(':valid') && passInputValue.length >= 6) {
+            checkFirstInput.css('display', 'none');
+            if (rePassInputValue == passInputValue) {
+                messageValid.css('display', 'block');
+                doesntMatch.css('display', 'none');
+                $scope.retypeMatch = true;
+            } else {
+                messageValid.css('display', 'none');
+                doesntMatch.css('display', 'block');
+                $scope.retypeMatch = false;
+            }
+        } else {
+            messageValid.css('display', 'none');
+            doesntMatch.css('display', 'none');
+            checkFirstInput.css('display', 'block');
+            $scope.retypeMatch = false;
         }
-    };
-};
+    }
 
-app.directive("compareTo", compareTo);
+});
+
