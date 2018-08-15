@@ -8,7 +8,7 @@
 </h:head>
 
 <h:body>
-    <h:dataTable id="schedules" value="#{userSchedule.getSchedules()}" var="schedule">
+    <h:dataTable id="schedules" value="#{userSchedule.getSchedules()}" var="schedule" rendered="#{not empty userSchedule.schedules}">
         <h:column>#{schedule}</h:column>
     </h:dataTable>
     <h:form>

@@ -40,6 +40,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Accept", "application/json");
         if (connection.getResponseCode() != 200) {
+            System.out.println("CODE IS NOT 200 EXCEPTION");
             throw new IOException("Some HTTP code error. Code is not 200.");
         }
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -61,13 +62,17 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     public List<ScheduleDTO> getScheduleForToday(String stationName) throws IOException {
         String jsonResponse = httpGet("http://localhost:8080/schedule/get/?stationName=" + stationName);
+        System.out.println("BREAKPOINT AFTER");
         SimpleModule module = new SimpleModule();
         module.addDeserializer(ScheduleDTO.class, new ScheduleDeserializer());
         objectMapper.registerModule(module);
         try {
             JavaType scheduleListClass = objectMapper.getTypeFactory().constructCollectionType(List.class, ScheduleDTO.class);
-            return objectMapper.readValue(jsonResponse, scheduleListClass);
+            List<ScheduleDTO> resultList = objectMapper.readValue(jsonResponse, scheduleListClass);
+            System.out.println("SUCCESSFULLY DESERIALIZED");
+            return resultList;
         } catch (IOException e) {
+            System.out.println("DESERIALIZING EXCEPTION");
             // TODO: What to return if exception occurs ?
             System.out.println(e.getMessage());
             return null;

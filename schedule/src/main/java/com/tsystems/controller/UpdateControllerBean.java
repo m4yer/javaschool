@@ -1,14 +1,17 @@
 package com.tsystems.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.tsystems.client.ScheduleBean;
 import com.tsystems.dto.ScheduleDTO;
-import com.tsystems.dto.TrainDTO;
-import com.tsystems.dto.TripDTO;
+import com.tsystems.util.ScheduleDeserializer;
 
 import javax.ejb.Stateless;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.time.Instant;
+import java.io.IOException;
+import java.util.List;
 
 @Named("messenger")
 @Stateless
@@ -16,14 +19,40 @@ public class UpdateControllerBean {
 
     @Inject
     private Event<ScheduleDTO> scheduleEvent;
+    @Inject
+    private ScheduleBean scheduleBean;
 
-    public void onNewSchedule() {
-        System.out.println("ON NEW SCHEDYLE TRIGGERED");
-        ScheduleDTO newSchedule = new ScheduleDTO(99,
-                new TripDTO(999, new TrainDTO(
-                        999, "my_poezd", 180D, 66, 12
-                ), 7, Instant.now(), true), Instant.now(), "late", Instant.now(), "0000");
-        scheduleEvent.fire(newSchedule);
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+
+    public void onNewSchedule(String newScheduleJson) {
+        // JSON -> Object [ScheduleDTO]
+        SimpleModule module = new SimpleModule();
+        module.addDeserializer(ScheduleDTO.class, new ScheduleDeserializer());
+        objectMapper.registerModule(module);
+        try {
+            ScheduleDTO newScheduleDto = objectMapper.readValue(newScheduleJson, ScheduleDTO.class);
+            System.out.println("UpdateControllerBean invoked onNewSchedule()");
+            String stationName = newScheduleDto.getStationDto().getName();
+            List<ScheduleDTO> stationSchedule = scheduleBean.getSchedules().get(stationName);
+            for (ScheduleDTO schedule : stationSchedule) {
+                if (newScheduleDto.getId().equals(schedule.getId())) {
+                    stationSchedule.set(stationSchedule.indexOf(schedule), newScheduleDto);
+                    scheduleBean.setScheduleListForMap(stationName, stationSchedule);
+                    return;
+                }
+                if (newScheduleDto.getId() < schedule.getId()) {
+                    stationSchedule.add(stationSchedule.indexOf(schedule), newScheduleDto);
+                    scheduleBean.setScheduleListForMap(stationName, stationSchedule);
+                    return;
+                }
+            }
+            stationSchedule.add(newScheduleDto);
+            scheduleBean.setScheduleListForMap(stationName, stationSchedule);
+            scheduleEvent.fire(newScheduleDto);
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+        }
     }
 
 }

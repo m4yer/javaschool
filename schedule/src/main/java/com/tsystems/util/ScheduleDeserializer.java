@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.tsystems.dto.ScheduleDTO;
+import com.tsystems.dto.StationDTO;
 import com.tsystems.dto.TrainDTO;
 import com.tsystems.dto.TripDTO;
 
@@ -44,6 +45,13 @@ public class ScheduleDeserializer extends StdDeserializer<ScheduleDTO> {
         long tripStartTimeSeconds = (node.get("tripDto").get("start_time").get("epochSecond").asLong());
         boolean active = node.get("tripDto").get("active").asBoolean();
 
+        // Station
+        int stationId = (Integer) (node.get("stationDto").get("id")).numberValue();
+        String stationName = node.get("stationDto").get("name").asText();
+        double latitude = node.get("stationDto").get("latitude").asDouble();
+        double longitude = node.get("stationDto").get("longitude").asDouble();
+        StationDTO scheduleStation = new StationDTO(stationId, stationName, latitude, longitude);
+
         // Train
         int trainId = (Integer) (node.get("tripDto").get("trainDto").get("id").numberValue());
         String trainName = node.get("tripDto").get("trainDto").get("name").asText();
@@ -76,6 +84,7 @@ public class ScheduleDeserializer extends StdDeserializer<ScheduleDTO> {
         return new ScheduleDTO(
                 scheduleId,
                 scheduleTrip,
+                scheduleStation,
                 arrivalInstant,
                 time_stop,
                 departureInstant,

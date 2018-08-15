@@ -14,8 +14,10 @@
     <h:body>
 
         <h:form>
-            Choose station to browse it's schedule: test
-
+            Choose station to browse it's schedule:
+            <h:selectOneMenu value="#{userSchedule.stationName}">
+                <f:selectItems value="#{scheduleBean.stations}" />
+            </h:selectOneMenu>
             <h:commandButton action="schedule" value="Show"/>
         </h:form>
 

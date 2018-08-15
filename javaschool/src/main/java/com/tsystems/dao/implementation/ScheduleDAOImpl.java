@@ -19,7 +19,7 @@ public class ScheduleDAOImpl extends GenericDAOImpl<Schedule, Integer> implement
                 "where schedule.station.id=:stationId and (schedule.time_arrival between :desiredDate and :tomorrow)");
         Instant desiredDate;
         if (date == null) {
-            desiredDate = LocalDate.now().atStartOfDay().toInstant(ZoneOffset.UTC);
+            desiredDate = LocalDate.now().atStartOfDay().toInstant(ZoneOffset.ofHours(3));
         } else {
             desiredDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("MM/dd/yyyy")).atStartOfDay().toInstant(ZoneOffset.ofHours(3));
         }

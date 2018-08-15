@@ -11,11 +11,8 @@
     <!-- To send JMS message -->
     <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
         <property name="connectionFactory" ref="connectionFactory"/>
-        <property name="defaultDestinationName" value="testQueue"/>
-    </bean>
-
-    <bean id="simpleMessageSender" class="com.tsystems.jms.SimpleMessageSender">
-        <property name="jmsTemplate" ref="jmsTemplate"/>
+        <property name="defaultDestinationName" value="ScheduleChannel"/>
+        <property name="pubSubDomain" value="true" />
     </bean>
 
 </beans>

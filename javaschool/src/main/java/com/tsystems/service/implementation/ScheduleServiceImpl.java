@@ -1,5 +1,7 @@
 package com.tsystems.service.implementation;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tsystems.dao.api.*;
 import com.tsystems.entity.converter.Converter;
 import com.tsystems.dto.ScheduleDTO;
@@ -16,9 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
 
 @Service
 public class ScheduleServiceImpl implements ScheduleService {
@@ -28,6 +32,8 @@ public class ScheduleServiceImpl implements ScheduleService {
     private TrainDAO trainDAO;
     private StationDAO stationDAO;
     private SimpleMessageSender messageSender;
+
+    private final static ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
     public ScheduleServiceImpl(ScheduleDAO scheduleDAO, RouteDAO routeDAO, TripDAO tripDAO, TrainDAO trainDAO, StationDAO stationDAO, SimpleMessageSender messageSender) {
@@ -71,6 +77,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         log.info("stationStopTimes: " + stationStopTimes);
 
         Trip trip = tripDAO.findById(tripId);
+        Instant tripStartInstant = trip.getStart_time();
         Train chosenTrain = trainDAO.findById(trainId);
         Double trainSpeed = chosenTrain.getSpeed();
 
@@ -82,12 +89,16 @@ public class ScheduleServiceImpl implements ScheduleService {
         List<Station> routeStations = new ArrayList<>();
         routes.forEach(route -> routeStations.add(route.getStation()));
 
+        List<Schedule> resultScheduleList = new ArrayList<>();
+
         Station tempStation = routeStations.get(0);
         Instant tempInstant = ConverterUtil.parseInstant(tripStartTime);
         log.info("@@tempTimestamp: " + tempInstant.toString());
         for (int i = 0; i < routeStations.size(); i++) {
             if (i == 0) { // First schedule row.
-                scheduleDAO.add(new Schedule(trip, tempInstant, routeStations.get(i), "00:00"));
+                Schedule schedule = new Schedule(trip, tempInstant, routeStations.get(i), "00:00");
+                scheduleDAO.add(schedule);
+                resultScheduleList.add(schedule);
                 log.info("@@tempTimestamp IN 1 IF: " + tempInstant.toString());
                 tempStation = routeStations.get(i);
             } else if (i != routeStations.size() - 1) { // All schedule row excerpt first and last.
@@ -96,7 +107,9 @@ public class ScheduleServiceImpl implements ScheduleService {
                 Long milliseconds = (long) (((distance / trainSpeed) * 60) * 60) * 1000;
                 Instant currentInstant = Instant.ofEpochMilli(tempInstant.toEpochMilli() + milliseconds);
                 log.info("@@currentTimestamp IN 2 IF: (without toString())" + currentInstant);
-                scheduleDAO.add(new Schedule(trip, routeStations.get(i), currentInstant, stationsStopsInHoursAndMinutes.get(i), Instant.ofEpochMilli(currentInstant.toEpochMilli() + stationTimeStops.get(i)), "00:00"));
+                Schedule schedule = new Schedule(trip, routeStations.get(i), currentInstant, stationsStopsInHoursAndMinutes.get(i), Instant.ofEpochMilli(currentInstant.toEpochMilli() + stationTimeStops.get(i)), "00:00");
+                resultScheduleList.add(schedule);
+                scheduleDAO.add(schedule);
                 tempStation = current;
                 tempInstant = currentInstant;
             } else { // Last schedule row.
@@ -105,12 +118,36 @@ public class ScheduleServiceImpl implements ScheduleService {
                 Long milliseconds = (long) (((distance / trainSpeed) * 60) * 60) * 1000;
                 Instant currentInstant = Instant.ofEpochMilli(tempInstant.toEpochMilli() + milliseconds);
                 log.info("@@currentTimestamp IN 3 IF: " + currentInstant);
-                scheduleDAO.add(new Schedule(trip, routeStations.get(i), currentInstant, "00:00"));
+                Schedule schedule = new Schedule(trip, routeStations.get(i), currentInstant, "00:00");
+                resultScheduleList.add(schedule);
+                scheduleDAO.add(schedule);
             }
         }
 
-        // This loop sends messages to ActiveMQ.
-        routeStations.forEach(station -> messageSender.sendMessage(station.getName()));
+        // This loop sends schedule objects to ActiveMQ.
+        Instant today = LocalDate.now().atStartOfDay().toInstant(ZoneOffset.ofHours(3));
+        Instant tomorrow = LocalDate.now().plusDays(1).atStartOfDay().toInstant(ZoneOffset.ofHours(3));
+        for (int i = 0; i < resultScheduleList.size(); i++) {
+            if (i == 0) {
+                if ((tripStartInstant.getEpochSecond() >= today.getEpochSecond()) && (tripStartInstant.getEpochSecond() <= tomorrow.getEpochSecond())) {
+                    try {
+                        messageSender.sendMessage(objectMapper.writeValueAsString(Converter.getScheduleDto(resultScheduleList.get(0))));
+                    } catch (JsonProcessingException e) {
+                        log.error(e.getMessage(), e);
+                    }
+                } else {
+                    break;
+                }
+            } else {
+                if ((resultScheduleList.get(i).getTime_arrival().getEpochSecond() > today.getEpochSecond()) && (resultScheduleList.get(i).getTime_arrival().getEpochSecond() < tomorrow.getEpochSecond())) {
+                    try {
+                        messageSender.sendMessage(objectMapper.writeValueAsString(Converter.getScheduleDto(resultScheduleList.get(i))));
+                    } catch (JsonProcessingException e) {
+                        log.error(e.getMessage(), e);
+                    }
+                }
+            }
+        }
 
     }
 

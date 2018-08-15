@@ -45,7 +45,7 @@ public class StationRestController {
 
     @GetMapping("/schedule/get/")
     public String getScheduleByStationNameForToday(@RequestParam("stationName") String stationName) {
-        List<ScheduleDTO> schedules = scheduleService.getScheduleByStationNameForToday(stationName);
+        List<ScheduleDTO> schedules = scheduleService.getScheduleByStationNameForDate(stationName, null);
         log.info("REST: Getting schedule for station: [" + stationName + "] for TODAY\nList<ScheduleDTO>.size(): " + schedules.size());
         return ConverterUtil.parseJson(schedules);
     }
