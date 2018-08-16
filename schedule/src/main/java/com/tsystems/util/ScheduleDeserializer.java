@@ -56,8 +56,8 @@ public class ScheduleDeserializer extends StdDeserializer<ScheduleDTO> {
         int trainId = (Integer) (node.get("tripDto").get("trainDto").get("id").numberValue());
         String trainName = node.get("tripDto").get("trainDto").get("name").asText();
         double trainSpeed = (Double) (node.get("tripDto").get("trainDto").get("speed").numberValue());
-        int trainSeatsAmount = (Integer) (node.get("tripDto").get("trainDto").get("id").numberValue());
-        int trainCarriageAmount = (Integer) (node.get("tripDto").get("trainDto").get("id").numberValue());
+        int trainSeatsAmount = (Integer) (node.get("tripDto").get("trainDto").get("seats_amount").numberValue());
+        int trainCarriageAmount = (Integer) (node.get("tripDto").get("trainDto").get("carriage_amount").numberValue());
 
         TrainDTO scheduleTrain = new TrainDTO(trainId, trainName, trainSpeed, trainSeatsAmount, trainCarriageAmount);
 

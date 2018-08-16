@@ -15,7 +15,12 @@ import javax.inject.Named;
 import javax.jms.*;
 import java.io.IOException;
 import java.io.Serializable;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.List;
+import java.util.Locale;
 
 @Named("userSchedule")
 @SessionScoped
@@ -93,5 +98,13 @@ public class UserSchedule implements Serializable {
 
     public void setStationName(String stationName) {
         this.stationName = stationName;
+    }
+
+    public String instantFormat(Instant input) {
+        DateTimeFormatter formatter =
+                DateTimeFormatter.ofLocalizedDateTime( FormatStyle.SHORT )
+                        .withLocale( Locale.UK )
+                        .withZone( ZoneId.systemDefault() );
+        return formatter.format(input);
     }
 }

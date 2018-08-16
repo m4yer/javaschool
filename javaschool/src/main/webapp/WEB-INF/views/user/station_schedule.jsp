@@ -138,7 +138,7 @@
                     Select station to browse it's schedule!<br><br>
                 </div>
             </div>
-            <div ng-if="userWasFindingSchedule && schedules == 0">
+            <div ng-if="userWasFindingSchedule && schedules.length == 0">
                 <div class="info-page-center">
                     <img src="<c:url value="/resources/img/nothing-found.png" />"/><br>
                     Nothing matched your search parameters was found.<br><br>

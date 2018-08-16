@@ -34,8 +34,6 @@ public class BeanController {
     }
 
     public List<ScheduleDTO> getScheduleForToday() {
-        // TODO: here need to dynamically paste stationName from page
-        // TODO: catch IOException from ScheduleServiceImpl!
         try {
             System.out.println("BeanController getScheduleForToday():");
             System.out.println("Successfully invoked");
@@ -43,17 +41,6 @@ public class BeanController {
             System.out.println("List<ScheduleDTO>.size(): " + resultSchedules.size());
             return resultSchedules;
         } catch (IOException e) {
-            // TODO: Logging exception + what to do if occurs in ScheduleServiceImpl?
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public List<String> getStations() {
-        try {
-            return restClient.getAllStations();
-        } catch (IOException e) {
-            // TODO: Logging exception + what to do if occurs in ScheduleServiceImpl?
             e.printStackTrace();
         }
         return null;
