@@ -2,15 +2,10 @@ package com.tsystems.jms;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.tsystems.client.ScheduleBean;
 import com.tsystems.controller.UpdateControllerBean;
 import com.tsystems.dto.ScheduleDTO;
 import com.tsystems.util.ScheduleDeserializer;
-import com.tsystems.websocket.ClientEndpoint;
-import org.jboss.annotation.ejb.ResourceAdapter;
 
-import javax.ejb.ActivationConfigProperty;
-import javax.ejb.MessageDriven;
 import javax.inject.Inject;
 import javax.jms.JMSException;
 import javax.jms.Message;

@@ -49,9 +49,10 @@ public class UpdateControllerBean {
             stationSchedule.add(newScheduleDto);
             scheduleBean.setScheduleListForMap(stationName, stationSchedule);
             scheduleEvent.fire(newScheduleDto);
+        } catch (NullPointerException e) {
+            return;
         } catch (IOException e) {
-            System.err.println(e.getMessage());
-            e.printStackTrace();
+            return;
         }
     }
 

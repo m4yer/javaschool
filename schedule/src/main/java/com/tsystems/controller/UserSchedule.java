@@ -3,19 +3,17 @@ package com.tsystems.controller;
 import com.tsystems.client.ScheduleBean;
 import com.tsystems.dto.ScheduleDTO;
 import org.apache.activemq.ActiveMQConnectionFactory;
-import org.primefaces.push.EventBus;
-import org.primefaces.push.EventBusFactory;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
-import javax.enterprise.event.Observes;
-import javax.faces.annotation.ManagedProperty;
+import javax.faces.context.FacesContext;
 import javax.faces.push.Push;
 import javax.faces.push.PushContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.jms.*;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
@@ -23,21 +21,15 @@ import java.util.List;
 @SessionScoped
 public class UserSchedule implements Serializable {
 
-    private String stationName;
-
     @Inject
     private ScheduleBean scheduleBean;
-
-//    @ManagedProperty(value = "pushContext")
-//    @Push(channel = "scheduleChannel")
-//    private PushContext pushContext;
-
     @Inject
     @Push(channel = "scheduleChannel")
     private PushContext pushContext;
-
     @EJB
     private UpdateControllerBean updateControllerBean;
+
+    private String stationName;
 
     @PostConstruct
     public void onInit() {
@@ -47,9 +39,6 @@ public class UserSchedule implements Serializable {
             Connection connection = connectionFactory.createConnection();
             connection.start();
 
-            // JMS messages are sent and received using a Session. We will
-            // create here a non-transactional session object. If you want
-            // to use transactions you should set the first parameter to 'true'
             Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
             Topic topic = session.createTopic("ScheduleChannel");
             MessageConsumer consumer = session.createConsumer(topic);
@@ -60,7 +49,11 @@ public class UserSchedule implements Serializable {
                     if (message instanceof TextMessage) {
                         try {
                             TextMessage textMessage = (TextMessage) message;
-                            updateControllerBean.onNewSchedule(textMessage.getText());
+                            try {
+                                updateControllerBean.onNewSchedule(textMessage.getText());
+                            } catch (NullPointerException e) {
+                                return;
+                            }
                             System.out.println("GOT MESSAGE FROM TOPIC:!!!!!!!!!");
                             System.out.println("MESSAGE IS: " + textMessage.getText());
                         } catch (JMSException e) {
@@ -79,12 +72,15 @@ public class UserSchedule implements Serializable {
         }
     }
 
-    public void onNewSchedule(@Observes ScheduleDTO newSchedule) {
-        System.out.println("onNewSchedule triggers! @Observer works!");
-//        pushContext.send("updateSchedule");
-    }
-
     public List<ScheduleDTO> getSchedules() {
+        if (stationName == null) {
+            try {
+                FacesContext.getCurrentInstance().getExternalContext().dispatch("/schedule.xhtml");
+            } catch (IOException e) {
+                System.err.println(e.getMessage());
+                e.printStackTrace();
+            }
+        }
         System.out.println("Fetching data from Central Schedule Bean");
         System.out.println("For station: " + stationName);
         List<ScheduleDTO> stationSchedules = scheduleBean.getStationSchedule(stationName);

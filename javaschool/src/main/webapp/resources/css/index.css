@@ -261,6 +261,11 @@ header.masthead p {
     font-weight: 900;
     font-family: 'Lato', sans-serif;
     padding: 3px;
+    padding-bottom: 5px;
     text-transform: uppercase;
     border-bottom: 1px solid #C9C9C9;
+}
+
+.site-path .text {
+    border-bottom: 2px solid rgba(124, 252, 0, 0.6);
 }

@@ -35,7 +35,7 @@ app.directive('clockpicker', ['$http', '$timeout', function($http, $timeout){
                 console.log('time_late: ', time_late);
 
                 $http({
-                    url: "/user/schedule/late",
+                    url: "/admin/schedule/late",
                     method: "POST",
                     params: {
                         scheduleId: scheduleId,

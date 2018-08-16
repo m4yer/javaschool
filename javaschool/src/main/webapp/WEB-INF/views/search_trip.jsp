@@ -115,18 +115,18 @@
                                     <div class="input-group">
                                         <span class="autocomplete-from">
                                             <input type="text" placeholder="From" class="input-place"
-                                                   ng-model="stationFrom" required/>
+                                                   ng-model="stationFrom" required id="awesomplete-from"/>
                                         </span>
                                         <span class="autocomplete-to">
                                             <input type="text" placeholder="To" class="input-place" ng-model="stationTo"
                                                    style="
                                                    border-top-left-radius: 0px;
-                                                   border-bottom-left-radius: 0px;" required/>
+                                                   border-bottom-left-radius: 0px;" required  id="awesomplete-to"/>
                                         </span>
                                         <input type="text" placeholder="Date" id="datepicker1" class="input-date"
-                                               ng-model="dateStart" autocomplete="off" required/>
+                                               ng-model="dateStart" autocomplete="off" required onkeydown="return false;"/>
                                         <input type="text" placeholder="Date" id="datepicker2" class="input-date"
-                                               ng-model="dateEnd" autocomplete="off" required/>
+                                               ng-model="dateEnd" autocomplete="off" required onkeydown="return false;"/>
                                         <input class="brand-pink-button" type="button" value="Search" ng-click="findTrips()"
                                                ng-disabled="!stationFrom || !stationTo || !dateStart || !dateEnd" />
                                     </div>
@@ -274,15 +274,21 @@
                                             }).then(function success(response) {
                                                 var list = response.data;
                                                 console.log('list: ', list);
-                                                new Awesomplete(document.querySelector(".autocomplete-from input"),{
+                                                var awesompleteFrom = new Awesomplete(document.querySelector(".autocomplete-from input"),{
                                                     list: list,
-                                                    minChars: 1,
+                                                    minChars: 0,
                                                     maxItems: 8
                                                 });
-                                                new Awesomplete(document.querySelector(".autocomplete-to input"),{
+                                                $('#awesomplete-from').on('focus', function() {
+                                                    awesompleteFrom.evaluate();
+                                                });
+                                                var awesompleteTo = new Awesomplete(document.querySelector(".autocomplete-to input"),{
                                                     list: list,
-                                                    minChars: 1,
+                                                    minChars: 0,
                                                     maxItems: 8
+                                                });
+                                                $('#awesomplete-to').on('focus', function() {
+                                                    awesompleteTo.evaluate();
                                                 });
                                                 pageLoaded();
                                             });
@@ -305,15 +311,21 @@
         }).then(function success(response) {
             var list = response.data;
             console.log('list: ', list);
-            new Awesomplete(document.querySelector(".autocomplete-from input"), {
+            var awesompleteFrom = new Awesomplete(document.querySelector(".autocomplete-from input"), {
                 list: list,
-                minChars: 1,
+                minChars: 0,
                 maxItems: 8
             });
-            new Awesomplete(document.querySelector(".autocomplete-to input"), {
+            $('#awesomplete-from').on('focus', function() {
+                awesompleteFrom.evaluate();
+            });
+            var awesompleteTo =new Awesomplete(document.querySelector(".autocomplete-to input"), {
                 list: list,
-                minChars: 1,
+                minChars: 0,
                 maxItems: 8
+            });
+            $('#awesomplete-to').on('focus', function() {
+                awesompleteTo.evaluate();
             });
             pageLoaded();
         });

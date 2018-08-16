@@ -57,8 +57,8 @@
                                                    border-top-left-radius: 0px;
                                                    border-bottom-left-radius: 0px;"/>
                                             </span>
-                                            <input type="text" placeholder="Date" id="datepicker1" class="input-date" name="dateStart" required autocomplete="off"/>
-                                            <input type="text" placeholder="Date" id="datepicker2" class="input-date" name="dateEnd" required autocomplete="off"/>
+                                            <input type="text" placeholder="Date" id="datepicker1" class="input-date" name="dateStart" required autocomplete="off" onkeydown="return false;"/>
+                                            <input type="text" placeholder="Date" id="datepicker2" class="input-date" name="dateEnd" required autocomplete="off" onkeydown="return false;"/>
                                             <input type="submit" value="Search"/>
                                         </div>
                                     </form>
@@ -81,8 +81,14 @@
 <script src="<c:url value="/resources/js/awesomplete.js" />"></script>
 <script src="<c:url value="/resources/js/angular/angular.min.js" />"></script>
 <script>
-    $("#datepicker1").datepicker();
-    $("#datepicker2").datepicker();
+    $("#datepicker1").datepicker({
+        startDate: 'now',
+        endDate: '+1m'
+    });
+    $("#datepicker2").datepicker({
+        startDate: 'now',
+        endDate: '+1m'
+    });
     $("nav").addClass("fixed-top");
 </script>
 <script src="<c:url value="/resources/js/angular/indexManageApp.js" />"></script>

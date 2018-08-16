@@ -100,7 +100,7 @@
     <sec:authorize access="hasRole('ROLE_ADMIN')">
         <%@ include file="../admin_navigation.jsp" %>
     </sec:authorize>
-    <div class="container-fluid site-path">My tickets</div>
+    <div class="container-fluid site-path"><span class="text">My tickets</span></div>
 
 
     <div class="container-fluid">
