@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.Query;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -43,7 +44,7 @@ public class ScheduleDAOImpl extends GenericDAOImpl<Schedule, Integer> implement
         return (List<Schedule>) findSchedules.getResultList();
     }
 
-    public void editLateStationSchedule(Integer scheduleId, String time_late) {
+    public void editLateStationSchedule(Integer scheduleId, LocalTime time_late) {
         Query updateTimeLate = entityManager.createQuery("update Schedule schedule set schedule.time_late=:time_late where schedule.id=:scheduleId");
         updateTimeLate.setParameter("scheduleId", scheduleId);
         updateTimeLate.setParameter("time_late", time_late);

@@ -1,6 +1,7 @@
 package com.tsystems.dto;
 
 import java.time.Instant;
+import java.time.LocalTime;
 import java.util.Objects;
 
 public class ScheduleDTO {
@@ -13,16 +14,16 @@ public class ScheduleDTO {
 
     private Instant time_arrival;
 
-    private String time_stop;
+    private LocalTime time_stop;
 
     private Instant time_departure;
 
-    private String time_late;
+    private LocalTime time_late;
 
     public ScheduleDTO() {
     }
 
-    public ScheduleDTO(Integer id, TripDTO tripDto, Instant time_arrival, String time_stop, Instant time_departure, String time_late) {
+    public ScheduleDTO(Integer id, TripDTO tripDto, Instant time_arrival, LocalTime time_stop, Instant time_departure, LocalTime time_late) {
         this.id = id;
         this.tripDto = tripDto;
         this.time_arrival = time_arrival;
@@ -31,7 +32,7 @@ public class ScheduleDTO {
         this.time_late = time_late;
     }
 
-    public ScheduleDTO(Integer id, TripDTO tripDto, StationDTO stationDto, Instant time_arrival, String time_stop, Instant time_departure, String time_late) {
+    public ScheduleDTO(Integer id, TripDTO tripDto, StationDTO stationDto, Instant time_arrival, LocalTime time_stop, Instant time_departure, LocalTime time_late) {
         this.id = id;
         this.tripDto = tripDto;
         this.stationDto = stationDto;
@@ -73,11 +74,11 @@ public class ScheduleDTO {
         this.time_arrival = time_arrival;
     }
 
-    public String getTime_stop() {
+    public LocalTime getTime_stop() {
         return time_stop;
     }
 
-    public void setTime_stop(String time_stop) {
+    public void setTime_stop(LocalTime time_stop) {
         this.time_stop = time_stop;
     }
 
@@ -90,11 +91,11 @@ public class ScheduleDTO {
     }
 
 
-    public String getTime_late() {
+    public LocalTime getTime_late() {
         return time_late;
     }
 
-    public void setTime_late(String time_late) {
+    public void setTime_late(LocalTime time_late) {
         this.time_late = time_late;
     }
 

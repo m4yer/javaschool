@@ -15,10 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.text.DateFormatter;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -68,7 +71,26 @@ public class ScheduleServiceImpl implements ScheduleService {
     public List<ScheduleDTO> getScheduleByStationNameForDate(String stationName, String date) {
         Station station = stationDAO.findByName(stationName);
         List<Schedule> schedules = scheduleDAO.getScheduleByStationIdForToday(station.getId(), date);
-        return Converter.getScheduleDtos(schedules);
+
+        List<ScheduleDTO> resultScheduleDtoList = Converter.getScheduleDtos(schedules);
+
+        for (ScheduleDTO schedule : resultScheduleDtoList) {
+            List<Schedule> scheduleForAllTrip = scheduleDAO.getSchedulesByTripId(schedule.getTripDto().getId());
+            LocalTime tempTime = null;
+            for (Schedule scheduleElement : scheduleForAllTrip) {
+                if (tempTime == null) {
+                    tempTime = scheduleElement.getTime_late();
+                } else {
+                    tempTime = tempTime.plusHours(scheduleElement.getTime_late().getHour()).plusMinutes(scheduleElement.getTime_late().getMinute());
+                }
+                if (scheduleElement.getId().equals(schedule.getId())) {
+                    schedule.setTime_late(tempTime);
+                    break;
+                }
+            }
+        }
+
+        return resultScheduleDtoList;
     }
 
     @Transactional
@@ -96,7 +118,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         log.info("@@tempTimestamp: " + tempInstant.toString());
         for (int i = 0; i < routeStations.size(); i++) {
             if (i == 0) { // First schedule row.
-                Schedule schedule = new Schedule(trip, tempInstant, routeStations.get(i), "00:00");
+                Schedule schedule = new Schedule(trip, tempInstant, routeStations.get(i), LocalTime.parse("00:00", DateTimeFormatter.ofPattern("HH:mm")));
                 scheduleDAO.add(schedule);
                 resultScheduleList.add(schedule);
                 log.info("@@tempTimestamp IN 1 IF: " + tempInstant.toString());
@@ -107,7 +129,7 @@ public class ScheduleServiceImpl implements ScheduleService {
                 Long milliseconds = (long) (((distance / trainSpeed) * 60) * 60) * 1000;
                 Instant currentInstant = Instant.ofEpochMilli(tempInstant.toEpochMilli() + milliseconds);
                 log.info("@@currentTimestamp IN 2 IF: (without toString())" + currentInstant);
-                Schedule schedule = new Schedule(trip, routeStations.get(i), currentInstant, stationsStopsInHoursAndMinutes.get(i), Instant.ofEpochMilli(currentInstant.toEpochMilli() + stationTimeStops.get(i)), "00:00");
+                Schedule schedule = new Schedule(trip, routeStations.get(i), currentInstant, LocalTime.parse(stationsStopsInHoursAndMinutes.get(i), DateTimeFormatter.ofPattern("HH:mm")), Instant.ofEpochMilli(currentInstant.toEpochMilli() + stationTimeStops.get(i)), LocalTime.parse("00:00", DateTimeFormatter.ofPattern("HH:mm")));
                 resultScheduleList.add(schedule);
                 scheduleDAO.add(schedule);
                 tempStation = current;
@@ -118,7 +140,7 @@ public class ScheduleServiceImpl implements ScheduleService {
                 Long milliseconds = (long) (((distance / trainSpeed) * 60) * 60) * 1000;
                 Instant currentInstant = Instant.ofEpochMilli(tempInstant.toEpochMilli() + milliseconds);
                 log.info("@@currentTimestamp IN 3 IF: " + currentInstant);
-                Schedule schedule = new Schedule(trip, routeStations.get(i), currentInstant, "00:00");
+                Schedule schedule = new Schedule(trip, routeStations.get(i), currentInstant, LocalTime.parse("00:00", DateTimeFormatter.ofPattern("HH:mm")));
                 resultScheduleList.add(schedule);
                 scheduleDAO.add(schedule);
             }
@@ -158,7 +180,58 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Transactional
     public void editLateStationSchedule(Integer scheduleId, String time_late) {
-        scheduleDAO.editLateStationSchedule(scheduleId, time_late);
+        LocalTime timeLate = LocalTime.parse(time_late, DateTimeFormatter.ofPattern("HH:mm"));
+        scheduleDAO.editLateStationSchedule(scheduleId, timeLate);
+        Schedule schedule = scheduleDAO.findById(scheduleId);
+        Trip scheduleTrip = schedule.getTrip();
+        List<Schedule> tripSchedules = scheduleDAO.getSchedulesByTripId(scheduleTrip.getId());
+        Instant today = LocalDate.now().atStartOfDay().toInstant(ZoneOffset.ofHours(3));
+        Instant tomorrow = LocalDate.now().plusDays(1).atStartOfDay().toInstant(ZoneOffset.ofHours(3));
+        LocalTime summaryTimeLate = null;
+        ScheduleDTO scheduleJms = null;
+        for (Schedule scheduleElement : tripSchedules) {
+            scheduleJms = null;
+            if (scheduleElement.getId() < scheduleId) {
+                if (summaryTimeLate == null) {
+                    summaryTimeLate = scheduleElement.getTime_late();
+                } else {
+                    summaryTimeLate = summaryTimeLate.plusHours(scheduleElement.getTime_late().getHour()).plusMinutes(scheduleElement.getTime_late().getMinute());
+                }
+                continue;
+            }
+            if (scheduleElement.getTime_arrival() != null) {
+                if ((scheduleElement.getTime_arrival().getEpochSecond() >= today.getEpochSecond()) && (scheduleElement.getTime_arrival().getEpochSecond() <= tomorrow.getEpochSecond())) {
+                    if (summaryTimeLate == null) {
+                        summaryTimeLate = scheduleElement.getTime_late();
+                    } else {
+                        summaryTimeLate = summaryTimeLate.plusHours(scheduleElement.getTime_late().getHour()).plusMinutes(scheduleElement.getTime_late().getMinute());
+                    }
+                    scheduleJms = Converter.getScheduleDto(scheduleElement);
+                    scheduleJms.setTime_late(summaryTimeLate);
+                    try {
+                        messageSender.sendMessage(objectMapper.writeValueAsString(scheduleJms));
+                    } catch (JsonProcessingException e) {
+                        log.error(e.getMessage(), e);
+                    }
+                } else break;
+            } else {
+                if ((scheduleTrip.getStart_time().getEpochSecond() >= today.getEpochSecond()) && (scheduleTrip.getStart_time().getEpochSecond() <= tomorrow.getEpochSecond())) {
+                    if (summaryTimeLate == null) {
+                        summaryTimeLate = scheduleElement.getTime_late();
+                    } else {
+                        summaryTimeLate = summaryTimeLate.plusHours(scheduleElement.getTime_late().getHour()).plusMinutes(scheduleElement.getTime_late().getMinute());
+                    }
+                    scheduleJms = Converter.getScheduleDto(scheduleElement);
+                    scheduleJms.setTime_late(summaryTimeLate);
+                    try {
+                        messageSender.sendMessage(objectMapper.writeValueAsString(scheduleJms));
+                    } catch (JsonProcessingException e) {
+                        log.error(e.getMessage(), e);
+                    }
+                } else break;
+            }
+        }
+
     }
 
 }

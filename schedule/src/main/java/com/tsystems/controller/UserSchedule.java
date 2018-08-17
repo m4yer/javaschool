@@ -45,7 +45,7 @@ public class UserSchedule implements Serializable {
         objectMapper.registerModule(module);
         try {
             System.out.println("Session bean: in TRY{} 140");
-            ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://localhost:61616");
+            ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("failover://(tcp://localhost:61616)?initialReconnectDelay=2000&maxReconnectAttempts=5");
             System.out.println("Session bean: after ActiveMQConnectionFactory");
             Connection connection = null;
             try {
@@ -114,9 +114,7 @@ public class UserSchedule implements Serializable {
         }
         System.out.println("Fetching data from Central Schedule Bean");
         System.out.println("For station: " + stationName);
-        List<ScheduleDTO> stationSchedules = scheduleBean.getStationSchedule(stationName);
-        System.out.println("LIST<SCHEDULE> SIZE FOR " + stationName + ": " + stationSchedules.size());
-        return stationSchedules;
+        return scheduleBean.getStationSchedule(stationName);
     }
 
     public String getStationName() {

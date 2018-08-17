@@ -2,6 +2,7 @@ package com.tsystems.entity;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.time.LocalTime;
 import java.util.Objects;
 
 @Entity
@@ -25,20 +26,19 @@ public class Schedule {
     private Instant time_arrival;
 
     @Column(name = "time_stop")
-    private String time_stop;
-    // TODO: ^^^ OMG? String ??
+    private LocalTime time_stop;
 
     @Column(name = "time_departure")
     private Instant time_departure;
 
     @Column(name = "time_late")
-    private String time_late;
+    private LocalTime time_late;
 
     public Schedule() {
     }
 
     // For first station. (there is no time_arrival and time_stop at the first route station)
-    public Schedule(Trip trip, Instant time_departure, Station station, String time_late) {
+    public Schedule(Trip trip, Instant time_departure, Station station, LocalTime time_late) {
         this.trip = trip;
         this.station = station;
         this.time_departure = time_departure;
@@ -46,7 +46,7 @@ public class Schedule {
     }
 
     // For all other stations. There are all part: time_arrival, time_departure and time_stop.
-    public Schedule(Trip trip, Station station, Instant time_arrival, String time_stop, Instant time_departure, String time_late) {
+    public Schedule(Trip trip, Station station, Instant time_arrival, LocalTime time_stop, Instant time_departure, LocalTime time_late) {
         this.trip = trip;
         this.station = station;
         this.time_arrival = time_arrival;
@@ -56,7 +56,7 @@ public class Schedule {
     }
 
     // For last station. (there is no time_departure and time_stop at the last route station)
-    public Schedule(Trip trip, Station station, Instant time_arrival, String time_late) {
+    public Schedule(Trip trip, Station station, Instant time_arrival, LocalTime time_late) {
         this.trip = trip;
         this.station = station;
         this.time_arrival = time_arrival;
@@ -95,11 +95,11 @@ public class Schedule {
         this.time_arrival = time_arrival;
     }
 
-    public String getTime_stop() {
+    public LocalTime getTime_stop() {
         return time_stop;
     }
 
-    public void setTime_stop(String time_stop) {
+    public void setTime_stop(LocalTime time_stop) {
         this.time_stop = time_stop;
     }
 
@@ -111,30 +111,15 @@ public class Schedule {
         this.time_departure = time_departure;
     }
 
-    public String getTime_late() {
+    public LocalTime getTime_late() {
         return time_late;
     }
 
-    public void setTime_late(String time_late) {
+    public void setTime_late(LocalTime time_late) {
         this.time_late = time_late;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Schedule schedule = (Schedule) o;
-        return Objects.equals(id, schedule.id) &&
-                Objects.equals(trip, schedule.trip) &&
-                Objects.equals(station, schedule.station) &&
-                Objects.equals(time_arrival, schedule.time_arrival) &&
-                Objects.equals(time_stop, schedule.time_stop) &&
-                Objects.equals(time_departure, schedule.time_departure) &&
-                Objects.equals(time_late, schedule.time_late);
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, trip, station, time_arrival, time_stop, time_departure, time_late);
-    }
+
+
 }

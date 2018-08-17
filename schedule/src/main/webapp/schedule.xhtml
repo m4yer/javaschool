@@ -9,7 +9,7 @@
 </h:head>
 
 <h:body>
-    <p:dataTable id="schedules" value="#{userSchedule.getSchedules()}" var="schedule" rendered="#{not empty userSchedule.schedules}">
+    <p:dataTable id="schedules" value="#{userSchedule.getSchedules()}" var="schedule" rendered="#{userSchedule.schedules != null}">
         <f:facet name="header">
             Schedule - #{userSchedule.stationName}
         </f:facet>

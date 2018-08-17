@@ -84,7 +84,7 @@ public class ITextPdfView extends AbstractITextPdfView {
             if (schedule.getTime_stop() == null) {
                 timeStop.setPhrase(new Phrase("-", BRAND_SMALL));
             } else {
-                timeStop.setPhrase(new Phrase(schedule.getTime_stop(), BRAND_SMALL));
+                timeStop.setPhrase(new Phrase(schedule.getTime_stop().toString(), BRAND_SMALL));
             }
             timeStop.setHorizontalAlignment(Element.ALIGN_CENTER);
             timeStop.setVerticalAlignment(Element.ALIGN_MIDDLE);

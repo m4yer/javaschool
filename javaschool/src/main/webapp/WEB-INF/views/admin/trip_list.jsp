@@ -125,7 +125,7 @@
                             <span ng-if="schedule.time_arrival">{{ (schedule.time_arrival.epochSecond + getLate($index)) * 1000 | date:'dd/MM/yyyy HH:mm' }}</span>
                             <font color="#FF5A5F" style="font-weight: 700;" ng-if="!schedule.time_arrival">Start</font>
                         </td>
-                        <td>{{ schedule.time_stop }}</td>
+                        <td>{{ schedule.time_stop ? (schedule.time_stop.hour < 10 ? '0' + schedule.time_stop.hour : schedule.time_stop.hour ) + ':' + (schedule.time_stop.minute < 10 ? '0' + schedule.time_stop.minute : schedule.time_stop.minute) : '-'}}</td>
                         <td>
                             <span ng-if="schedule.time_departure">{{ (schedule.time_departure.epochSecond + getLate($index)) * 1000  | date:'dd/MM/yyyy HH:mm' }}</span>
                             <font color="#FF5A5F" style="font-weight: 700;" ng-if="!schedule.time_departure">Finish</font>
@@ -136,7 +136,7 @@
 
                                 <div class="input-group-prepend">
                                     <div class="clockpicker text-center">
-                                        <input id="timepicker" type="text" class="form-control clockpicker-border-0 clockpicker-modal-form" value="{{ schedule.time_late }}" readonly style="background-color: white; border-radius: 0;font-size: 12px;border-bottom-left-radius: 2px;border-top-left-radius: 2px;" />
+                                        <input id="timepicker" type="text" class="form-control clockpicker-border-0 clockpicker-modal-form" value="{{ (schedule.time_late.hour < 10 ? '0' + schedule.time_late.hour : schedule.time_late.hour ) + ':' + (schedule.time_late.minute < 10 ? '0' + schedule.time_late.minute : schedule.time_late.minute)}}" readonly style="background-color: white; border-radius: 0;font-size: 12px;border-bottom-left-radius: 2px;border-top-left-radius: 2px;" />
                                     </div>
                                 </div>
 

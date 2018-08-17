@@ -43,10 +43,10 @@ app.controller("tripManageCtrl", function($scope, $http, DTOptionsBuilder, DTCol
         var lateness = 0;
         console.log('$scope.schedules: ', $scope.schedules);
         for (var i = 0; i < index; i++) {
-            var stringTimeLateForCurrentIndex = $scope.schedules[i]['time_late'];
-            var timeParts = stringTimeLateForCurrentIndex.split(':');
-            console.log('timeparts: ', timeParts);
-            var timeLateForCurrentIndex = (timeParts[0] * 24 * 60) + timeParts[1] * 60;
+            var lateForCurrentIndex = $scope.schedules[i]['time_late'];
+            var hours = lateForCurrentIndex['hour'];
+            var minutes = lateForCurrentIndex['minute'];
+            var timeLateForCurrentIndex = (hours * 24 * 60) + minutes * 60;
             console.log('timeLateForCurrentIndex', timeLateForCurrentIndex);
             lateness = lateness + timeLateForCurrentIndex;
         }

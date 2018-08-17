@@ -62,6 +62,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     public List<ScheduleDTO> getScheduleForToday(String stationName) throws IOException {
         String jsonResponse = httpGet("http://localhost:8080/schedule/get/?stationName=" + stationName);
+        System.out.println("response getScheduleForToday(): " + jsonResponse);
         System.out.println("BREAKPOINT AFTER");
         SimpleModule module = new SimpleModule();
         module.addDeserializer(ScheduleDTO.class, new ScheduleDeserializer());

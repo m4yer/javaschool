@@ -12,6 +12,8 @@ import com.tsystems.dto.TripDTO;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 public class ScheduleDeserializer extends StdDeserializer<ScheduleDTO> {
 
@@ -30,14 +32,33 @@ public class ScheduleDeserializer extends StdDeserializer<ScheduleDTO> {
         } catch (NullPointerException e) {
             timeArrivalSeconds = 0;
         }
-        String time_stop = node.get("time_stop").asText();
         long timeDepartureSeconds;
         try {
             timeDepartureSeconds = (node.get("time_departure").get("epochSecond")).asLong();
         } catch (NullPointerException e) {
             timeDepartureSeconds = 0;
         }
-        String time_late = node.get("time_late").asText();
+
+        // Time stop
+        LocalTime time_stop;;
+        try {
+            Integer timeStopHours = (Integer) node.get("time_stop").get("hour").numberValue();
+            Integer timeStopMinutes = (Integer) node.get("time_stop").get("minute").numberValue();
+            time_stop = LocalTime.of(timeStopHours, timeStopMinutes);
+
+        } catch (NullPointerException e) {
+            time_stop = null;
+        }
+
+        // Time late
+        LocalTime time_late;
+        try {
+            Integer timeLateHours = (Integer) node.get("time_late").get("hour").numberValue();
+            Integer timeLateMinutes = (Integer) node.get("time_late").get("minute").numberValue();
+            time_late = LocalTime.of(timeLateHours, timeLateMinutes);
+        } catch (NullPointerException e) {
+            time_late = null;
+        }
 
         // Trip
         int tripId = (Integer) (node.get("tripDto").get("id").numberValue());
