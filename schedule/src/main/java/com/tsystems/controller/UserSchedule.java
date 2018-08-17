@@ -1,7 +1,10 @@
 package com.tsystems.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.tsystems.client.ScheduleBean;
 import com.tsystems.dto.ScheduleDTO;
+import com.tsystems.util.ScheduleDeserializer;
 import org.apache.activemq.ActiveMQConnectionFactory;
 
 import javax.annotation.PostConstruct;
@@ -25,53 +28,76 @@ import java.util.Locale;
 @Named("userSchedule")
 @SessionScoped
 public class UserSchedule implements Serializable {
-
     @Inject
     private ScheduleBean scheduleBean;
     @Inject
     @Push(channel = "scheduleChannel")
     private PushContext pushContext;
-    @EJB
-    private UpdateControllerBean updateControllerBean;
 
+    private static final ObjectMapper objectMapper = new ObjectMapper();
     private String stationName;
 
     @PostConstruct
     public void onInit() {
         System.out.println("Session bean was created!!");
+        SimpleModule module = new SimpleModule();
+        module.addDeserializer(ScheduleDTO.class, new ScheduleDeserializer());
+        objectMapper.registerModule(module);
         try {
-            ConnectionFactory connectionFactory = new ActiveMQConnectionFactory();
-            Connection connection = connectionFactory.createConnection();
-            connection.start();
+            System.out.println("Session bean: in TRY{} 140");
+            ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://localhost:61616");
+            System.out.println("Session bean: after ActiveMQConnectionFactory");
+            Connection connection = null;
+            try {
+                connection = connectionFactory.createConnection();
+                System.out.println("Session bean: after createConnection in TRY{}");
+            } catch (JMSException e) {
+                System.out.println("Session bean: JMSException after createConnection()");
+                e.printStackTrace();
+            }
+            System.out.println("Session bean: after createConnection");
+            try {
+                connection.start();
+                System.out.println("Session bean: after connection.start() in TRY{}");
+            } catch (Exception e) {
+                System.out.println("Session bean: Exception when connection.start()");
+                e.printStackTrace();
+            }
+            System.out.println("Session bean: after connection.start()");
 
             Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+            System.out.println("Session bean: after createSession()");
             Topic topic = session.createTopic("ScheduleChannel");
+            System.out.println("Session bean: after createTopic()");
             MessageConsumer consumer = session.createConsumer(topic);
+            System.out.println("Session bean: after createConsumer()");
 
+            System.out.println("Session bean: before new MessageListener()");
             MessageListener listener = new MessageListener() {
                 @Override
                 public void onMessage(Message message) {
                     if (message instanceof TextMessage) {
                         try {
                             TextMessage textMessage = (TextMessage) message;
-                            try {
-                                updateControllerBean.onNewSchedule(textMessage.getText());
-                            } catch (NullPointerException e) {
-                                return;
+                            ScheduleDTO newScheduleDto = objectMapper.readValue(textMessage.getText(), ScheduleDTO.class);
+                            System.out.println("Got message from topic on SESSION USER BEAN.");
+                            if (newScheduleDto.getStationDto().getName().equals(getStationName())) {
+                                pushContext.send("updateSchedule");
+                                System.out.println("pushContext.send(\"updateSchedule\") invoked()");
                             }
-                            System.out.println("GOT MESSAGE FROM TOPIC:!!!!!!!!!");
-                            System.out.println("MESSAGE IS: " + textMessage.getText());
-                        } catch (JMSException e) {
+                        } catch (JMSException | IOException | NullPointerException e) {
                             System.err.println(e.getMessage());
                             e.printStackTrace();
                         }
                     }
-                    pushContext.send("updateSchedule");
                 }
             };
+            System.out.println("Session bean: after new MessageListener()");
 
             consumer.setMessageListener(listener);
+            System.out.println("Session bean: TRY{} finished");
         } catch (JMSException e) {
+            System.out.println("Session bean: CATCH{}");
             System.err.println(e.getMessage());
             e.printStackTrace();
         }
@@ -89,6 +115,7 @@ public class UserSchedule implements Serializable {
         System.out.println("Fetching data from Central Schedule Bean");
         System.out.println("For station: " + stationName);
         List<ScheduleDTO> stationSchedules = scheduleBean.getStationSchedule(stationName);
+        System.out.println("LIST<SCHEDULE> SIZE FOR " + stationName + ": " + stationSchedules.size());
         return stationSchedules;
     }
 
@@ -105,6 +132,6 @@ public class UserSchedule implements Serializable {
                 DateTimeFormatter.ofLocalizedDateTime( FormatStyle.SHORT )
                         .withLocale( Locale.UK )
                         .withZone( ZoneId.systemDefault() );
-        return formatter.format(input);
+        return input != null? formatter.format(input) : "-";
     }
 }

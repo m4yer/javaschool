@@ -103,13 +103,7 @@ public class ScheduleDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ScheduleDTO that = (ScheduleDTO) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(tripDto, that.tripDto) &&
-                Objects.equals(stationDto, that.stationDto) &&
-                Objects.equals(time_arrival, that.time_arrival) &&
-                Objects.equals(time_stop, that.time_stop) &&
-                Objects.equals(time_departure, that.time_departure) &&
-                Objects.equals(time_late, that.time_late);
+        return Objects.equals(id, that.id);
     }
 
     @Override

@@ -13,11 +13,17 @@
         <f:facet name="header">
             Schedule - #{userSchedule.stationName}
         </f:facet>
+        <p:column headerText="schedule.id">
+            <h:column>#{schedule.id}</h:column>
+        </p:column>
         <p:column headerText="Train">
             <h:column>#{schedule.tripDto.trainDto.name}</h:column>
         </p:column>
         <p:column headerText="Arriving">
             <h:column>#{userSchedule.instantFormat(schedule.time_arrival)}</h:column>
+        </p:column>
+        <p:column headerText="Departing">
+            <h:column>#{userSchedule.instantFormat(schedule.time_departure)}</h:column>
         </p:column>
         <p:column headerText="Late">
             <h:column>#{schedule.time_late}</h:column>

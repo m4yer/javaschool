@@ -2,11 +2,9 @@ package com.tsystems.jms;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.tsystems.controller.UpdateControllerBean;
 import com.tsystems.dto.ScheduleDTO;
 import com.tsystems.util.ScheduleDeserializer;
 
-import javax.inject.Inject;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
@@ -23,8 +21,6 @@ import java.io.IOException;
 //@ResourceAdapter("activemq.rar")
 public class ScheduleMessageBean implements MessageListener {
 
-    @Inject
-    UpdateControllerBean updateControllerBean;
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 //    private static ClientEndpoint clientEndpoint = new ClientEndpoint();
