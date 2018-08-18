@@ -5,12 +5,14 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 <h:head>
-
+    <link type="text/css" rel="stylesheet" href="resources/css/triptable.css"/>
+    <title>RW | #{userSchedule.stationName}</title>
 </h:head>
-
 <h:body>
-    <p:dataTable id="schedules" value="#{userSchedule.getSchedules()}" var="schedule" rendered="#{userSchedule.schedules != null}">
-        <f:facet name="header">
+    <p:dataTable id="schedules" value="#{userSchedule.getSchedules()}" var="schedule"
+                 rendered="#{userSchedule.schedules != null}"
+                 rowStyleClass="#{schedule.tripDto.active == true ? ((schedule.time_late.hour == 0) and (schedule.time_late.minute == 0) ? 'trip-active' : 'trip-late') : 'trip-cancelled'}">
+        <f:facet name="header" styleClass="scheduleTripTable">
             Schedule - #{userSchedule.stationName}
         </f:facet>
         <p:column headerText="schedule.id">
@@ -28,10 +30,13 @@
         <p:column headerText="Late">
             <h:column>#{schedule.time_late}</h:column>
         </p:column>
+        <p:column headerText="Status">
+            <h:column>#{schedule.tripDto.active == true ? ((schedule.time_late.hour == 0) and (schedule.time_late.minute == 0) ? 'On the way' : 'Train is late') : 'Trip is cancelled'}</h:column>
+        </p:column>
     </p:dataTable>
     <h:form>
         <f:websocket channel="scheduleChannel">
-            <f:ajax event="updateSchedule" render=":schedules" />
+            <f:ajax event="updateSchedule" render=":schedules"/>
         </f:websocket>
     </h:form>
 </h:body>

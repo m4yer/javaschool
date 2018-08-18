@@ -1,10 +1,11 @@
 package com.tsystems.service.implementation;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tsystems.dao.api.*;
+import com.tsystems.dto.ScheduleDTO;
+import com.tsystems.entity.Schedule;
 import com.tsystems.entity.converter.Converter;
-import com.tsystems.dao.api.RouteDAO;
-import com.tsystems.dao.api.StationDAO;
-import com.tsystems.dao.api.TrainDAO;
-import com.tsystems.dao.api.TripDAO;
 import com.tsystems.dto.TicketDTO;
 import com.tsystems.dto.TripDTO;
 import com.tsystems.entity.Route;
@@ -19,6 +20,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,14 +31,18 @@ public class TripServiceImpl implements TripService {
     private TripDAO tripDAO;
     private RouteDAO routeDAO;
     private StationDAO stationDAO;
+    private ScheduleDAO scheduleDAO;
     private TrainDAO trainDAO;
     private SimpleMessageSender messageSender;
 
+    private final static ObjectMapper objectMapper = new ObjectMapper();
+
     @Autowired
-    public TripServiceImpl(TripDAO tripDAO, RouteDAO routeDAO, StationDAO stationDAO, TrainDAO trainDAO, SimpleMessageSender messageSender) {
+    public TripServiceImpl(TripDAO tripDAO, RouteDAO routeDAO, StationDAO stationDAO, ScheduleDAO scheduleDAO, TrainDAO trainDAO, SimpleMessageSender messageSender) {
         this.tripDAO = tripDAO;
         this.routeDAO = routeDAO;
         this.stationDAO = stationDAO;
+        this.scheduleDAO = scheduleDAO;
         this.trainDAO = trainDAO;
         this.messageSender = messageSender;
     }
@@ -123,11 +131,36 @@ public class TripServiceImpl implements TripService {
 
         // Entire code below is to send messages to ActiveMQ
         Trip currentTrip = tripDAO.findById(tripId);
-        Integer routeId = currentTrip.getRoute_id();
-        List<Route> routes = routeDAO.findRouteByRouteId(routeId);
-        List<Station> routeStations = new ArrayList<>();
-        routes.forEach(route -> routeStations.add(route.getStation()));
-        routeStations.forEach(station -> messageSender.sendMessage(station.getName()));
+        List<Schedule> tripSchedules = scheduleDAO.getSchedulesByTripId(currentTrip.getId());
+        Instant today = LocalDate.now().atStartOfDay().toInstant(ZoneOffset.ofHours(3));
+        Instant tomorrow = LocalDate.now().plusDays(1).atStartOfDay().toInstant(ZoneOffset.ofHours(3));
+        LocalTime summaryTimeLate = LocalTime.of(0, 0);
+        ScheduleDTO scheduleJms = null;
+        for (Schedule scheduleElement : tripSchedules) {
+            if (scheduleElement.getTime_arrival() != null) {
+                if ((scheduleElement.getTime_arrival().getEpochSecond() >= today.getEpochSecond()) && (scheduleElement.getTime_arrival().getEpochSecond() <= tomorrow.getEpochSecond())) {
+                    scheduleJms = Converter.getScheduleDto(scheduleElement);
+                    scheduleJms.setTime_late(summaryTimeLate);
+                    summaryTimeLate = summaryTimeLate.plusHours(scheduleElement.getTime_late().getHour()).plusMinutes(scheduleElement.getTime_late().getMinute());
+                    try {
+                        messageSender.sendMessage(objectMapper.writeValueAsString(scheduleJms));
+                    } catch (JsonProcessingException e) {
+                        log.error(e.getMessage(), e);
+                    }
+                } else break;
+            } else {
+                if ((currentTrip.getStart_time().getEpochSecond() >= today.getEpochSecond()) && (currentTrip.getStart_time().getEpochSecond() <= tomorrow.getEpochSecond())) {
+                    scheduleJms = Converter.getScheduleDto(scheduleElement);
+                    scheduleJms.setTime_late(summaryTimeLate);
+                    summaryTimeLate = summaryTimeLate.plusHours(scheduleElement.getTime_late().getHour()).plusMinutes(scheduleElement.getTime_late().getMinute());
+                    try {
+                        messageSender.sendMessage(objectMapper.writeValueAsString(scheduleJms));
+                    } catch (JsonProcessingException e) {
+                        log.error(e.getMessage(), e);
+                    }
+                } else break;
+            }
+        }
 
     }
 

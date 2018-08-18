@@ -1,0 +1,15 @@
+.trip-active {
+    background-color: rgba(34, 252, 0, 0.68);
+}
+
+.trip-late {
+    background-color: rgba(255, 167, 0, 0.6);
+}
+
+.trip-cancelled {
+    background-color: rgba(255, 90, 95, 0.35);
+}
+
+.scheduleTripTable td:nth-child(1) {
+    color: blueviolet;
+}
