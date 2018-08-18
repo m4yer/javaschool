@@ -17,7 +17,7 @@ public class ScheduleDAOImpl extends GenericDAOImpl<Schedule, Integer> implement
 
     public List<Schedule> getScheduleByStationIdForToday(Integer stationId, String date) {
         Query findSchedules = entityManager.createQuery("select schedule from Schedule schedule " +
-                "where schedule.station.id=:stationId and (schedule.time_arrival between :desiredDate and :tomorrow)");
+                "where schedule.station.id=:stationId and ((schedule.time_arrival between :desiredDate and :tomorrow) or (schedule.time_departure between :desiredDate and :tomorrow))");
         Instant desiredDate;
         if (date == null) {
             desiredDate = LocalDate.now().atStartOfDay().toInstant(ZoneOffset.ofHours(3));
@@ -34,7 +34,6 @@ public class ScheduleDAOImpl extends GenericDAOImpl<Schedule, Integer> implement
         findSchedules.setParameter("tomorrow", tomorrow);
         findSchedules.setParameter("stationId", stationId);
         List<Schedule> resultList = (List<Schedule>) findSchedules.getResultList();
-        System.out.println("mock");
         return resultList;
     }
 

@@ -76,17 +76,13 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         for (ScheduleDTO schedule : resultScheduleDtoList) {
             List<Schedule> scheduleForAllTrip = scheduleDAO.getSchedulesByTripId(schedule.getTripDto().getId());
-            LocalTime tempTime = null;
+            LocalTime tempTime = LocalTime.of(0, 0);
             for (Schedule scheduleElement : scheduleForAllTrip) {
-                if (tempTime == null) {
-                    tempTime = scheduleElement.getTime_late();
-                } else {
-                    tempTime = tempTime.plusHours(scheduleElement.getTime_late().getHour()).plusMinutes(scheduleElement.getTime_late().getMinute());
-                }
                 if (scheduleElement.getId().equals(schedule.getId())) {
                     schedule.setTime_late(tempTime);
                     break;
                 }
+                tempTime = tempTime.plusHours(scheduleElement.getTime_late().getHour()).plusMinutes(scheduleElement.getTime_late().getMinute());
             }
         }
 
@@ -187,48 +183,36 @@ public class ScheduleServiceImpl implements ScheduleService {
         List<Schedule> tripSchedules = scheduleDAO.getSchedulesByTripId(scheduleTrip.getId());
         Instant today = LocalDate.now().atStartOfDay().toInstant(ZoneOffset.ofHours(3));
         Instant tomorrow = LocalDate.now().plusDays(1).atStartOfDay().toInstant(ZoneOffset.ofHours(3));
-        LocalTime summaryTimeLate = null;
+        LocalTime summaryTimeLate = LocalTime.of(0, 0);
         ScheduleDTO scheduleJms = null;
         for (Schedule scheduleElement : tripSchedules) {
-            scheduleJms = null;
-            if (scheduleElement.getId() < scheduleId) {
-                if (summaryTimeLate == null) {
-                    summaryTimeLate = scheduleElement.getTime_late();
+            if (scheduleElement.getId() >= scheduleId) {
+                if (scheduleElement.getTime_arrival() != null) {
+                    if ((scheduleElement.getTime_arrival().getEpochSecond() >= today.getEpochSecond()) && (scheduleElement.getTime_arrival().getEpochSecond() <= tomorrow.getEpochSecond())) {
+                        scheduleJms = Converter.getScheduleDto(scheduleElement);
+                        scheduleJms.setTime_late(summaryTimeLate);
+                        summaryTimeLate = summaryTimeLate.plusHours(scheduleElement.getTime_late().getHour()).plusMinutes(scheduleElement.getTime_late().getMinute());
+                        try {
+                            messageSender.sendMessage(objectMapper.writeValueAsString(scheduleJms));
+                        } catch (JsonProcessingException e) {
+                            log.error(e.getMessage(), e);
+                        }
+                    } else break;
                 } else {
-                    summaryTimeLate = summaryTimeLate.plusHours(scheduleElement.getTime_late().getHour()).plusMinutes(scheduleElement.getTime_late().getMinute());
+                    if ((scheduleTrip.getStart_time().getEpochSecond() >= today.getEpochSecond()) && (scheduleTrip.getStart_time().getEpochSecond() <= tomorrow.getEpochSecond())) {
+                        scheduleJms = Converter.getScheduleDto(scheduleElement);
+                        scheduleJms.setTime_late(summaryTimeLate);
+                        summaryTimeLate = summaryTimeLate.plusHours(scheduleElement.getTime_late().getHour()).plusMinutes(scheduleElement.getTime_late().getMinute());
+                        try {
+                            messageSender.sendMessage(objectMapper.writeValueAsString(scheduleJms));
+                        } catch (JsonProcessingException e) {
+                            log.error(e.getMessage(), e);
+                        }
+                    } else break;
                 }
-                continue;
             }
-            if (scheduleElement.getTime_arrival() != null) {
-                if ((scheduleElement.getTime_arrival().getEpochSecond() >= today.getEpochSecond()) && (scheduleElement.getTime_arrival().getEpochSecond() <= tomorrow.getEpochSecond())) {
-                    if (summaryTimeLate == null) {
-                        summaryTimeLate = scheduleElement.getTime_late();
-                    } else {
-                        summaryTimeLate = summaryTimeLate.plusHours(scheduleElement.getTime_late().getHour()).plusMinutes(scheduleElement.getTime_late().getMinute());
-                    }
-                    scheduleJms = Converter.getScheduleDto(scheduleElement);
-                    scheduleJms.setTime_late(summaryTimeLate);
-                    try {
-                        messageSender.sendMessage(objectMapper.writeValueAsString(scheduleJms));
-                    } catch (JsonProcessingException e) {
-                        log.error(e.getMessage(), e);
-                    }
-                } else break;
-            } else {
-                if ((scheduleTrip.getStart_time().getEpochSecond() >= today.getEpochSecond()) && (scheduleTrip.getStart_time().getEpochSecond() <= tomorrow.getEpochSecond())) {
-                    if (summaryTimeLate == null) {
-                        summaryTimeLate = scheduleElement.getTime_late();
-                    } else {
-                        summaryTimeLate = summaryTimeLate.plusHours(scheduleElement.getTime_late().getHour()).plusMinutes(scheduleElement.getTime_late().getMinute());
-                    }
-                    scheduleJms = Converter.getScheduleDto(scheduleElement);
-                    scheduleJms.setTime_late(summaryTimeLate);
-                    try {
-                        messageSender.sendMessage(objectMapper.writeValueAsString(scheduleJms));
-                    } catch (JsonProcessingException e) {
-                        log.error(e.getMessage(), e);
-                    }
-                } else break;
+            if (scheduleElement.getId() < scheduleId) {
+                summaryTimeLate = summaryTimeLate.plusHours(scheduleElement.getTime_late().getHour()).plusMinutes(scheduleElement.getTime_late().getMinute());
             }
         }
 

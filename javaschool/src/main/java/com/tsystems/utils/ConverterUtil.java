@@ -57,8 +57,7 @@ public class ConverterUtil {
             objectMapper.writeValue(out, inputList);
             return new String(out.toByteArray());
         } catch (IOException e) {
-            log.error(e);
-            // TODO: Think about: what to return if exception occurs?
+            log.error(e.getMessage(), e);
             return null;
         }
     }

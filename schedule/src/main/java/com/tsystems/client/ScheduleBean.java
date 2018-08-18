@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.tsystems.dto.ScheduleDTO;
 import com.tsystems.util.ScheduleDeserializer;
 import org.apache.activemq.ActiveMQConnectionFactory;
+import org.apache.log4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -28,6 +29,7 @@ public class ScheduleBean {
     private List<String> stations = new ArrayList<>();
     private static ConcurrentMap<String, List<ScheduleDTO>> schedules = new ConcurrentHashMap<>();
     private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final Logger log = Logger.getLogger(ScheduleBean.class);
 
 
     @PostConstruct
@@ -35,23 +37,23 @@ public class ScheduleBean {
         SimpleModule module = new SimpleModule();
         module.addDeserializer(ScheduleDTO.class, new ScheduleDeserializer());
         objectMapper.registerModule(module);
-        System.out.println("init() ScheduleBean was invoked!");
+        log.info("init() ScheduleBean was invoked!");
         try {
             stations = scheduleService.getAllStations();
         } catch (IOException e) {
-            System.out.println("FAIL WHILE TRYING TO FETCH STATIONS");
+            log.info("FAIL WHILE TRYING TO FETCH STATIONS");
             e.printStackTrace();
         }
         stations.forEach(station -> {
             try {
-                System.out.println("Get scheduleForToday from 1st app for: " + station);
+                log.info("Get scheduleForToday from 1st app for: " + station);
                 List<ScheduleDTO> stationSchedules = scheduleService.getScheduleForToday(station);
                 if (stationSchedules != null) schedules.put(station, stationSchedules);
             } catch (IOException e) {
-                System.out.println("SOME TROUBLES WHILE TRYING TO GET SCHEDULE FOR: " + station);
+                log.info("SOME TROUBLES WHILE TRYING TO GET SCHEDULE FOR: " + station);
             }
         });
-        System.out.println("After fetсhing data list<ScheduleDto>: " + schedules);
+        log.info("After fetсhing data list<ScheduleDto>: " + schedules);
         ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("failover://(tcp://localhost:61616)?initialReconnectDelay=2000&maxReconnectAttempts=5");
         Connection connection = null;
         try {
@@ -68,11 +70,10 @@ public class ScheduleBean {
                         try {
                             TextMessage textMessage = (TextMessage) message;
                             ScheduleDTO newScheduleDto = objectMapper.readValue(textMessage.getText(), ScheduleDTO.class);
-                            System.out.println("Got message from topic on CENTRAL SCHEDULE BEAN.");
+                            log.info("Got message from topic on CENTRAL SCHEDULE BEAN.");
                             onNewSchedule(newScheduleDto);
                         } catch (JMSException | IOException | NullPointerException e) {
-                            System.err.println(e.getMessage());
-                            e.printStackTrace();
+                            log.error(e.getMessage(), e);
                         }
                     }
                 }
@@ -87,22 +88,21 @@ public class ScheduleBean {
 
     private void onNewSchedule(ScheduleDTO newScheduleDto) {
         synchronized (schedules) {
-            System.out.println("CENTRAL BEAN: invoked onNewSchedule()");
+            log.info("CENTRAL BEAN: invoked onNewSchedule()");
             String stationName = newScheduleDto.getStationDto().getName();
             List<ScheduleDTO> stationSchedule = schedules.get(stationName);
-            System.out.println("CENTRAL BEAN: Go into FOR LOOP");
             if (stationSchedule != null) {
                 for (ScheduleDTO schedule : stationSchedule) {
                     if (newScheduleDto.getId().equals(schedule.getId())) {
                         stationSchedule.set(stationSchedule.indexOf(schedule), newScheduleDto);
                         setScheduleListForMap(stationName, stationSchedule);
-                        System.out.println("CENTRAL BEAN: NewSchedule is presented in list. We just change old object to new.");
+                        log.info("CENTRAL BEAN: NewSchedule is presented in list. We just change old object to new.");
                         return;
                     }
                     if (newScheduleDto.getId() < schedule.getId()) {
                         stationSchedule.add(stationSchedule.indexOf(schedule) - 1, newScheduleDto);
                         setScheduleListForMap(stationName, stationSchedule);
-                        System.out.println("CENTRAL BEAN: Next schedule ID is larger. We just add after previous.");
+                        log.info("CENTRAL BEAN: Next schedule ID is larger. We just add after previous.");
                         return;
                     }
                 }
@@ -114,12 +114,12 @@ public class ScheduleBean {
                 stationSchedule.add(newScheduleDto);
             }
             setScheduleListForMap(stationName, stationSchedule);
-            System.out.println("CENTRAL BEAN: NewSchedule is not presented, we just add it to the end of list!");
+            log.info("CENTRAL BEAN: NewSchedule is not presented, we just add it to the end of list!");
         }
     }
 
     private void setScheduleListForMap(String key, List<ScheduleDTO> scheduleList) {
-        System.out.println("setScheduleListForMap() invoked. Schedule was updated.");
+        log.info("setScheduleListForMap() invoked. Schedule was updated.");
         schedules.remove(key);
         schedules.put(key, scheduleList);
     }

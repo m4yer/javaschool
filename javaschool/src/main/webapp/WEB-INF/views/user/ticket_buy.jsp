@@ -164,8 +164,6 @@
         window.location.replace("/user/ticket/buy/?tripId=" + ${trip.id} +"&carriageNum=" + carriageNum + "&stationFrom=" + '${stationFromName}' + "&stationTo=" + '${stationToName}');
     }
 
-    // TODO: Сделать "этот билет сейчас покупают: N человек", через сокеты.
-
 </script>
 <script>
     <c:forEach var="i" begin="1" end="${trip.trainDto.seats_amount}" varStatus="loop">
