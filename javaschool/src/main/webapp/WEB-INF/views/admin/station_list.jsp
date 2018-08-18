@@ -1,5 +1,6 @@
 <%@ include file="../includes.jsp" %>
 <html>
+<link rel="icon" type="image/png" href="<c:url value="/resources/img/favicon.ico"/>"/>
 <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/bootstrap.min.css"/>"/>
 <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/font-awesome.min.css"/>"/>
 <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/index.css" />"/>

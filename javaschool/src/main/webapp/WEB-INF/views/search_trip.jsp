@@ -128,7 +128,7 @@
                                         <input type="text" placeholder="Date" id="datepicker2" class="input-date"
                                                ng-model="dateEnd" autocomplete="off" required onkeydown="return false;"/>
                                         <input class="brand-pink-button" type="button" value="Search" ng-click="findTrips()"
-                                               ng-disabled="!stationFrom || !stationTo || !dateStart || !dateEnd" />
+                                               ng-disabled="stationFrom.length == 0 || stationTo.length == 0 || !dateStart || !dateEnd" />
                                     </div>
                                 </td>
                             </tr>
@@ -305,30 +305,30 @@
 
         </c:when>
         <c:otherwise>
-        $http({
-            url: "/station/get/list/title",
-            method: "GET"
-        }).then(function success(response) {
-            var list = response.data;
-            console.log('list: ', list);
-            var awesompleteFrom = new Awesomplete(document.querySelector(".autocomplete-from input"), {
-                list: list,
-                minChars: 0,
-                maxItems: 8
+            $http({
+                url: "/station/get/list/title",
+                method: "GET"
+            }).then(function success(response) {
+                var list = response.data;
+                console.log('list: ', list);
+                var awesompleteFrom = new Awesomplete(document.querySelector(".autocomplete-from input"), {
+                    list: list,
+                    minChars: 0,
+                    maxItems: 8
+                });
+                $('#awesomplete-from').on('focus', function() {
+                    awesompleteFrom.evaluate();
+                });
+                var awesompleteTo =new Awesomplete(document.querySelector(".autocomplete-to input"), {
+                    list: list,
+                    minChars: 0,
+                    maxItems: 8
+                });
+                $('#awesomplete-to').on('focus', function() {
+                    awesompleteTo.evaluate();
+                });
+                pageLoaded();
             });
-            $('#awesomplete-from').on('focus', function() {
-                awesompleteFrom.evaluate();
-            });
-            var awesompleteTo =new Awesomplete(document.querySelector(".autocomplete-to input"), {
-                list: list,
-                minChars: 0,
-                maxItems: 8
-            });
-            $('#awesomplete-to').on('focus', function() {
-                awesompleteTo.evaluate();
-            });
-            pageLoaded();
-        });
         </c:otherwise>
         </c:choose>
         $scope.findTrips = function () {

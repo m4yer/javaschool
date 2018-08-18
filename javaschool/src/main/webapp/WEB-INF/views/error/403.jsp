@@ -1,6 +1,7 @@
 <%@ include file="../includes.jsp" %>
 <html>
 <head>
+    <link rel="icon" type="image/png" href="<c:url value="/resources/img/favicon.ico"/>"/>
     <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/403.css" />"/>

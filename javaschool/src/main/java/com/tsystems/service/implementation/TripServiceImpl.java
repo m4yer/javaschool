@@ -129,7 +129,7 @@ public class TripServiceImpl implements TripService {
     public void cancelTrip(Integer tripId) {
         Trip currentTrip = tripDAO.findById(tripId);
         currentTrip.setActive(false);
-        System.out.println("mock");
+
         // Entire code below is to send messages to ActiveMQ
         List<Schedule> tripSchedules = scheduleDAO.getSchedulesByTripId(tripId);
         Instant today = LocalDate.now().atStartOfDay().toInstant(ZoneOffset.ofHours(3));

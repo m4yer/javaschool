@@ -49,13 +49,13 @@
                                     <form action="/trip/find/" method="get" >
                                         <div class="input-group">
                                             <span class="autocomplete-from">
-                                                <input type="text" placeholder="From" class="input-place" name="stationFrom" required/>
+                                                <input type="text" placeholder="From" class="input-place" name="stationFrom" required id="awesomplete-from"/>
                                             </span>
                                             <span class="autocomplete-to">
                                                 <input type="text" placeholder="To" class="input-place autocomplete-to" name="stationTo" required
                                                        style="
                                                    border-top-left-radius: 0px;
-                                                   border-bottom-left-radius: 0px;"/>
+                                                   border-bottom-left-radius: 0px;" id="awesomplete-to"/>
                                             </span>
                                             <input type="text" placeholder="Date" id="datepicker1" class="input-date" name="dateStart" required autocomplete="off" onkeydown="return false;"/>
                                             <input type="text" placeholder="Date" id="datepicker2" class="input-date" name="dateEnd" required autocomplete="off" onkeydown="return false;"/>
