@@ -21,8 +21,6 @@ public interface TripService {
 
     void cancelTrip(Integer tripId);
 
-    void addLateTime(Integer tripId, String timeLate);
-
     Instant getDepartureTime(Integer tripId);
 
     Instant getArrivalTime(Integer tripId, String stationToName);

@@ -92,14 +92,6 @@ public class TripController {
         return "redirect:/admin/trip/list";
     }
 
-    @PostMapping("/admin/trip/late/add")
-    public String addLateTime(
-            @RequestParam("tripId") Integer tripId,
-            @RequestParam("timeLate") String timeLate) {
-        tripService.addLateTime(tripId, timeLate);
-        return "redirect:/admin/trip/list";
-    }
-
     @GetMapping("/trip/departure-time")
     public @ResponseBody Instant getDepartureTime(@RequestParam("tripId") Integer tripId) {
         return tripService.getDepartureTime(tripId);

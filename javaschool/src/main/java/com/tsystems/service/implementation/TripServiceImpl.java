@@ -127,11 +127,11 @@ public class TripServiceImpl implements TripService {
 
     @Transactional
     public void cancelTrip(Integer tripId) {
-        tripDAO.cancelTrip(tripId);
-
-        // Entire code below is to send messages to ActiveMQ
         Trip currentTrip = tripDAO.findById(tripId);
-        List<Schedule> tripSchedules = scheduleDAO.getSchedulesByTripId(currentTrip.getId());
+        currentTrip.setActive(false);
+        System.out.println("mock");
+        // Entire code below is to send messages to ActiveMQ
+        List<Schedule> tripSchedules = scheduleDAO.getSchedulesByTripId(tripId);
         Instant today = LocalDate.now().atStartOfDay().toInstant(ZoneOffset.ofHours(3));
         Instant tomorrow = LocalDate.now().plusDays(1).atStartOfDay().toInstant(ZoneOffset.ofHours(3));
         LocalTime summaryTimeLate = LocalTime.of(0, 0);
@@ -161,20 +161,6 @@ public class TripServiceImpl implements TripService {
                 } else break;
             }
         }
-
-    }
-
-    @Transactional
-    public void addLateTime(Integer tripId, String timeLate) {
-        tripDAO.addLateTime(tripId, timeLate);
-
-        // Entire code below is to send messages to ActiveMQ
-        Trip currentTrip = tripDAO.findById(tripId);
-        Integer routeId = currentTrip.getRoute_id();
-        List<Route> routes = routeDAO.findRouteByRouteId(routeId);
-        List<Station> routeStations = new ArrayList<>();
-        routes.forEach(route -> routeStations.add(route.getStation()));
-        routeStations.forEach(station -> messageSender.sendMessage(station.getName()));
     }
 
     @Transactional

@@ -41,18 +41,14 @@ public class TripDAOImpl extends GenericDAOImpl<Trip, Integer> implements TripDA
         return false;
     }
 
-    public void cancelTrip(Integer tripId) {
+    public Instant cancelTrip(Integer tripId) {
         Query setTripInactive = entityManager.createQuery("update Trip trip set trip.active=:bool where trip.id=:tripId");
         setTripInactive.setParameter("bool", false);
         setTripInactive.setParameter("tripId", tripId);
         setTripInactive.executeUpdate();
-    }
-
-    public void addLateTime(Integer tripId, String timeLate) {
-        Query setTripLateTime = entityManager.createQuery("update Trip trip set trip.time_late=:timeLate where trip.id=:tripId");
-        setTripLateTime.setParameter("tripId", tripId);
-        setTripLateTime.setParameter("timeLate", timeLate);
-        setTripLateTime.executeUpdate();
+        Query getTripStartTime = entityManager.createQuery("select trip.start_time from Trip trip where trip.id=:tripId");
+        getTripStartTime.setParameter("tripId", tripId);
+        return (Instant) getTripStartTime.getSingleResult();
     }
 
     public Instant getDepartureTime(Integer tripId) {

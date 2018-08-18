@@ -14,9 +14,7 @@ public interface TripDAO extends GenericDAO<Trip, Integer> {
 
     boolean isTripAvailableForUser(Integer tripId, String userName);
 
-    void cancelTrip(Integer tripId);
-
-    void addLateTime(Integer tripId, String timeLate);
+    Instant cancelTrip(Integer tripId);
 
     Instant getDepartureTime(Integer tripId);
 
