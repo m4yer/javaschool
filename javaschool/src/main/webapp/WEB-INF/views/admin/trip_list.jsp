@@ -60,7 +60,7 @@
                             <th>Arrival</th>
                             <th>Passengers</th>
                             <th>Late</th>
-                            <th>Active</th>
+                            <th>Status</th>
                             <th>Cancel</th>
                         </tr>
                     </thead>
@@ -80,8 +80,8 @@
                             <td>
                                 <%--<font color="#7CFC00" ng-if="trip.active">&#10004;</font>--%>
                                 <%--<font color="red" ng-if="!trip.active">&#10008;</font>--%>
-                                <font color="#7CFC00" ng-if="trip.active">Yes</font>
-                                <font color="red" ng-if="!trip.active">No</font>
+                                <span style="font-weight: 700;" ng-if="trip.active">Active</span>
+                                <span style="font-weight: 700;" ng-if="!trip.active">Cancelled</span>
 
                             </td>
                             <td style="font-size: 12px;">
