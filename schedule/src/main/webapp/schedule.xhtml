@@ -3,37 +3,53 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
 <h:head>
+    <link type="text/css" rel="stylesheet" href="resources/css/bootstrap.min.css"/>
+    <link type="text/css" rel="stylesheet" href="resources/css/font-awesome.min.css"/>
+    <link type="text/css" rel="stylesheet" href="resources/css/navigation-transparent.css"/>
     <link type="text/css" rel="stylesheet" href="resources/css/triptable.css"/>
-    <title>RW | #{userSchedule.stationName}</title>
+    <title>SC | #{userSchedule.stationName}</title>
 </h:head>
 <h:body>
-    <p:dataTable id="schedules" value="#{userSchedule.getSchedules()}" var="schedule"
-                 rendered="#{userSchedule.schedules != null}"
-                 rowStyleClass="#{schedule.tripDto.active == true ? ((schedule.time_late.hour == 0) and (schedule.time_late.minute == 0) ? 'trip-active' : 'trip-late') : 'trip-cancelled'}">
-        <f:facet name="header" styleClass="scheduleTripTable">
-            Schedule - #{userSchedule.stationName}
-        </f:facet>
-        <p:column headerText="schedule.id">
-            <h:column>#{schedule.id}</h:column>
-        </p:column>
-        <p:column headerText="Train">
-            <h:column>#{schedule.tripDto.trainDto.name}</h:column>
-        </p:column>
-        <p:column headerText="Arriving">
-            <h:column>#{userSchedule.instantFormat(schedule.time_arrival)}</h:column>
-        </p:column>
-        <p:column headerText="Departing">
-            <h:column>#{userSchedule.instantFormat(schedule.time_departure)}</h:column>
-        </p:column>
-        <p:column headerText="Late">
-            <h:column>#{schedule.time_late}</h:column>
-        </p:column>
-        <p:column headerText="Status">
-            <h:column>#{schedule.tripDto.active == true ? ((schedule.time_late.hour == 0) and (schedule.time_late.minute == 0) ? 'On the way' : 'Train is late') : 'Trip is cancelled'}</h:column>
-        </p:column>
-    </p:dataTable>
+    <ui:include src="navigation.jsp"/>
+
+    <!-- Schedule table -->
+    <div class="container">
+        <div class="row">
+            <p:dataTable id="schedules" value="#{userSchedule.getSchedules()}" var="schedule"
+                         rendered="#{userSchedule.schedules != null}" styleClass="scheduleTripTable"
+                         rowStyleClass="#{schedule.tripDto.active == true ? ((schedule.time_late.hour == 0) and (schedule.time_late.minute == 0) ? 'trip-active' : 'trip-late') : 'trip-cancelled'}">
+                <f:facet name="header" styleClass="table-header">
+                    #{userSchedule.stationName}
+                </f:facet>
+                <p:column headerText="schedule.id">
+                    <h:column>#{schedule.id}</h:column>
+                </p:column>
+                <p:column headerText="Train">
+                    <h:column>#{schedule.tripDto.trainDto.name}</h:column>
+                </p:column>
+                <p:column headerText="Arriving">
+                    <h:column>#{userSchedule.instantFormat(schedule.time_arrival)}</h:column>
+                </p:column>
+                <p:column headerText="Departing">
+                    <h:column>#{userSchedule.instantFormat(schedule.time_departure)}</h:column>
+                </p:column>
+                <p:column headerText="Late">
+                    <h:column>#{schedule.time_late}</h:column>
+                </p:column>
+                <p:column headerText="Status">
+                    <h:column rendered="#{(schedule.time_late.hour == 0) and (schedule.time_late.minute == 0) and (schedule.tripDto.active == true)}"><i class="fa fa-check"></i> On the way</h:column>
+                    <h:column rendered="#{((schedule.time_late.hour != 0) or (schedule.time_late.minute != 0)) and (schedule.tripDto.active == true)}"><i class="fa fa-clock-o"></i> Train is late</h:column>
+                    <h:column rendered="#{schedule.tripDto.active == false}"><i class="fa fa-ban"></i> Cancelled</h:column>
+
+                </p:column>
+            </p:dataTable>
+        </div>
+    </div>
+
     <h:form>
         <f:websocket channel="scheduleChannel">
             <f:ajax event="updateSchedule" render=":schedules"/>

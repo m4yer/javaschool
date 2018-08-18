@@ -3,23 +3,34 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:c="http://java.sun.com/jsp/jstl/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+>
 
 <f:view>
     <h:head>
-        <title>RW | Select station</title>
+        <link type="text/css" rel="stylesheet" href="resources/css/bootstrap.min.css"/>
+        <link type="text/css" rel="stylesheet" href="resources/css/font-awesome.min.css"/>
+        <link type="text/css" rel="stylesheet" href="resources/css/navigation-transparent.css"/>
+        <title>SC | Select station</title>
     </h:head>
 
     <h:body>
-
-        <h:form>
-            Choose station to browse it's schedule:
-            <h:selectOneMenu value="#{userSchedule.stationName}">
-                <f:selectItems value="#{scheduleBean.stations}" />
-            </h:selectOneMenu>
-            <h:commandButton action="schedule" value="Show"/>
-        </h:form>
+        <ui:include src="navigation.jsp"/>
+        <div class="container-fluid my-auto" style="position: relative;">
+            <div class="row">
+                <div class="col-md-12 text-center info-block">
+                    <h:form>
+                        <h1>Choose station to browse schedule</h1>
+                        <div class="select-station">
+                            <h:selectOneMenu value="#{userSchedule.stationName}">
+                                <f:selectItems value="#{scheduleBean.stations}"/>
+                            </h:selectOneMenu>
+                            <h:commandButton action="schedule" value="Show"/>
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+        </div>
 
     </h:body>
 </f:view>

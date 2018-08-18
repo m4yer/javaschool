@@ -1,0 +1,173 @@
+@import url('https://fonts.googleapis.com/css?family=Sacramento');
+
+@import url('https://fonts.googleapis.com/css?family=Lato:400,700,900');
+
+body {
+    background: url("../img/1.jpg");
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+#mainNav {
+    border-bottom: 1px solid rgba(33, 37, 41, 0.1);
+    background-color: rgba(0,0,0,0.7);
+    font-family: 'Lato', sans-serif;
+    -webkit-transition: all 0.2s;
+    -moz-transition: all 0.2s;
+    transition: all 0.2s;
+}
+
+a {
+    -webkit-transition: all 0.2s;
+    -moz-transition: all 0.2s;
+    transition: all 0.2s;
+}
+
+nav {
+    position: static;
+}
+
+#mainNav .navbar-brand {
+    font-weight: 700;
+    color: #FF5A5F;
+    font-family: 'Sacramento', cursive;
+}
+
+#mainNav .navbar-brand:focus, #mainNav .navbar-brand:hover {
+    color: #FF5A5F;
+}
+
+#mainNav .navbar-nav > li.nav-item > a.nav-link,
+#mainNav .navbar-nav > li.nav-item > a.nav-link:focus {
+    font-size: .9rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+#mainNav .navbar-nav > li.nav-item > a.nav-link:hover,
+#mainNav .navbar-nav > li.nav-item > a.nav-link:focus:hover {
+    color: #FF5A5F;
+}
+
+#mainNav .navbar-nav > li.nav-item > a.nav-link.active,
+#mainNav .navbar-nav > li.nav-item > a.nav-link:focus.active {
+    color: #FF5A5F !important;
+    background-color: transparent;
+}
+
+#mainNav .navbar-nav > li.nav-item > a.nav-link.active:hover,
+#mainNav .navbar-nav > li.nav-item > a.nav-link:focus.active:hover {
+    background-color: transparent;
+}
+
+#mainNav .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,255,255, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+}
+
+#mainNav .navbar-toggler {
+    border-color: #FF5A5F;
+}
+
+#mainNav .navbar-toggler:focus {
+    outline-color: #FF5A5F;
+}
+
+@media (min-width: 992px) {
+
+    #mainNav {
+        border-color: #C9C9C9;
+        background-color: #fff;
+    }
+
+    #mainNav .navbar-brand {
+        color: #FF5A5F;
+        font-family: 'Sacramento', cursive;
+        text-transform: none;
+    }
+
+
+    #mainNav .navbar-nav > li.nav-item > a.nav-link {
+        padding: 0rem 1rem;
+    }
+
+    #mainNav .navbar-nav > li.nav-item > a.nav-link,
+    #mainNav .navbar-nav > li.nav-item > a.nav-link:focus {
+        color: #414141;
+    }
+
+    #mainNav.navbar-shrink {
+        border-bottom: 1px solid rgba(33, 37, 41, 0.1);
+        background-color: #fff;
+    }
+
+    #mainNav.navbar-shrink .navbar-brand {
+        color: #FF5A5F;
+    }
+
+    #mainNav.navbar-shrink .navbar-brand:focus, #mainNav.navbar-shrink .navbar-brand:hover {
+        color: #FF5A5F;
+    }
+
+    #mainNav.navbar-shrink .navbar-nav > li.nav-item > a.nav-link,
+    #mainNav.navbar-shrink .navbar-nav > li.nav-item > a.nav-link:focus {
+        color: #212529;
+    }
+
+    #mainNav.navbar-shrink .navbar-nav > li.nav-item > a.nav-link:hover,
+    #mainNav.navbar-shrink .navbar-nav > li.nav-item > a.nav-link:focus:hover {
+        color: #FF5A5F;
+    }
+}
+
+.brand-pink-button {
+    border: 0;
+    border-bottom: 2px solid red;
+    background: #FF5A5F;
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    color: white;
+    border-radius: 2px;
+    padding: 6px 12px;
+    -webkit-transition: all 0.2s;
+    -moz-transition: all 0.2s;
+    transition: all 0.2s;
+}
+
+.brand-pink-button:hover {
+    cursor: pointer;
+    color: black;
+}
+
+.brand-pink-button:focus {
+    outline-color: #FF5A5F;
+}
+
+.brand-pink-button:disabled {
+    color: #414141;
+    background: #DDDDDD;
+    border-color: #414141;
+}
+
+.brand-pink-button:disabled:hover {
+    cursor: not-allowed;
+}
+
+.brand-dark-grey-button {
+    border: 0;
+    border-bottom: 2px solid #000000;
+    background: #414141;
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    color: white;
+    border-radius: 2px;
+    padding: 6px 12px;
+    -webkit-transition: all 0.2s;
+    -moz-transition: all 0.2s;
+    transition: all 0.2s;
+}
+
+.brand-dark-grey-button:hover {
+    text-decoration: none;
+}
