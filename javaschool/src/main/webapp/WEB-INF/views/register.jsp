@@ -28,6 +28,37 @@
             }
         }
 
+        .example {
+            width: 33%;
+            min-width: 400px;
+            padding: 15px;
+            display: inline-block;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .example input {
+            display: block;
+            margin: 0 auto 20px auto;
+            width: 150px;
+            padding: 8px 10px;
+            border: 1px solid #CCCCCC;
+            border-radius: 3px;
+            background: #F2F2F2;
+            text-align: center;
+            font-size: 1em;
+            letter-spacing: 0.02em;
+            font-family: "Roboto Condensed", helvetica, arial, sans-serif;
+        }
+
+        .example select {
+            padding: 10px;
+            background: #ffffff;
+            border: 1px solid #CCCCCC;
+            border-radius: 3px;
+            margin: 0 3px;
+        }
+
     </style>
     <title>RW | Register</title>
 </head>
@@ -90,7 +121,7 @@
 
                                 <div id="retypePasswordValid" class="input-success" style="display: none;">&#10004;</div>
                                 <div id="retypePasswordNotMatch" class="input-warning" style="display: none;">Passwords does not match</div>
-                                <div id="retypePasswordCheckFirstInput" class="input-warning" style="display: block;">Check PASSWORD validity</div>
+                                <div id="retypePasswordCheckFirstInput" class="input-warning" style="display: block;">Fix password</div>
                                 <label for="rePassword">Retype password</label>
                                 <input type="password" placeholder="Password again" id="rePassword" autocomplete="off"
                                        required ng-model="rePassword" name="rePassword" ng-keyup="checkPasswordMatching()" />
@@ -107,11 +138,12 @@
                                                 autocomplete="off" required="required" ng-model="firstname"/>
                                     <form:input path="lastname" type="text" placeholder="Lastname" id="lastname" name="lastname"
                                                 autocomplete="off" required="required" ng-model="lastname"/>
-                                    <form:input path="birthday" type="text" placeholder="Birthday" id="birthday" name="birthday"
-                                                autocomplete="off" required="required" ng-model="birthday" readonly="true"/>
+                                </div>
+                                <div class="example">
+                                    <form:input path="birthday" type="text" id="birthday" ng-model="birthday" name="birthday" required="required"/>
                                 </div>
                                 <div class="button-wrapper text-center">
-                                    <button disabled class="brand-pink-button" ng-disabled="!registerForm.$valid || !retypeMatch">Sign Up</button>
+                                    <button disabled ng-disabled="!registerForm.$valid || !retypeMatch" id="btn-reg-submit" class="brand-pink-button">Sign Up</button>
                                 </div>
                             </form:form>
                         </div>
@@ -126,10 +158,17 @@
 <script src="<c:url value="/resources/js/bootstrap-datepicker.min.js" />"></script>
 <script src="<c:url value="/resources/js/creative.js" />"></script>
 <script src="<c:url value="/resources/js/loading.js" />"></script>
+<script src="<c:url value="/resources/js/jquery.date-dropdowns.min.js" />"></script>
 <script src="<c:url value="/resources/js/angular/angular.min.js" />"></script>
 <script src="<c:url value="/resources/js/angular/angular-messages.min.js" />"></script>
 <script src="<c:url value="/resources/js/angular/registerApp.js" />"></script>
 <script>
+    $("#birthday").dateDropdowns({
+        submitFormat: "mm/dd/yyyy",
+        required: true
+    });
+    $("#birthday").prop('type', 'text');
+    $("#birthday").css('display', 'none');
     var needCheck = true;
     $("#registerForm").submit(function (e) {
         if (needCheck) {

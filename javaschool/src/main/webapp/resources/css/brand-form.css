@@ -84,6 +84,27 @@
     color: #414141;
 }
 
+.form-content .example {
+    padding: 0;
+    width: 100%;
+    min-width: 100%;
+    margin-bottom: 2px;
+}
+
+
+.form-content .example .date-dropdowns select {
+    display: inline;
+    width: auto;
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    font-family: 'Lato', sans-serif;
+    border-radius: 2px;
+    padding: 6px;
+    margin: 6px;
+    margin-top: 0;
+}
+
 .form-content select:focus {
     outline-color: #FF5A5F;
 }

@@ -17,11 +17,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
         <junit.version>4.12</junit.version>
         <spring.version>5.0.7.RELEASE</spring.version>
-        <spring-security.version>5.0.5.RELEASE</spring-security.version>
         <hibernate.version>5.2.12.Final</hibernate.version>
         <hibernate-jpa-api.version>1.0.0.Final</hibernate-jpa-api.version>
         <apache-dbcp2-commons.version>2.4.0</apache-dbcp2-commons.version>
@@ -90,23 +87,23 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
-            <version>${spring-security.version}</version>
+            <version>${spring.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
-            <version>${spring-security.version}</version>
+            <version>${spring.version}</version>
         </dependency>
         <!--To start using the security namespace in your application context-->
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-config</artifactId>
-            <version>${spring-security.version}</version>
+            <version>${spring.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-taglibs</artifactId>
-            <version>${spring-security.version}</version>
+            <version>${spring.version}</version>
         </dependency>
 
         <!-- Apache Commons DBCP - Basic Data Source Configuration -->
@@ -160,7 +157,6 @@
         </dependency>
 
         <!-- Jackson -->
-        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
@@ -177,7 +173,6 @@
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>${log4j.version}</version>
-            <!--<scope>compile</scope>-->
         </dependency>
 
         <!-- Include ActiveMQ -->
@@ -201,7 +196,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
-            <version>4.3.0.RELEASE</version>
+            <version>${spring.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -216,6 +211,17 @@
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
             <version>3.12.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-chrome-driver</artifactId>
+            <version>3.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-htmlunit-driver</artifactId>
+            <version>2.25.0</version>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>

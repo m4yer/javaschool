@@ -65,7 +65,7 @@
 
                                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
-                                <input type="submit" value="Sign In" class="mx-auto"/>
+                                <input type="submit" value="Sign In" class="mx-auto" id="btn-auth-submit"/>
 
                             </form>
 
