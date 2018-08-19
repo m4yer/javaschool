@@ -19,7 +19,9 @@ public class RegisterRestController {
     public boolean isUsernameRegistered(@RequestParam("username") String username) {
         try {
             return userService.findByUsername(username) == null ? true : false;
-        } catch (NullPointerException npe) { return true; }
+        } catch (NullPointerException npe) {
+            return true;
+        }
     }
 
     @GetMapping("/register/is-allowed/email")
@@ -27,7 +29,9 @@ public class RegisterRestController {
         String checkEmail = email.replaceAll("%40", "@");
         try {
             return userService.findByEmail(checkEmail) == null ? true : false;
-        } catch (NullPointerException npe) { return true; }
+        } catch (NullPointerException npe) {
+            return true;
+        }
     }
 
 }

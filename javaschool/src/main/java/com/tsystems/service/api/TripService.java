@@ -2,7 +2,6 @@ package com.tsystems.service.api;
 
 import com.tsystems.dto.TicketDTO;
 import com.tsystems.dto.TripDTO;
-import com.tsystems.entity.Trip;
 
 import java.time.Instant;
 import java.util.List;

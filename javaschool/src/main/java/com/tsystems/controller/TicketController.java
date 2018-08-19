@@ -38,8 +38,7 @@ public class TicketController {
 
     @GetMapping("/user/ticket/{ticket}.pdf")
     public ModelAndView getTicketPdf(
-            @PathVariable("ticket") Integer ticketId)
-    {
+            @PathVariable("ticket") Integer ticketId) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Integer userId = userDetails.getId();
         if (ticketService.isTripBelongsUser(ticketId, userId)) {
@@ -80,7 +79,8 @@ public class TicketController {
     }
 
     @PostMapping("/user/ticket/buy/")
-    public @ResponseBody String buyTicket(
+    public @ResponseBody
+    String buyTicket(
             @RequestParam("tripId") Integer tripId,
             @RequestParam("seatId") Integer seatId,
             @RequestParam("stationFromName") String stationFromName,

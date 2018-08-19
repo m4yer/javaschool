@@ -143,7 +143,7 @@ public class TripServiceImpl implements TripService {
 
         Map<String, String> resultValidPartialTrips = new HashMap<>();
 
-        for(Map.Entry<List<String>, List<String>> entry : validPartialRoutes.entrySet()) {
+        for (Map.Entry<List<String>, List<String>> entry : validPartialRoutes.entrySet()) {
             List<String> transferStations = new ArrayList<>();
             List<TripDTO> validPairOfTrips = new ArrayList<>();
             entry.getKey().forEach(transferStation -> {
@@ -232,8 +232,8 @@ public class TripServiceImpl implements TripService {
     /**
      * This method adds new route and returns it's id
      *
-     * @param trainId trainId of new trip
-     * @param routeId routeId of new trip
+     * @param trainId       trainId of new trip
+     * @param routeId       routeId of new trip
      * @param tripStartTime start time of new trip
      * @return id of new added route
      */

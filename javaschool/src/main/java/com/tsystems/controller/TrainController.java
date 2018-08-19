@@ -2,12 +2,10 @@ package com.tsystems.controller;
 
 import com.tsystems.entity.Train;
 import com.tsystems.service.api.TrainService;
-import com.tsystems.utils.ConverterUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/admin")
@@ -41,7 +39,4 @@ public class TrainController {
         trainService.deleteTrain(train);
         return "redirect:/admin/train/list";
     }
-
-    // TODO: Add @PostMapping delete train and implementation.
-
 }

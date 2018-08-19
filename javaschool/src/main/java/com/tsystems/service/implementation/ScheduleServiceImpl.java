@@ -3,9 +3,9 @@ package com.tsystems.service.implementation;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tsystems.dao.api.*;
-import com.tsystems.entity.converter.Converter;
 import com.tsystems.dto.ScheduleDTO;
 import com.tsystems.entity.*;
+import com.tsystems.entity.converter.Converter;
 import com.tsystems.jms.SimpleMessageSender;
 import com.tsystems.service.api.ScheduleService;
 import com.tsystems.utils.ConverterUtil;
@@ -15,8 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.text.DateFormatter;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -25,7 +23,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Predicate;
 
 @Service
 public class ScheduleServiceImpl implements ScheduleService {

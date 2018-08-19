@@ -3,7 +3,6 @@ package com.tsystems.entity;
 import javax.persistence.*;
 import java.time.Instant;
 import java.time.LocalTime;
-import java.util.Objects;
 
 @Entity
 @Table(name = "schedule")
@@ -118,8 +117,6 @@ public class Schedule {
     public void setTime_late(LocalTime time_late) {
         this.time_late = time_late;
     }
-
-
 
 
 }

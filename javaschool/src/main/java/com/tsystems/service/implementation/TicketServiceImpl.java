@@ -1,12 +1,12 @@
 package com.tsystems.service.implementation;
 
-import com.tsystems.entity.converter.Converter;
 import com.tsystems.dao.api.*;
 import com.tsystems.dto.TicketDTO;
 import com.tsystems.entity.Route;
 import com.tsystems.entity.Station;
 import com.tsystems.entity.Ticket;
 import com.tsystems.entity.Trip;
+import com.tsystems.entity.converter.Converter;
 import com.tsystems.service.api.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -27,7 +27,8 @@ public class StationController {
     }
 
     @GetMapping("/station/list/get")
-    public @ResponseBody String getAllStationsJSON() {
+    public @ResponseBody
+    String getAllStationsJSON() {
         return ConverterUtil.parseJson(stationService.getAll());
     }
 

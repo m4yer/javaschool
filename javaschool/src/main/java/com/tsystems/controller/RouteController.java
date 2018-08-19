@@ -58,8 +58,7 @@ public class RouteController {
                 model.addObject("routeId", routeId);
                 return model;
             }
-        }
-        else {
+        } else {
             throw new EntityNotFoundException();
         }
     }
@@ -80,7 +79,7 @@ public class RouteController {
                 routeService.deleteRoute(routeId);
                 return new ModelAndView("redirect:/admin/route/list", "routeDeletedResult", true);
             } else {
-                ModelAndView model =new ModelAndView("redirect:/admin/route/list", "routeDeletedResult", false);
+                ModelAndView model = new ModelAndView("redirect:/admin/route/list", "routeDeletedResult", false);
                 model.addObject("routeId", routeId);
                 return model;
             }

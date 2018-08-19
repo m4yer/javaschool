@@ -1,9 +1,9 @@
 package com.tsystems.service.implementation;
 
-import com.tsystems.entity.converter.Converter;
 import com.tsystems.dao.api.TrainDAO;
 import com.tsystems.dto.TrainDTO;
 import com.tsystems.entity.Train;
+import com.tsystems.entity.converter.Converter;
 import com.tsystems.service.api.TrainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -24,7 +24,8 @@ public class DirectionController {
     }
 
     @PostMapping("/direction/add")
-    public @ResponseBody void addDirectionBetweenStations(
+    public @ResponseBody
+    void addDirectionBetweenStations(
             @RequestParam("stationFromName") String stationFromName,
             @RequestParam("stationToName") String stationToName) {
         log.info("Add new direction between: " + stationFromName + " and " + stationToName + ". [" + stationFromName + " -> " + stationToName + "]");
@@ -32,7 +33,8 @@ public class DirectionController {
     }
 
     @PostMapping("/direction/remove")
-    public @ResponseBody void removeDirectionBetweenStations(
+    public @ResponseBody
+    void removeDirectionBetweenStations(
             @RequestParam("stationFromName") String stationFromName,
             @RequestParam("stationToName") String stationToName) {
         log.info("Remove direction between: " + stationFromName + " and " + stationToName + ". [" + stationFromName + " -> " + stationToName + "]");

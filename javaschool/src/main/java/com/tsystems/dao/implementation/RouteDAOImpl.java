@@ -1,14 +1,13 @@
 package com.tsystems.dao.implementation;
 
-import com.tsystems.entity.converter.Converter;
 import com.tsystems.dao.api.RouteDAO;
 import com.tsystems.entity.Route;
 import com.tsystems.entity.Station;
+import com.tsystems.entity.converter.Converter;
 import com.tsystems.utils.HaversineUtil;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityNotFoundException;
 import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +41,7 @@ public class RouteDAOImpl extends GenericDAOImpl<Route, Integer> implements Rout
     public List<Route> findRouteByRouteId(Integer id) {
         Query query = entityManager.createQuery("select route from Route route where route.route_id=:id order by route.station_order asc");
         query.setParameter("id", id);
-        return  (query.getResultList().size() > 0)?  (List<Route>) query.getResultList() : null;
+        return (query.getResultList().size() > 0) ? (List<Route>) query.getResultList() : null;
     }
 
     public double getRouteDistanceByRouteId(Integer id) {

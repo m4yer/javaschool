@@ -41,11 +41,11 @@ public class UserServiceImpl implements UserService {
             throw new RegisterFailedException();
         }
         if (user.getUsername().length() < 4 || user.getUsername() == null ||
-            user.getPassword().length() < 6 || user.getPassword() == null ||
-            user.getFirstname() == null || user.getLastname() == null ||
+                user.getPassword().length() < 6 || user.getPassword() == null ||
+                user.getFirstname() == null || user.getLastname() == null ||
                 !Validator.isValid(user.getEmail(), Validator.EMAIL_PATTERN) ||
-            userDAO.findByUsername(user.getUsername()) != null ||
-            userDAO.findByEmail(user.getEmail()) != null) {
+                userDAO.findByUsername(user.getUsername()) != null ||
+                userDAO.findByEmail(user.getEmail()) != null) {
             throw new RegisterFailedException();
         }
         user.setRole(Role.USER);

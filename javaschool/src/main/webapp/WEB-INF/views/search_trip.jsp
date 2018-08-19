@@ -378,8 +378,6 @@
                     closure(i);
                 }
                 console.log('We tried to find DIRECT trips, and foundDirectTripsCount: ', foundDirectTripsCount);
-                // TODO: Здесь составные пути
-                // TODO: Если не нашёл прямых рейсов - ищи составные
                 if (foundDirectTripsCount == undefined) {
                     console.log('Due to DIRECT trips = 0, trying to find PARTIAL trips.');
                     $http({
@@ -414,7 +412,6 @@
                         $scope.transferStations = transferStations;
                         console.log('$scope.transferStations: ', $scope.transferStations);
 
-                        // TODO: И теперь достаём Schedule чтобы вывести в каждом блоке время прибытия и отправления
                         for (var i = 0; i < $scope.partialTrips.length; i++) {
 
                             stationsTemp = [];

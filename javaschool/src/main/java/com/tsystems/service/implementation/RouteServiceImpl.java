@@ -1,11 +1,11 @@
 package com.tsystems.service.implementation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tsystems.entity.converter.Converter;
 import com.tsystems.dao.api.RouteDAO;
 import com.tsystems.dao.api.StationDAO;
 import com.tsystems.dto.RouteDTO;
 import com.tsystems.entity.Route;
+import com.tsystems.entity.converter.Converter;
 import com.tsystems.service.api.RouteService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

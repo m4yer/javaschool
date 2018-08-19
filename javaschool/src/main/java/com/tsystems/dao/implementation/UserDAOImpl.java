@@ -2,15 +2,11 @@ package com.tsystems.dao.implementation;
 
 import com.tsystems.dao.api.UserDAO;
 import com.tsystems.entity.User;
-import com.tsystems.entity.enums.Role;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Query;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 @Repository
 public class UserDAOImpl extends GenericDAOImpl<User, Integer> implements UserDAO {

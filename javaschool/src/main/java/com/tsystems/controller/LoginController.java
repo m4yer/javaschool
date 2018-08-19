@@ -20,7 +20,7 @@ public class LoginController {
     }
 
     @GetMapping("/login-forward")
-    public String processLoginForwarding(){
+    public String processLoginForwarding() {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Predicate<GrantedAuthority> roleAdmin = grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN");
         return userDetails.getAuthorities().stream().anyMatch(roleAdmin) ? "redirect:/admin/trip/list" : "redirect:/";

@@ -17,7 +17,8 @@ public class UserRestController {
     }
 
     @GetMapping("/admin/user/list/get")
-    public @ResponseBody String getAllUsers() {
+    public @ResponseBody
+    String getAllUsers() {
         return ConverterUtil.parseJson(userService.getAllUsers());
     }
 

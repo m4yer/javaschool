@@ -3,7 +3,6 @@ package com.tsystems.service.api;
 import com.tsystems.dto.TicketDTO;
 import com.tsystems.entity.Ticket;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

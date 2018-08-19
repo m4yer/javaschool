@@ -1,11 +1,11 @@
 package com.tsystems.service.implementation;
 
-import com.tsystems.entity.converter.Converter;
 import com.tsystems.dao.api.RouteDAO;
 import com.tsystems.dao.api.StationDAO;
 import com.tsystems.dto.StationDTO;
 import com.tsystems.entity.Route;
 import com.tsystems.entity.Station;
+import com.tsystems.entity.converter.Converter;
 import com.tsystems.service.api.StationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

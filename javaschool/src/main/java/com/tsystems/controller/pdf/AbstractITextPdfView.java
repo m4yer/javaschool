@@ -17,7 +17,8 @@ public abstract class AbstractITextPdfView extends AbstractView {
         setContentType("application/pdf");
     }
 
-    protected void buildPdfMetadata(Map<String, Object> model, Document document, HttpServletRequest request) {}
+    protected void buildPdfMetadata(Map<String, Object> model, Document document, HttpServletRequest request) {
+    }
 
     protected abstract void buildPdfDocument(Map<String, Object> model,
                                              Document document,
