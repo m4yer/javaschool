@@ -17,6 +17,10 @@ app.controller("tripManageCtrl", function($scope, $http, DTOptionsBuilder, DTCol
         for (var i = 0; i < $scope.trips.length; i++) {
             closure(i);
         }
+        if ($scope.trips.length == 0) {
+            $scope.columnsReady = true;
+            pageLoaded();
+        }
     });
 
     function closure(i) {

@@ -37,7 +37,7 @@
                 <entry key="com.tsystems.exceptions.RegisterFailedException" value="/error/403" />
             </map>
         </property>
-        <!--<property name="defaultErrorView" value="error/error-default" />-->
+        <property name="defaultErrorView" value="error/error-default" />
     </bean>
 
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">

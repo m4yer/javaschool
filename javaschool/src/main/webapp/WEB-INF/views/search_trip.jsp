@@ -10,6 +10,7 @@
     <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/magnific-popup.css"/>"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/index.css"/>"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/loading.css"/>"/>
+    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/partial-trip.css"/>"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/brand-form-modal.css"/>"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/navigation-white.css"/>"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/navigation-admin.css"/>"/>
@@ -143,13 +144,14 @@
                     Let's find a trip for you!<br><br>
                 </div>
             </div>
-            <div ng-if="userWasFindingTrips && trips == 0">
+            <div ng-if="userWasFindingTrips && trips == 0 && partialTrips == 0">
                 <div class="info-page-center">
                     <img src="<c:url value="/resources/img/nothing-found.png" />"/><br>
                     Nothing matched your search parameters was found.<br><br>
                 </div>
             </div>
 
+            <!-- Direct trips -->
             <div class="row">
                 <table class="search-trip-results-table">
                     <tr ng-show="trips.length > 0">
@@ -183,6 +185,27 @@
                     </tr>
                 </table>
             </div>
+
+            <!-- Partial trips -->
+            <div class="row">
+                <div class="partial-wrapper" ng-repeat="(key, value) in partialTrips">
+                    <div class="partial-block">
+                        <div class="partial-line">{{ stationFrom + ' &rarr; ' + key }}</div>
+                        <div class="partial-line">{{ key + ' &rarr; ' + stationTo }}</div>
+                        <form action="/user/ticket/buy/" method="get">
+                            <input type="hidden" name="tripId" value="!!!!!"/>
+                            <input type="hidden" name="carriageNum" value="!!!!!"/>
+                            <input type="hidden" name="stationFrom" value="!!!!!!"/>
+                            <input type="hidden" name="stationTo" value="da!!!!!!da"/>
+                            <button class="brand-pink-button" style="font-size: 12px; padding: 4px 12px;"
+                                    href="/user/ticket/buy/?tripId={{trip.id}}&carriageNum=1&stationFrom={{stationFrom}}&stationTo={{stationTo}}">
+                                Buy!
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -347,11 +370,31 @@
                     dateEnd: dateTimeTo
                 }
             }).then(function success(response) {
-                console.log(response.data);
                 $scope.trips = response.data;
+                var foundDirectTripsCount = $scope.trips.length;
                 for (var i = 0; i < $scope.trips.length; i++) {
                     closure(i);
                 }
+                console.log('We tried to find DIRECT trips, and foundDirectTripsCount: ', foundDirectTripsCount);
+                // TODO: Здесь составные пути
+                // TODO: Если не нашёл прямых рейсов - ищи составные
+                if (foundDirectTripsCount == undefined) {
+                    console.log('Due to DIRECT trips = 0, trying to find PARTIAL trips.');
+                    $http({
+                        url: "/trip/get/partial/",
+                        method: "GET",
+                        params: {
+                            stationFrom: $scope.stationFrom,
+                            stationTo: $scope.stationTo,
+                            dateStart: dateTimeFrom,
+                            dateEnd: dateTimeTo
+                        }
+                    }).then(function success(response) {
+                        console.log(response.data);
+                        $scope.partialTrips = response.data;
+                    });
+                }
+
             });
         };
 

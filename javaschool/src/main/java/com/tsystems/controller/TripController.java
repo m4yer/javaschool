@@ -1,5 +1,8 @@
 package com.tsystems.controller;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tsystems.dto.TripDTO;
 import com.tsystems.service.api.*;
 import com.tsystems.utils.ConverterUtil;
@@ -11,7 +14,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class TripController {
@@ -27,18 +32,27 @@ public class TripController {
     }
 
     private static final Logger log = Logger.getLogger(TripController.class);
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @GetMapping("/trip/find/")
     public ModelAndView findTripPage(ModelAndView model,
-            @RequestParam(value = "stationFrom", required = false) String stationFromName,
-            @RequestParam(value = "stationTo", required = false) String stationToName,
-            @RequestParam(value = "dateStart", required = false) String startSearchInterval,
-            @RequestParam(value = "dateEnd", required = false) String endSearchInterval) {
+                                     @RequestParam(value = "stationFrom", required = false) String stationFromName,
+                                     @RequestParam(value = "stationTo", required = false) String stationToName,
+                                     @RequestParam(value = "dateStart", required = false) String startSearchInterval,
+                                     @RequestParam(value = "dateEnd", required = false) String endSearchInterval) {
         log.info("Searching trips.....");
-        if (stationFromName != null) {model.addObject("stationFrom", stationFromName);}
-        if (stationToName != null) {model.addObject("stationTo", stationToName);}
-        if (startSearchInterval != null) {model.addObject("dateStart", startSearchInterval);}
-        if (endSearchInterval != null) {model.addObject("dateEnd", endSearchInterval);}
+        if (stationFromName != null) {
+            model.addObject("stationFrom", stationFromName);
+        }
+        if (stationToName != null) {
+            model.addObject("stationTo", stationToName);
+        }
+        if (startSearchInterval != null) {
+            model.addObject("dateStart", startSearchInterval);
+        }
+        if (endSearchInterval != null) {
+            model.addObject("dateEnd", endSearchInterval);
+        }
         model.setViewName("search_trip");
         return model;
     }
@@ -59,20 +73,41 @@ public class TripController {
         }
     }
 
+    @GetMapping("/trip/get/partial/")
+    public @ResponseBody
+    String findPartialTrips(
+            @RequestParam("stationFrom") String stationFromName,
+            @RequestParam("stationTo") String stationToName,
+            @RequestParam("dateStart") String startSearchInterval,
+            @RequestParam("dateEnd") String endSearchInterval) {
+        Map<String, List<TripDTO>> validTrips = new HashMap<>();
+        validTrips = tripService.findValidPartialTrips(stationFromName, stationToName, startSearchInterval, endSearchInterval);
+        try {
+            return objectMapper.writeValueAsString(validTrips);
+        } catch (JsonProcessingException e) {
+            log.error(e.getMessage(), e);
+            return null;
+        }
+    }
+
     @GetMapping("/admin/trip/list")
     public String allRoutesPage() {
         return "admin/trip_list";
     }
 
     @GetMapping("/admin/trip/list/get")
-    public @ResponseBody String getAllTrips() {
+    public @ResponseBody
+    String getAllTrips() {
         return ConverterUtil.parseJson(tripService.getAll());
     }
 
     @GetMapping("/admin/trip/create/{routeId}")
     public ModelAndView createTripPageNew(@PathVariable("routeId") Integer routeId) {
-        if (routeService.findRouteByRouteId(routeId) != null) {return new ModelAndView("admin/trip_create", "routeId", routeId);}
-        else { throw new EntityNotFoundException(); }
+        if (routeService.findRouteByRouteId(routeId) != null) {
+            return new ModelAndView("admin/trip_create", "routeId", routeId);
+        } else {
+            throw new EntityNotFoundException();
+        }
     }
 
     @PostMapping("/admin/trip/create")
@@ -93,12 +128,14 @@ public class TripController {
     }
 
     @GetMapping("/trip/departure-time")
-    public @ResponseBody Instant getDepartureTime(@RequestParam("tripId") Integer tripId) {
+    public @ResponseBody
+    Instant getDepartureTime(@RequestParam("tripId") Integer tripId) {
         return tripService.getDepartureTime(tripId);
     }
 
     @GetMapping("/trip/arrival-time")
-    public @ResponseBody Instant getArrivalTime(
+    public @ResponseBody
+    Instant getArrivalTime(
             @RequestParam("tripId") Integer tripId,
             @RequestParam("stationTo") String stationTo) {
         return tripService.getArrivalTime(tripId, stationTo);
@@ -116,7 +153,8 @@ public class TripController {
     }
 
     @GetMapping("/admin/trip/passengers/get")
-    public @ResponseBody String getTripPassengersByCarriageNum(
+    public @ResponseBody
+    String getTripPassengersByCarriageNum(
             @RequestParam("tripId") Integer tripId,
             @RequestParam("carriageNum") Integer carriageNum
     ) {

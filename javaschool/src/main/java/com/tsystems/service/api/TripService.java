@@ -6,6 +6,7 @@ import com.tsystems.entity.Trip;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 
 public interface TripService {
 
@@ -16,6 +17,8 @@ public interface TripService {
     boolean isTripAvailableForUser(Integer tripId, String userName);
 
     List<TripDTO> findValidTrips(String stationFromName, String stationToName, String startSearchInterval, String endSearchInterval);
+
+    Map<String, List<TripDTO>> findValidPartialTrips(String stationFromName, String stationToName, String startSearchInterval, String endSearchInterval);
 
     Integer createTrip(Integer trainId, Integer routeId, String tripStartTime);
 

@@ -4,6 +4,14 @@ INSERT INTO station (name, latitude, longitude) VALUES ('Saratov', 51.592365, 45
 INSERT INTO station (name, latitude, longitude) VALUES ('Samara', 53.241505, 50.221245);
 INSERT INTO station (name, latitude, longitude) VALUES ('Kazan', 55.78874, 49.12214);
 INSERT INTO station (name, latitude, longitude) VALUES ('Nizhniy-Novgorod', 56.296505, 43.936058);
+INSERT INTO station (name, latitude, longitude) VALUES ('Perm', 58.0297, 56.2668);
+INSERT INTO station (name, latitude, longitude) VALUES ('Orenburg', 51.7666, 55.1005);
+INSERT INTO station (name, latitude, longitude) VALUES ('Volgograd', 48.7080, 44.5133);
+INSERT INTO station (name, latitude, longitude) VALUES ('Saint-Petersburg', 59.9343, 30.3351);
+INSERT INTO station (name, latitude, longitude) VALUES ('Ufa', 54.7388, 55.9721);
+INSERT INTO station (name, latitude, longitude) VALUES ('Omsk', 54.9885, 73.3242);
+INSERT INTO station (name, latitude, longitude) VALUES ('Chelyabinsk', 55.1644, 61.4368);
+INSERT INTO station (name, latitude, longitude) VALUES ('Ekaterinburg', 56.8389, 60.6057);
 
 
 INSERT INTO `direction` VALUES (17,1,3),(18,1,4),(26,1,2),(27,1,6),(31,2,6),(32,2,3),(23,4,6),(24,4,2),(30,4,3),(8,5,4),(28,5,3),(29,5,1),(33,5,6),(21,6,3),(34,6,2),(35,6,1);
