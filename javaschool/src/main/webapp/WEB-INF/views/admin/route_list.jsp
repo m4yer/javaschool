@@ -8,6 +8,7 @@
 <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/navigation-admin.css" />"/>
 <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/search-trip-results-table.css"/>"/>
 <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/loading.css" />"/>
+<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/brand-form-modal.css" />"/>
 <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/datatables.css" />"/>
 
 <script src="<c:url value="/resources/js/jquery-3.3.1.min.js"/>"></script>
@@ -48,7 +49,7 @@
                             <td>{{ route.stationDto.name }}</td>
                             <td>{{ routes[$index+1].stationDto.name }}</td>
                             <td><a href="/admin/route/edit/{{ route.route_id }}" style="font-size: 12px;">Edit</a></td>
-                            <td>Delete</td>
+                            <td><a href="/admin/route/delete/{{ route.route_id }}" style="font-size: 12px;">Delete</a></td>
                             <td>
                                 <a href="/admin/trip/create/{{ route.route_id }}" style="font-size: 12px;">Create</a>
                             </td>
@@ -59,10 +60,41 @@
         </div>
     </div>
 
+    <!-- User Information Modal Form -->
+    <div id="brand-form-modal" class="brand-form-modal">
+        <!-- Modal content -->
+        <div class="brand-form-modal-content" style="width: 50%; margin-top: 6%;">
+            <div class="brand-form-modal-header">
+                <span class="close">&times;</span>
+                <span class="caption">Edit route information</span>
+            </div>
+            <div class="brand-form-modal-body text-center" style="padding-bottom: 6px; padding-top: 6px;">
+                <div id="edit-route-info" style="font-size: 20px; font-weight: 700; padding: 42px 0; font-family: 'Lato', sans-serif;"></div>
+            </div>
+        </div>
+    </div>
+
 </div>
 <script src="<c:url value="/resources/js/bootstrap.bundle.min.js" />"></script>
 <script src="<c:url value="/resources/js/loading.js" />"></script>
+<script src="<c:url value="/resources/js/brand-form-modal.js" />"></script>
 <script src="<c:url value="/resources/js/angular/routeListApp.js" />"></script>
 <script src="<c:url value="/resources/js/angular/routeListCtrl.js" />"></script>
+<script>
+    <c:choose>
+        <c:when test="${param.editAllowed == false}">
+            $("#edit-route-info").html("You cannot edit route " + ${param.routeId} + " because <br><br> there are active trips that use this route.");
+            openModalForm();
+        </c:when>
+        <c:when test="${param.routeDeletedResult == true}">
+            $("#edit-route-info").html("Route was successfully deleted.");
+            openModalForm();
+        </c:when>
+        <c:when test="${param.routeDeletedResult == false}">
+            $("#edit-route-info").html("You cannot delete route " + ${param.routeId} + " because <br><br> there are active trips that use this route!");
+            openModalForm();
+        </c:when>
+    </c:choose>
+</script>
 </body>
 </html>

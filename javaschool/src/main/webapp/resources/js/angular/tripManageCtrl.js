@@ -11,20 +11,16 @@ app.controller("tripManageCtrl", function($scope, $http, DTOptionsBuilder, DTCol
             .withOption('autoWidth', true)
             .withOption('scrollX', '100%')
             .withOption('scrollY', '390px')
-            .withOption('order', [[2, 'desc']])
+            .withOption('order', [[2, 'asc']])
             .withOption('scrollCollapse', true);
 
         for (var i = 0; i < $scope.trips.length; i++) {
             closure(i);
         }
-
-        //initialize the dataTable
-        $scope.columnsReady = true;
-
-        pageLoaded();
     });
 
     function closure(i) {
+        pageLoading();
         $http({
             url: "/trip/arrival-time",
             method: "GET",
@@ -33,29 +29,28 @@ app.controller("tripManageCtrl", function($scope, $http, DTOptionsBuilder, DTCol
                 stationTo: 'LAST'
             }
         }).then(function success(response) {
-            console.log(response.data);
-            console.log($scope.trips[i]);
             $scope.trips[i].arrival_time = response.data;
+            if (i == $scope.trips.length - 1) {
+                $scope.columnsReady = true;
+                pageLoaded();
+            }
         });
     }
 
     $scope.getLate = function(index) {
         var lateness = 0;
-        console.log('$scope.schedules: ', $scope.schedules);
         for (var i = 0; i < index; i++) {
             var lateForCurrentIndex = $scope.schedules[i]['time_late'];
             var hours = lateForCurrentIndex['hour'];
             var minutes = lateForCurrentIndex['minute'];
             var timeLateForCurrentIndex = (hours * 24 * 60) + minutes * 60;
-            console.log('timeLateForCurrentIndex', timeLateForCurrentIndex);
             lateness = lateness + timeLateForCurrentIndex;
         }
-        console.log('lateness: ', lateness);
         return lateness;
     };
 
     $scope.manageLateness = function (event) {
-
+        pageLoading();
         clickedManageButton = event.target.id;
 
         counter = 0;
@@ -63,8 +58,6 @@ app.controller("tripManageCtrl", function($scope, $http, DTOptionsBuilder, DTCol
 
         $("#brand-form-modal .dataTables_wrapper").remove();
 
-        pageLoading();
-        console.log('Finding schedule for tripId: ', event.target.id);
         $http({
             url: "/route/schedule/get/",
             method: "GET",
@@ -81,7 +74,6 @@ app.controller("tripManageCtrl", function($scope, $http, DTOptionsBuilder, DTCol
 
             $scope.tmColumnsReady = true;
 
-            console.log('manage button clicked!');
             openModalForm();
             pageLoaded();
         });

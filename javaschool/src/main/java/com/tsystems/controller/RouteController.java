@@ -1,10 +1,8 @@
 package com.tsystems.controller;
 
-import com.tsystems.dto.RouteDTO;
 import com.tsystems.service.api.RouteService;
 import com.tsystems.service.api.StationService;
-import com.tsystems.utils.ConverterUtil;
-import com.tsystems.utils.RoundUtil;
+import com.tsystems.service.api.TripService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,19 +10,19 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
 public class RouteController {
     private RouteService routeService;
     private StationService stationService;
+    private TripService tripService;
 
     @Autowired
-    public RouteController(RouteService routeService, StationService stationService) {
+    public RouteController(RouteService routeService, StationService stationService, TripService tripService) {
         this.routeService = routeService;
         this.stationService = stationService;
+        this.tripService = tripService;
     }
 
     private static final Logger log = Logger.getLogger(RouteController.class);
@@ -53,9 +51,17 @@ public class RouteController {
     @GetMapping("/route/edit/{id}")
     public ModelAndView editRoutePage(@PathVariable("id") Integer routeId) {
         if (routeService.findRouteByRouteId(routeId) != null) {
-            return new ModelAndView("admin/route_edit", "routeId", routeId); }
+            if (tripService.findActiveTripsByRouteId(routeId).size() == 0) {
+                return new ModelAndView("admin/route_edit", "routeId", routeId);
+            } else {
+                ModelAndView model = new ModelAndView("redirect:/admin/route/list", "editAllowed", false);
+                model.addObject("routeId", routeId);
+                return model;
+            }
+        }
         else {
-            throw new EntityNotFoundException();}
+            throw new EntityNotFoundException();
+        }
     }
 
     @PostMapping("/route/edit")
@@ -68,9 +74,19 @@ public class RouteController {
 
 
     @GetMapping("/route/delete/{id}")
-    public String deleteRouteAndReloadPage(@PathVariable("id") Integer id) {
-        routeService.deleteRoute(id);
-        return "redirect:/admin/route/list";
+    public ModelAndView deleteRouteAndReloadPage(@PathVariable("id") Integer routeId) {
+        if (routeService.findRouteByRouteId(routeId) != null) {
+            if (tripService.findActiveTripsByRouteId(routeId).size() == 0) {
+                routeService.deleteRoute(routeId);
+                return new ModelAndView("redirect:/admin/route/list", "routeDeletedResult", true);
+            } else {
+                ModelAndView model =new ModelAndView("redirect:/admin/route/list", "routeDeletedResult", false);
+                model.addObject("routeId", routeId);
+                return model;
+            }
+        } else {
+            throw new EntityNotFoundException();
+        }
     }
 
 }

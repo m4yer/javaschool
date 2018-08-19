@@ -16,6 +16,8 @@ app.directive('clockpicker', ['$http', '$timeout', function($http, $timeout){
                     donetext: 'Ok',
                     autoclose: true
                 });
+            } else if (counter == scope.schedules.length - 1) {
+                elm.remove();
             } else {
                 elm.clockpicker({
                     placement: 'top',
@@ -24,15 +26,15 @@ app.directive('clockpicker', ['$http', '$timeout', function($http, $timeout){
                     autoclose: true
                 });
             }
-            console.log(elm);
-            console.log(elm[0]['children'][1]);
+            // console.log(elm);
+            // console.log(elm[0]['children'][1]);
             elm[0]['children'][1].onclick = function() {
 
                 var scheduleId = attr.id.split('schedule').join('');
                 var time_late = elm[0]['children'][0]['children'][0]['children'][0]['value'];
-                console.log('$http.post:');
-                console.log('scheduleId: ', scheduleId);
-                console.log('time_late: ', time_late);
+                // console.log('$http.post:');
+                // console.log('scheduleId: ', scheduleId);
+                // console.log('time_late: ', time_late);
 
                 $http({
                     url: "/admin/schedule/late",
@@ -53,7 +55,7 @@ app.directive('clockpicker', ['$http', '$timeout', function($http, $timeout){
                 });
 
             };
-            console.log('counter: ', counter);
+            // console.log('counter: ', counter);
             counter++;
         }
     }
@@ -63,9 +65,9 @@ app.directive('tripRow', ['$http', function ($http) {
 
     return {
         link: function(scope, elm, attr){
-            console.log('elm: ', elm);
+            // console.log('elm: ', elm);
             var arrivalCellValue = elm[0]['cells'][3]['innerHTML'];
-            console.log('4rd column value: ', arrivalCellValue);
+            // console.log('4rd column value: ', arrivalCellValue);
             tripRow.push(elm);
         }
     }

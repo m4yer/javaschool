@@ -7,6 +7,7 @@
 <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/navigation-white.css" />"/>
 <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/navigation-admin.css" />"/>
 <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/loading.css" />"/>
+<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/brand-form-modal.css" />"/>
 <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/tickets.css" />"/>
 <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/carriage-line.css" />"/>
 <title>RW | Buy ticket</title>
@@ -23,7 +24,7 @@
     <div class="container-fluid" ng-app="ticketApp" ng-controller="ticketCtrl">
 
         <div class="row">
-            <div class="col-lg-12 text-center caption">
+            <div class="col-lg-12 text-center caption" style="padding-left: 0; padding-right: 0; margin-left: 0; margin-right: 0;">
                 <span class="caption-attention">Select carriage</span>
             </div>
             <div class="col-lg-12 carriages">
@@ -60,7 +61,7 @@
         </div>
 
         <div class="row">
-            <div class="col-lg-12 text-center caption">
+            <div class="col-md-12 text-center caption" style="padding-left: 0; padding-right: 0; margin-left: 0; margin-right: 0;">
                 <span class="caption-attention">Select seat</span>
             </div>
             <c:choose>
@@ -79,7 +80,7 @@
             </c:choose>
 
 
-            <div class="col-lg-12 text-center">
+            <div class="col-md-12 text-center">
                 <div class="info-section">
                     ${stationFromName} [{{ departureTime * 1000 | date:'dd/MM/yyyy HH:mm' }}] <span class="brand-pink-color">&rarr;</span> ${stationToName} [{{ arrivalTime * 1000 | date:'dd/MM/yyyy HH:mm' }}]
                 </div>
@@ -105,10 +106,20 @@
 
             </div>
 
-            <div class="col-md-12 text-center" style="font-size: 32px;color:red;margin-top: 20px;">
-                <span id="error_msg"></span>
-            </div>
+        </div>
+    </div>
 
+    <!-- User Information Modal Form -->
+    <div id="brand-form-modal" class="brand-form-modal">
+        <!-- Modal content -->
+        <div class="brand-form-modal-content" style="width: 50%; margin-top: 6%;">
+            <div class="brand-form-modal-header">
+                <span class="close">&times;</span>
+                <span class="caption">Ticket booking details</span>
+            </div>
+            <div class="brand-form-modal-body text-center" style="padding-bottom: 6px; padding-top: 6px;">
+                <div id="ticket-result-info" style="font-size: 20px; font-weight: 700; padding: 42px 0; font-family: 'Lato', sans-serif;"></div>
+            </div>
         </div>
     </div>
 
@@ -119,6 +130,7 @@
 <script src="<c:url value="/resources/js/angular/angular.min.js" />"></script>
 <script src="<c:url value="/resources/js/angular/ticketApp.js" />"></script>
 <script src="<c:url value="/resources/js/loading.js" />"></script>
+<script src="<c:url value="/resources/js/brand-form-modal.js" />"></script>
 <script>
     var oldSeatId;
     var chosenSeatId;
@@ -151,9 +163,11 @@
             }
         }).done(function (response) {
             if (response == "notavailable") {
-                $("#error_msg").html("Sorry, you cannot buy ticket for this trip.<br>It's currently unavailable.");
+                $("#ticket-result-info").html("Sorry, but this trip is about to start or started. <br><br>It's too late for booking tickets.");
+                openModalForm();
             } else if (response == "alreadybought") {
-                $("#error_msg").html("You've already bought a ticket for this trip!");
+                $("#ticket-result-info").html("You've already bought ticket for this trip.");
+                openModalForm();
             } else if (response == "success") {
                 window.location.replace("/user/ticket/list");
             }

@@ -78,4 +78,11 @@ public class TripDAOImpl extends GenericDAOImpl<Trip, Integer> implements TripDA
         return (List<Ticket>) getTickets.getResultList();
     }
 
+    public List<Trip> findActiveTripsByRouteId(Integer routeId) {
+        Query findActiveTrips = entityManager.createQuery("select trip from Trip trip where trip.route_id=:routeId and trip.active=:active");
+        findActiveTrips.setParameter("routeId", routeId);
+        findActiveTrips.setParameter("active", true);
+        return (List<Trip>) findActiveTrips.getResultList();
+    }
+
 }

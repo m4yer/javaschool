@@ -178,4 +178,9 @@ public class TripServiceImpl implements TripService {
         return Converter.getTicketDtos(tripDAO.getTicketsByTripAndCarriageNum(tripId, carriageNum));
     }
 
+    @Transactional
+    public List<TripDTO> findActiveTripsByRouteId(Integer routeId) {
+        return Converter.getTripDtos(tripDAO.findActiveTripsByRouteId(routeId));
+    }
+
 }

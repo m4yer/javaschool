@@ -22,4 +22,6 @@ public interface TripDAO extends GenericDAO<Trip, Integer> {
 
     List<Ticket> getTicketsByTripAndCarriageNum(Integer tripId, Integer carriageNum);
 
+    List<Trip> findActiveTripsByRouteId(Integer routeId);
+
 }

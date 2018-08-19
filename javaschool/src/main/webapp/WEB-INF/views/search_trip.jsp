@@ -274,21 +274,15 @@
                                             }).then(function success(response) {
                                                 var list = response.data;
                                                 console.log('list: ', list);
-                                                var awesompleteFrom = new Awesomplete(document.querySelector(".autocomplete-from input"),{
+                                                new Awesomplete(document.querySelector(".autocomplete-from input"),{
                                                     list: list,
-                                                    minChars: 0,
+                                                    minChars: 1,
                                                     maxItems: 8
                                                 });
-                                                $('#awesomplete-from').on('focus', function() {
-                                                    awesompleteFrom.evaluate();
-                                                });
-                                                var awesompleteTo = new Awesomplete(document.querySelector(".autocomplete-to input"),{
+                                                new Awesomplete(document.querySelector(".autocomplete-to input"),{
                                                     list: list,
-                                                    minChars: 0,
+                                                    minChars: 1,
                                                     maxItems: 8
-                                                });
-                                                $('#awesomplete-to').on('focus', function() {
-                                                    awesompleteTo.evaluate();
                                                 });
                                                 pageLoaded();
                                             });
@@ -311,21 +305,15 @@
             }).then(function success(response) {
                 var list = response.data;
                 console.log('list: ', list);
-                var awesompleteFrom = new Awesomplete(document.querySelector(".autocomplete-from input"), {
+                new Awesomplete(document.querySelector(".autocomplete-from input"), {
                     list: list,
-                    minChars: 0,
+                    minChars: 1,
                     maxItems: 8
                 });
-                $('#awesomplete-from').on('focus', function() {
-                    awesompleteFrom.evaluate();
-                });
-                var awesompleteTo =new Awesomplete(document.querySelector(".autocomplete-to input"), {
+                new Awesomplete(document.querySelector(".autocomplete-to input"), {
                     list: list,
-                    minChars: 0,
+                    minChars: 1,
                     maxItems: 8
-                });
-                $('#awesomplete-to').on('focus', function() {
-                    awesompleteTo.evaluate();
                 });
                 pageLoaded();
             });

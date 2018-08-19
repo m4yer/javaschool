@@ -145,7 +145,7 @@
         <div class="brand-form-modal-content">
             <div class="brand-form-modal-header" style="margin-bottom: 12px;">
                 <span class="close">&times;</span>
-                <span class="caption" style="margin-left: 32px;">Trip details</span>
+                <span class="caption">Trip details</span>
             </div>
             <div class="brand-form-modal-body">
                 <span ng-repeat="schedule in schedules" class="span-wrapper">

@@ -131,13 +131,14 @@
                                 </div>
                                 <div ngShow="registerForm.firstname.$dirty && !registerForm.firstname.$valid" ng-messages="registerForm.$error">
                                     <div class="input-warning" ng-message="required">Fields are required</div>
+                                    <div class="input-warning" ng-message="pattern">Only letters</div>
                                 </div>
                                 <label for="lastname">Personal information</label>
                                 <div class="personal-information">
                                     <form:input path="firstname" type="text" placeholder="Firstname" id="firstname" name="firstname"
-                                                autocomplete="off" required="required" ng-model="firstname"/>
+                                                autocomplete="off" required="required" ng-model="firstname" pattern="[a-zA-Z]+"/>
                                     <form:input path="lastname" type="text" placeholder="Lastname" id="lastname" name="lastname"
-                                                autocomplete="off" required="required" ng-model="lastname"/>
+                                                autocomplete="off" required="required" ng-model="lastname" pattern="[a-zA-Z]+"/>
                                 </div>
                                 <div class="example">
                                     <form:input path="birthday" type="text" id="birthday" ng-model="birthday" name="birthday" required="required"/>

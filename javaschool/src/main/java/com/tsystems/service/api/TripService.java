@@ -26,4 +26,6 @@ public interface TripService {
     Instant getArrivalTime(Integer tripId, String stationToName);
 
     List<TicketDTO> getTicketsByTripAndCarriageNum(Integer tripId, Integer carriageNum);
+
+    List<TripDTO> findActiveTripsByRouteId(Integer routeId);
 }

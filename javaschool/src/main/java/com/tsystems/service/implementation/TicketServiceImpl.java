@@ -23,15 +23,17 @@ public class TicketServiceImpl implements TicketService {
     private StationDAO stationDAO;
     private RouteDAO routeDAO;
     private MailService mailService;
+    private SmsAero smsAero;
 
     @Autowired
-    public TicketServiceImpl(TicketDAO ticketDAO, TripDAO tripDAO, UserDAO userDAO, StationDAO stationDAO, RouteDAO routeDAO, MailService mailService) {
+    public TicketServiceImpl(TicketDAO ticketDAO, TripDAO tripDAO, UserDAO userDAO, StationDAO stationDAO, RouteDAO routeDAO, MailService mailService, SmsAero smsAero) {
         this.ticketDAO = ticketDAO;
         this.tripDAO = tripDAO;
         this.userDAO = userDAO;
         this.stationDAO = stationDAO;
         this.routeDAO = routeDAO;
         this.mailService = mailService;
+        this.smsAero = smsAero;
     }
 
     @Transactional
@@ -96,6 +98,7 @@ public class TicketServiceImpl implements TicketService {
                         "aspid888@gmail.com", "RW | Ticket details", "" +
                                 "Congratulations! You've just bought a ticket for a trip!\n" +
                                 "Details: " + ticket.toString());
+//                smsAero.sendSms("79992158347", "Ticket was bought");
                 return "success";
             } else {
                 return "alreadybought";
