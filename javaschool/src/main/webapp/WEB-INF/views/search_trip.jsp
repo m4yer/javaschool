@@ -188,17 +188,19 @@
 
             <!-- Partial trips -->
             <div class="row">
-                <div class="partial-wrapper" ng-repeat="(key, value) in partialTrips">
+                <div class="partial-wrapper" ng-repeat="i in [] | range: partialTrips.length">
                     <div class="partial-block">
-                        <div class="partial-line">{{ stationFrom + ' &rarr; ' + key }}</div>
-                        <div class="partial-line">{{ key + ' &rarr; ' + stationTo }}</div>
+                        <div class="partial-line">{{ stationFrom + ' [' + (partialTrips[i][0].timeArr.epochSecond * 1000 | date:'dd/MM/yyyy HH:mm') + ']' + ' &rarr; ' + transferStations[i] + ' [' + (partialTrips[i][0].timeDep.epochSecond * 1000 | date:'dd/MM/yyyy HH:mm') + ']' }}</div>
+                        <div class="partial-line">{{ transferStations[i] + ' [' + (partialTrips[i][1].timeArr.epochSecond * 1000 | date:'dd/MM/yyyy HH:mm') + ']' + ' &rarr; ' + stationTo + ' [' + (partialTrips[i][1].timeDep.epochSecond * 1000 | date:'dd/MM/yyyy HH:mm') + ']' }}</div>
                         <form action="/user/ticket/buy/" method="get">
-                            <input type="hidden" name="tripId" value="!!!!!"/>
-                            <input type="hidden" name="carriageNum" value="!!!!!"/>
-                            <input type="hidden" name="stationFrom" value="!!!!!!"/>
-                            <input type="hidden" name="stationTo" value="da!!!!!!da"/>
+                            <input type="hidden" name="tripId" value="{{partialTrips[i][0].id}}"/>
+                            <input type="hidden" name="carriageNum" value="1"/>
+                            <input type="hidden" name="stationFrom" value="{{stationFrom}}"/>
+                            <input type="hidden" name="lastStation" value="{{stationTo}}"/>
+                            <input type="hidden" name="stationTo" value="{{transferStations[i]}}"/>
+                            <input type="hidden" name="tripIds" value="{{partialTrips[i][0].id + '-' + partialTrips[i][1].id}}"/>
                             <button class="brand-pink-button" style="font-size: 12px; padding: 4px 12px;"
-                                    href="/user/ticket/buy/?tripId={{trip.id}}&carriageNum=1&stationFrom={{stationFrom}}&stationTo={{stationTo}}">
+                                    href="/user/ticket/buy/?tripId={{partialTrips[i][0].id}}&carriageNum=1&stationFrom={{stationFrom}}&stationTo={{transferStations[i]}}&tripIds=">
                                 Buy!
                             </button>
                         </form>
@@ -249,7 +251,7 @@
     });
 </script>
 <script>
-
+    var fullTimes = [];
     app.controller("searchTripCtrl", function ($scope, $http, DTOptionsBuilder) {
         // If we have "GET" parameters (means that user came to this page from index and he filled all inputs)
         // Then we need to GET valid trips and paste it in result page
@@ -390,13 +392,69 @@
                             dateEnd: dateTimeTo
                         }
                     }).then(function success(response) {
-                        console.log(response.data);
                         $scope.partialTrips = response.data;
+                        var counter = 0;
+                        var tripsArray = [];
+                        var transferStations = [];
+                        angular.forEach($scope.partialTrips, function (value, key) {
+                            tripsArray.push(angular.fromJson(value));
+                            var transfersTemp = key.split(',');
+                            var tempArray = [];
+                            transfersTemp.forEach(function (station) {
+                                tempArray.push(station);
+                            });
+                            transferStations.push(tempArray);
+                            console.log('$scope.trips[counter]: ', $scope.trips[counter]);
+                            console.log('key: ', key);
+                            console.log('value: ', value);
+                            counter++;
+                        });
+                        $scope.partialTrips = tripsArray;
+                        console.log('$scope.partialTrips: ', $scope.partialTrips);
+                        $scope.transferStations = transferStations;
+                        console.log('$scope.transferStations: ', $scope.transferStations);
+
+                        // TODO: И теперь достаём Schedule чтобы вывести в каждом блоке время прибытия и отправления
+                        for (var i = 0; i < $scope.partialTrips.length; i++) {
+
+                            stationsTemp = [];
+                            stationsTemp.push($scope.stationFrom);
+                            $scope.transferStations[i].forEach(function (station) {
+                                stationsTemp.push(station);
+                            });
+                            stationsTemp.push($scope.stationTo);
+
+                            for (var j = 0; j < $scope.partialTrips[i].length; j++) {
+                                getArrivalTimePartialTrips(i, j);
+                            }
+                        }
                     });
                 }
 
             });
         };
+
+        var stationsTemp = [];
+        function getArrivalTimePartialTrips(i, j) {
+            console.log('Params GET partial time:');
+            console.log('$scope.partialTrips[i][j][\'id\']: ', $scope.partialTrips[i][j]['id']);
+            console.log('$scope.stationFrom: ', $scope.stationFrom);
+            console.log('$scope.stationTo: ', $scope.stationTo);
+            $http({
+                url: "/trip/partial-time",
+                method: "GET",
+                params: {
+                    tripId: $scope.partialTrips[i][j]['id'],
+                    stationFrom: stationsTemp[j],
+                    stationTo: stationsTemp[j+1]
+                }
+            }).then(function success(response) {
+                console.log('response from get PARTIAL time: ', response.data);
+                $scope.partialTrips[i][j]['timeDep'] = response.data[0];
+                $scope.partialTrips[i][j]['timeArr'] = response.data[1];
+                console.log('$scope.partialTrips AFTER get schedule: ', $scope.partialTrips);
+            });
+        }
 
         $scope.showTripDetails = function (event) {
             var chosenTripId = event.target.id.split('trip-').join('');

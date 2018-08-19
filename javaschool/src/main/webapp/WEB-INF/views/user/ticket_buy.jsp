@@ -82,7 +82,7 @@
 
             <div class="col-md-12 text-center">
                 <div class="info-section">
-                    ${stationFromName} [{{ departureTime * 1000 | date:'dd/MM/yyyy HH:mm' }}] <span class="brand-pink-color">&rarr;</span> ${stationToName} [{{ arrivalTime * 1000 | date:'dd/MM/yyyy HH:mm' }}]
+                    ${stationFromName} [{{ departureTime * 1000 | date:'dd/MM/yyyy HH:mm' }}] <span class="brand-pink-color">&rarr;</span> {{ stationToFixedName }} [{{ arrivalTime * 1000 | date:'dd/MM/yyyy HH:mm' }}]
                 </div>
             </div>
 
@@ -151,6 +151,9 @@
     $("#carriageSelector option[value=${carriageNum}]").attr('selected', true);
 
     $("#btn_buy_ticket").click(function () {
+        var stationTo = '${param.stationTo}';
+        stationTo = stationTo.split('["').join('');
+        stationTo = stationTo.split('"]').join('');
         $.ajax({
             url: "/user/ticket/buy/",
             method: "POST",
@@ -158,7 +161,7 @@
                 tripId: ${trip.id},
                 seatId: chosenSeatId,
                 stationFromName: '${stationFromName}',
-                stationToName: '${stationToName}',
+                stationToName: stationTo,
                 carriageNum: ${carriageNum}
             }
         }).done(function (response) {
@@ -169,14 +172,25 @@
                 $("#ticket-result-info").html("You've already bought ticket for this trip.");
                 openModalForm();
             } else if (response == "success") {
-                window.location.replace("/user/ticket/list");
+                <c:choose>
+                    <c:when test="${param.tripIds != null}">
+                        var nextTicketTrip = '${param.tripIds}';
+                        nextTicketTrip.split('-').join('');
+                        var nextTrip = nextTicketTrip[2];
+                        console.log('next ticket buy: ', nextTrip);
+                        window.location.replace("/user/ticket/buy/?tripId=" + nextTrip + "&carriageNum=1&stationFrom=" + stationTo + "&stationTo=" + '${lastStation}');
+                    </c:when>
+                    <c:otherwise>
+                        window.location.replace("/user/ticket/list");
+                    </c:otherwise>
+                </c:choose>
             }
         });
     });
 
     function changeCarriage(carriageNum) {
         carriageNum = carriageNum.split('carriage-').join('');
-        window.location.replace("/user/ticket/buy/?tripId=" + ${trip.id} +"&carriageNum=" + carriageNum + "&stationFrom=" + '${stationFromName}' + "&stationTo=" + '${stationToName}');
+        window.location.replace("/user/ticket/buy/?tripId=" + '${trip.id}' + "&carriageNum=" + carriageNum + "&stationFrom=" + '${stationFromName}' + "&stationTo=" + '${stationToName}');
     }
 
 </script>
@@ -215,20 +229,26 @@
             url: "/trip/departure-time",
             method: "GET",
             params: {
-                tripId: '${trip.id}'
+                tripId: '${trip.id}',
+                stationFrom: '${stationFrom}'
             }
         }).then(function success(response) {
             $scope.departureTime = response.data['epochSecond'];
             console.log('Departure time: ' + $scope.departureTime);
-
+            console.log('${param.stationTo}');
+            var stationTo = '${param.stationTo}';
+            stationTo = stationTo.split('["').join('');
+            stationTo = stationTo.split('"]').join('');
+            $scope.stationToFixedName = stationTo;
             $http({
                 url: "/trip/arrival-time",
                 method: "GET",
                 params: {
                     tripId: '${trip.id}',
-                    stationTo: '${stationToName}'
+                    stationTo: stationTo
                 }
             }).then(function success(response) {
+                console.log(response.data);
                 $scope.arrivalTime = response.data['epochSecond'];
                 console.log('Arrival time: ' + $scope.arrivalTime);
                 pageLoaded();

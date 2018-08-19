@@ -4,13 +4,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tsystems.dao.api.*;
 import com.tsystems.dto.ScheduleDTO;
-import com.tsystems.entity.Schedule;
-import com.tsystems.entity.converter.Converter;
 import com.tsystems.dto.TicketDTO;
 import com.tsystems.dto.TripDTO;
 import com.tsystems.entity.Route;
+import com.tsystems.entity.Schedule;
 import com.tsystems.entity.Station;
 import com.tsystems.entity.Trip;
+import com.tsystems.entity.converter.Converter;
 import com.tsystems.jms.SimpleMessageSender;
 import com.tsystems.service.api.TripService;
 import com.tsystems.utils.ConverterUtil;
@@ -24,7 +24,10 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class TripServiceImpl implements TripService {
@@ -118,7 +121,7 @@ public class TripServiceImpl implements TripService {
     }
 
     @Transactional
-    public Map<String, List<TripDTO>> findValidPartialTrips(String stationFromName, String stationToName, String startSearchInterval, String endSearchInterval) {
+    public Map<String, String> findValidPartialTrips(String stationFromName, String stationToName, String startSearchInterval, String endSearchInterval) {
         List<Integer> allRouteIds = routeDAO.getSingleRoutesId();
         List<Integer> validRoutesA = new ArrayList<>();
         List<Integer> validRoutesB = new ArrayList<>();
@@ -136,72 +139,94 @@ public class TripServiceImpl implements TripService {
             });
         });
 
-        Map<String, String> validPartialRoutes = new HashMap<>();
+        Map<List<String>, List<String>> validPartialRoutes = getValidPartialRoutes(validRoutesA, validRoutesB, stationFromName, stationToName);
+
+        Map<String, String> resultValidPartialTrips = new HashMap<>();
+
+        for(Map.Entry<List<String>, List<String>> entry : validPartialRoutes.entrySet()) {
+            List<String> transferStations = new ArrayList<>();
+            List<TripDTO> validPairOfTrips = new ArrayList<>();
+            entry.getKey().forEach(transferStation -> {
+                List<TripDTO> validTripsA = findValidTrips(stationFromName, transferStation, startSearchInterval, endSearchInterval);
+                if (validTripsA.size() > 0) {
+                    validTripsA.forEach(tripA -> {
+                        scheduleDAO.getSchedulesByTripId(tripA.getId()).forEach(scheduleA -> {
+                            if (scheduleA.getStation().getName().equals(transferStation)) {
+                                String startSearchIntervalForTripB = scheduleA.getTime_arrival().toString();
+                                String endSearchIntervalForTripB = scheduleA.getTime_arrival().plus(5, ChronoUnit.DAYS).toString();
+                                List<TripDTO> validTripsB = findValidTrips(transferStation, stationToName, startSearchIntervalForTripB, endSearchIntervalForTripB);
+                                if (validTripsB.size() > 0) {
+                                    transferStations.add(transferStation);
+                                    validPairOfTrips.add(tripA);
+                                    validPairOfTrips.add(validTripsB.get(0));
+                                    StringBuilder stationSequence = new StringBuilder();
+                                    for (int i = 0; i < transferStations.size(); i++) {
+                                        if (i != transferStations.size() - 1) {
+                                            stationSequence.append(transferStations.get(i) + ",");
+                                        } else {
+                                            stationSequence.append(transferStations.get(i));
+                                        }
+                                    }
+                                    resultValidPartialTrips.put(stationSequence.toString(), ConverterUtil.parseJson(validPairOfTrips));
+                                    transferStations.clear();
+                                    validPairOfTrips.clear();
+                                }
+                            }
+                        });
+                    });
+                }
+            });
+        }
+        System.out.println(resultValidPartialTrips);
+        return resultValidPartialTrips;
+    }
+
+    private Map<List<String>, List<String>> getValidPartialRoutes(List<Integer> validRoutesA, List<Integer> validRoutesB, String stationFromName, String stationToName) {
+        Map<List<String>, List<String>> validPartialRoutes = new HashMap<>();
+        List<String> stationTransfers = new ArrayList<>();
+        List<String> routeSequence = new ArrayList<>();
 
         validRoutesA.forEach(routeId -> {
             List<Station> routeStationsA = new ArrayList<>();
             routeDAO.findRouteByRouteId(routeId).forEach(route -> routeStationsA.add(route.getStation()));
 
             validRoutesB.forEach(routeIdB -> {
-                    List<Station> routeStationsB = new ArrayList<>();
-                    routeDAO.findRouteByRouteId(routeIdB).forEach(routeB -> routeStationsB.add(routeB.getStation()));
+                List<Station> routeStationsB = new ArrayList<>();
+                routeDAO.findRouteByRouteId(routeIdB).forEach(routeB -> routeStationsB.add(routeB.getStation()));
 
-                    routeStationsA.forEach(stationA -> {
+                routeStationsA.forEach(stationA -> {
 
-                        routeStationsB.forEach(stationB -> {
-                            if (stationA.getName().equals(stationB.getName())) {
-                                int stationFromIndex = 0;
-                                for (int i = 0; i < routeStationsA.size(); i++) {
-                                    if (routeStationsA.get(i).getName().equals(stationFromName)) {
-                                        stationFromIndex = i;
-                                        break;
-                                    }
-                                }
-                                int stationToIndex = 0;
-                                for (int i = 0; i < routeStationsB.size(); i++) {
-                                    if (routeStationsB.get(i).getName().equals(stationToName)) {
-                                        stationToIndex = i;
-                                        break;
-                                    }
-                                }
-                                if ((routeStationsA.indexOf(stationA) > stationFromIndex) && (routeStationsB.indexOf(stationB) < stationToIndex)) {
-                                    validPartialRoutes.put(stationA.getName(), routeId + "-" + routeIdB);
+                    routeStationsB.forEach(stationB -> {
+                        if (stationA.getName().equals(stationB.getName())) {
+                            int stationFromIndex = 0;
+                            for (int i = 0; i < routeStationsA.size(); i++) {
+                                if (routeStationsA.get(i).getName().equals(stationFromName)) {
+                                    stationFromIndex = i;
+                                    break;
                                 }
                             }
-                        });
-
+                            int stationToIndex = 0;
+                            for (int i = 0; i < routeStationsB.size(); i++) {
+                                if (routeStationsB.get(i).getName().equals(stationToName)) {
+                                    stationToIndex = i;
+                                    break;
+                                }
+                            }
+                            if ((routeStationsA.indexOf(stationA) > stationFromIndex) && (routeStationsB.indexOf(stationB) < stationToIndex)) {
+                                stationTransfers.add(stationA.getName());
+                                routeSequence.add(routeId + "-" + routeIdB);
+                            }
+                        }
                     });
+
+                });
             });
 
         });
 
-        Map<String, List<TripDTO>> resultValidPartialTrips = new HashMap<>();
+        validPartialRoutes.put(stationTransfers, routeSequence);
 
-        for(Map.Entry<String, String> entry : validPartialRoutes.entrySet()) {
-            List<String> partialRoutes = Arrays.asList(entry.getValue().split("-"));
-            List<TripDTO> validTripsA = findValidTrips(stationFromName, entry.getKey(), startSearchInterval, endSearchInterval);
-            if (validTripsA.size() > 0) {
-                validTripsA.forEach(tripA -> {
-                    scheduleDAO.getSchedulesByTripId(tripA.getId()).forEach(scheduleA -> {
-                        if (scheduleA.getStation().getName().equals(entry.getKey())) {
-                            String startSearchIntervalForTripB = scheduleA.getTime_arrival().toString();
-                            String endSearchIntervalForTripB = scheduleA.getTime_arrival().plus(5, ChronoUnit.DAYS).toString();
-                            List<TripDTO> validTripsB = findValidTrips(entry.getKey(), stationToName, startSearchIntervalForTripB, endSearchIntervalForTripB);
-                            List<TripDTO> validPairOfTrips = new ArrayList<>();
-                            validPairOfTrips.add(tripA);
-                            validPairOfTrips.add(validTripsB.get(0));
-                            if (validTripsB.size() > 0) {
-                                resultValidPartialTrips.put(entry.getKey(), validPairOfTrips);
-                            }
-                        }
-                    });
-                });
-            }
-        }
-
-        System.out.println(resultValidPartialTrips);
-
-        return resultValidPartialTrips;
+        return validPartialRoutes;
     }
 
     /**
@@ -262,13 +287,21 @@ public class TripServiceImpl implements TripService {
     }
 
     @Transactional
-    public Instant getDepartureTime(Integer tripId) {
-        return tripDAO.getDepartureTime(tripId);
+    public Instant getDepartureTime(Integer tripId, String stationFromName) {
+        return tripDAO.getDepartureTime(tripId, stationFromName);
     }
 
     @Transactional
     public Instant getArrivalTime(Integer tripId, String stationToName) {
         return tripDAO.getArrivalTime(tripId, stationToName);
+    }
+
+    @Transactional
+    public List<Instant> getPartialTime(Integer tripId, String stationFromName, String stationToName) {
+        List<Instant> resultList = new ArrayList<>();
+        resultList.add(tripDAO.getArrivalTime(tripId, stationToName));
+        resultList.add(tripDAO.getDepartureTime(tripId, stationFromName));
+        return resultList;
     }
 
     @Transactional

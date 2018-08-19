@@ -61,15 +61,18 @@ public class TicketController {
 
     @GetMapping("/user/ticket/buy/")
     public ModelAndView buyTicketPage(ModelAndView model,
-                                      @RequestParam("tripId") Integer tripId,
+                                      @RequestParam(value = "tripId") Integer tripId,
+                                      @RequestParam(value = "tripIds", required = false) String tripIds,
                                       @RequestParam("carriageNum") Integer carriageNum,
                                       @RequestParam("stationFrom") String stationFromName,
+                                      @RequestParam(value = "lastStation", required = false) String lastStationName,
                                       @RequestParam("stationTo") String stationToName) {
         TripDTO tripDto = tripService.findById(tripId);
         model.addObject("trip", tripDto);
         model.addObject("carriageNum", carriageNum);
         model.addObject("stationFromName", stationFromName);
         model.addObject("stationToName", stationToName);
+        model.addObject("lastStation", lastStationName);
         model.addObject("bookedTickets", ticketService.getBookedTicketsByTripAndCarriageNum(tripId, stationFromName, stationToName, carriageNum));
         model.addObject("seatsAmountMap", ticketService.getBookedTicketsAmountForTrip(tripId, stationFromName, stationToName));
         model.setViewName("user/ticket_buy");

@@ -6,6 +6,8 @@ import com.tsystems.entity.Trip;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.time.Instant;
 import java.util.List;
@@ -51,10 +53,24 @@ public class TripDAOImpl extends GenericDAOImpl<Trip, Integer> implements TripDA
         return (Instant) getTripStartTime.getSingleResult();
     }
 
-    public Instant getDepartureTime(Integer tripId) {
-        Query getDepartureTime = entityManager.createQuery("select trip.start_time from Trip trip where trip.id=:tripId");
+    public Instant getDepartureTime(Integer tripId, String stationFromName) {
+        Query getDepartureTime = entityManager.createQuery("select schedule.time_departure from Schedule schedule where schedule.trip.id=:tripId and schedule.station.name=:stationFromName");
         getDepartureTime.setParameter("tripId", tripId);
-        return (Instant) getDepartureTime.getSingleResult();
+        if (!stationFromName.equals("LAST")) {
+            getDepartureTime.setParameter("stationFromName", stationFromName);
+        } else {
+            Query getFirstTripStation = entityManager.createQuery("select schedule.station.name from Schedule schedule where schedule.trip.id=:tripId order by schedule.id asc");
+            getFirstTripStation.setParameter("tripId", tripId);
+            getFirstTripStation.setMaxResults(1);
+            getDepartureTime.setParameter("stationFromName", getFirstTripStation.getResultList().get(0));
+        }
+        try {
+            return (Instant) getDepartureTime.getSingleResult();
+        } catch (EntityNotFoundException | NoResultException e) {
+            getDepartureTime = entityManager.createQuery("select trip.start_time from Trip trip where trip.id=:tripId");
+            getDepartureTime.setParameter("tripId", tripId);
+            return (Instant) getDepartureTime.getSingleResult();
+        }
     }
 
     public Instant getArrivalTime(Integer tripId, String stationToName) {
@@ -68,7 +84,11 @@ public class TripDAOImpl extends GenericDAOImpl<Trip, Integer> implements TripDA
             getLastTripStation.setMaxResults(1);
             getArrivalTime.setParameter("stationToName", getLastTripStation.getResultList().get(0));
         }
-        return (Instant) getArrivalTime.getSingleResult();
+        try {
+            return (Instant) getArrivalTime.getSingleResult();
+        } catch (EntityNotFoundException | NoResultException e) {
+            return null;
+        }
     }
 
     public List<Ticket> getTicketsByTripAndCarriageNum(Integer tripId, Integer carriageNum) {

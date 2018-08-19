@@ -16,7 +16,7 @@ public interface TripDAO extends GenericDAO<Trip, Integer> {
 
     Instant cancelTrip(Integer tripId);
 
-    Instant getDepartureTime(Integer tripId);
+    Instant getDepartureTime(Integer tripId, String stationFromName);
 
     Instant getArrivalTime(Integer tripId, String stationToName);
 

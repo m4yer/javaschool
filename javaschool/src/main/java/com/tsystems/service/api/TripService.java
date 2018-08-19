@@ -18,15 +18,17 @@ public interface TripService {
 
     List<TripDTO> findValidTrips(String stationFromName, String stationToName, String startSearchInterval, String endSearchInterval);
 
-    Map<String, List<TripDTO>> findValidPartialTrips(String stationFromName, String stationToName, String startSearchInterval, String endSearchInterval);
+    Map<String, String> findValidPartialTrips(String stationFromName, String stationToName, String startSearchInterval, String endSearchInterval);
 
     Integer createTrip(Integer trainId, Integer routeId, String tripStartTime);
 
     void cancelTrip(Integer tripId);
 
-    Instant getDepartureTime(Integer tripId);
+    Instant getDepartureTime(Integer tripId, String stationFromName);
 
     Instant getArrivalTime(Integer tripId, String stationToName);
+
+    List<Instant> getPartialTime(Integer tripId, String stationFromName, String stationToName);
 
     List<TicketDTO> getTicketsByTripAndCarriageNum(Integer tripId, Integer carriageNum);
 

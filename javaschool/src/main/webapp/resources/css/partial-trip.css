@@ -1,13 +1,19 @@
 .partial-wrapper {
     display: block;
     width: 100%;
-    border-radius: 2px;
     font-weight: 700;
 }
 
 .partial-block {
     margin: 0 auto;
-    background: hotpink;
     width: 60%;
     margin-bottom: 24px;
+    border-radius: 2px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    color: #414141;
+}
+
+.partial-wrapper button {
+    margin-top: 12px;
 }

@@ -80,7 +80,7 @@ public class TripController {
             @RequestParam("stationTo") String stationToName,
             @RequestParam("dateStart") String startSearchInterval,
             @RequestParam("dateEnd") String endSearchInterval) {
-        Map<String, List<TripDTO>> validTrips = new HashMap<>();
+        Map<String, String> validTrips;
         validTrips = tripService.findValidPartialTrips(stationFromName, stationToName, startSearchInterval, endSearchInterval);
         try {
             return objectMapper.writeValueAsString(validTrips);
@@ -129,8 +129,10 @@ public class TripController {
 
     @GetMapping("/trip/departure-time")
     public @ResponseBody
-    Instant getDepartureTime(@RequestParam("tripId") Integer tripId) {
-        return tripService.getDepartureTime(tripId);
+    Instant getDepartureTime(
+            @RequestParam("tripId") Integer tripId,
+            @RequestParam("stationFrom") String stationFrom) {
+        return tripService.getDepartureTime(tripId, stationFrom);
     }
 
     @GetMapping("/trip/arrival-time")
@@ -139,6 +141,21 @@ public class TripController {
             @RequestParam("tripId") Integer tripId,
             @RequestParam("stationTo") String stationTo) {
         return tripService.getArrivalTime(tripId, stationTo);
+    }
+
+    @GetMapping("/trip/partial-time")
+    public @ResponseBody
+    List<Instant> getPartialTime(
+            @RequestParam("tripId") Integer tripId,
+            @RequestParam("stationFrom") String stationFrom,
+            @RequestParam("stationTo") String stationTo) {
+        log.info("@GetMapping(\"/trip/partial-time\"):");
+        log.info("@RequestParam(\"tripId\") Integer tripId: " + tripId);
+        log.info("@RequestParam(\"stationFrom\") String stationFrom: " + stationFrom);
+        log.info("@RequestParam(\"stationTo\") String stationTo: " + stationTo);
+        List<Instant> resultList = tripService.getPartialTime(tripId, stationFrom, stationTo);
+        log.info("resultList: " + resultList);
+        return tripService.getPartialTime(tripId, stationFrom, stationTo);
     }
 
     @GetMapping("/admin/trip/passengers")
