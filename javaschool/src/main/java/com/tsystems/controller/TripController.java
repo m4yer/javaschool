@@ -1,10 +1,11 @@
 package com.tsystems.controller;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tsystems.dto.TripDTO;
-import com.tsystems.service.api.*;
+import com.tsystems.service.api.RouteService;
+import com.tsystems.service.api.ScheduleService;
+import com.tsystems.service.api.TripService;
 import com.tsystems.utils.ConverterUtil;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.Instant;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +34,7 @@ public class TripController {
     private static final Logger log = Logger.getLogger(TripController.class);
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    @GetMapping("/trip/find/")
+    @GetMapping("/user/trip/find/")
     public ModelAndView findTripPage(ModelAndView model,
                                      @RequestParam(value = "stationFrom", required = false) String stationFromName,
                                      @RequestParam(value = "stationTo", required = false) String stationToName,

@@ -36,30 +36,19 @@
                     </h1>
                     <hr>
                 </div>
-                <div class="col-lg-8 mx-auto">
+                <div class="col-lg-12 mx-auto">
                     <p class="text-faded mb-5">Start your journey with the most intelligent platform for planning your
                         route
                     </p>
                 </div>
-                <div class="col-lg-7 mx-auto" style="background-color: rgba(0,0,0,0.82); height: 100px;margin: 0 auto; border-radius: 4px;">
+                <div class="col-lg-3 mx-auto" style="background-color: rgba(0,0,0,0.72); height: 100px;margin: 0 auto; border-radius: 4px;">
                     <div class="center-vert-horz index-input-line">
                         <table style="margin: 0 auto;">
                             <tr>
                                 <td>
-                                    <form action="/trip/find/" method="get" >
+                                    <form action="/user/trip/find/" method="get" >
                                         <div class="input-group">
-                                            <span class="autocomplete-from">
-                                                <input type="text" placeholder="From" class="input-place" name="stationFrom" required id="awesomplete-from"/>
-                                            </span>
-                                            <span class="autocomplete-to">
-                                                <input type="text" placeholder="To" class="input-place autocomplete-to" name="stationTo" required
-                                                       style="
-                                                   border-top-left-radius: 0px;
-                                                   border-bottom-left-radius: 0px;" id="awesomplete-to"/>
-                                            </span>
-                                            <input type="text" placeholder="Date" id="datepicker1" class="input-date" name="dateStart" required autocomplete="off" onkeydown="return false;"/>
-                                            <input type="text" placeholder="Date" id="datepicker2" class="input-date" name="dateEnd" required autocomplete="off" onkeydown="return false;"/>
-                                            <input type="submit" value="Search"/>
+                                            <input type="submit" value="Search trips" style="width: 150px;"/>
                                         </div>
                                     </form>
                                 </td>
@@ -78,20 +67,9 @@
 <script src="<c:url value="/resources/js/creative.js" />"></script>
 <script src="<c:url value="/resources/js/bootstrap-datepicker.min.js" />"></script>
 <script src="<c:url value="/resources/js/loading.js" />"></script>
-<script src="<c:url value="/resources/js/awesomplete.js" />"></script>
-<script src="<c:url value="/resources/js/angular/angular.min.js" />"></script>
 <script>
-    $("#datepicker1").datepicker({
-        startDate: 'now',
-        endDate: '+1m'
-    });
-    $("#datepicker2").datepicker({
-        startDate: 'now',
-        endDate: '+1m'
-    });
     $("nav").addClass("fixed-top");
+    pageLoaded();
 </script>
-<script src="<c:url value="/resources/js/angular/indexManageApp.js" />"></script>
-<script src="<c:url value="/resources/js/angular/indexManageCtrl.js" />"></script>
 </body>
 </html>

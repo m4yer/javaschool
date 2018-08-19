@@ -9,10 +9,10 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link js-scroll-trigger" href="/schedule"><i class="fa fa-calendar"></i> Schedule</a>
+                    <a class="nav-link js-scroll-trigger" href="/user/schedule"><i class="fa fa-calendar"></i> Schedule</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link js-scroll-trigger" href="/trip/find/"><i class="fa fa-search"></i> Find Trip</a>
+                    <a class="nav-link js-scroll-trigger" href="/user/trip/find/"><i class="fa fa-search"></i> Find Trip</a>
                 </li>
                 <sec:authorize access="isAnonymous()">
                     <li class="nav-item">
