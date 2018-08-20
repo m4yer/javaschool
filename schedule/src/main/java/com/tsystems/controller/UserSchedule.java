@@ -90,7 +90,7 @@ public class UserSchedule implements Serializable {
     public List<ScheduleDTO> getSchedules() {
         if (stationName == null) {
             try {
-                FacesContext.getCurrentInstance().getExternalContext().dispatch("/schedule.xhtml");
+                FacesContext.getCurrentInstance().getExternalContext().dispatch("/index.xhtml");
             } catch (IOException e) {
                 log.error(e.getMessage(), e);
             }

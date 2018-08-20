@@ -7,9 +7,10 @@
 <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/navigation-white.css" />"/>
 <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/navigation-admin.css" />"/>
 <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/loading.css" />"/>
+<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/brand-form-modal.css" />"/>
 <style>
     #map {
-        height: 65vh;
+        height: 80vh;
     }
 </style>
 <title>RW | Railways</title>
@@ -32,11 +33,26 @@
         </div>
     </div>
 
+    <!-- User Information Modal Form -->
+    <div id="brand-form-modal" class="brand-form-modal">
+        <!-- Modal content -->
+        <div class="brand-form-modal-content" style="width: 50%; margin-top: 6%;">
+            <div class="brand-form-modal-header">
+                <span class="close">&times;</span>
+                <span class="caption">Edit route information</span>
+            </div>
+            <div class="brand-form-modal-body text-center" style="padding-bottom: 6px; padding-top: 6px;">
+                <div id="direction-manage-info" style="font-size: 20px; font-weight: 700; padding: 42px 0; font-family: 'Lato', sans-serif;"></div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <script src="<c:url value="/resources/js/jquery-3.3.1.min.js"/>"></script>
 <script src="<c:url value="/resources/js/bootstrap.bundle.min.js" />"></script>
 <script src="<c:url value="/resources/js/loading.js" />"></script>
+<script src="<c:url value="/resources/js/brand-form-modal.js" />"></script>
 <script>
 
     var map;
@@ -198,10 +214,15 @@
                 stationFromName: stationFrom,
                 stationToName: stationTo
             }
-        }).done(function () {
-            // console.log('Direction removed:');
-            // console.log(stationFrom + ' -> ' + stationTo);
+        }).done(function (response) {
             google.maps.event.trigger(marker, 'click');
+            if (response == true) {
+                $('#direction-manage-info').html('Direction was successfully removed: <br><br><font color="#FF5A5F">' + stationFrom + '</font> &rarr; <font color="#FF5A5F">' + stationTo + '</font>');
+                openModalForm();
+            } else {
+                $('#direction-manage-info').html('You cannot delete this direction because of it\'s dependencies: <br><br><font color="#FF5A5F">' + stationFrom + '</font> &rarr; <font color="#FF5A5F">' + stationTo + '</font>');
+                openModalForm();
+            }
         });
     }
     function addDirection(stationFrom, stationTo, marker) {
@@ -213,9 +234,9 @@
                 stationToName: stationTo
             }
         }).done(function () {
-            // console.log('Direction added:');
-            // console.log(stationFrom + ' -> ' + stationTo);
             google.maps.event.trigger(marker, 'click');
+            $('#direction-manage-info').html('Direction was successfully added: <br><br><font color="#FF5A5F">' + stationFrom + '</font> &rarr; <font color="#FF5A5F">' + stationTo + '</font>');
+            openModalForm();
         });
     }
 

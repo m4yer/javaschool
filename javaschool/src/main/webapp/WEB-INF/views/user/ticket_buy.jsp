@@ -190,7 +190,21 @@
 
     function changeCarriage(carriageNum) {
         carriageNum = carriageNum.split('carriage-').join('');
-        window.location.replace("/user/ticket/buy/?tripId=" + '${trip.id}' + "&carriageNum=" + carriageNum + "&stationFrom=" + '${stationFromName}' + "&stationTo=" + '${stationToName}');
+        var stationTo = '${param.stationTo}';
+        stationTo = stationTo.split('["').join('');
+        stationTo = stationTo.split('"]').join('');
+        <c:choose>
+            <c:when test="${param.tripIds != null}">
+                var nextTicketTrip = '${param.tripIds}';
+                nextTicketTrip.split('-').join('');
+                var nextTrip = nextTicketTrip[2];
+                console.log('next ticket buy: ', nextTrip);
+                window.location.replace("/user/ticket/buy/?tripId=" + '${trip.id}' + "&carriageNum=" + carriageNum + "&stationFrom=" + '${stationFromName}' + "&lastStation=" + '${lastStation}' + "&stationTo=" + stationTo + "&tripIds=" + '${param.tripIds}');
+        </c:when>
+            <c:otherwise>
+                window.location.replace("/user/ticket/buy/?tripId=" + '${trip.id}' + "&carriageNum=" + carriageNum + "&stationFrom=" + '${stationFromName}' + "&stationTo=" + '${stationToName}');
+            </c:otherwise>
+        </c:choose>
     }
 
 </script>

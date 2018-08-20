@@ -10,7 +10,7 @@ public interface DirectionService {
 
     List<CoordinateDTO> getDepartureStationCoordinates(String stationName);
 
-    void removeDirectionBetweenStations(String stationFromName, String stationToName);
+    boolean removeDirectionBetweenStations(String stationFromName, String stationToName);
 
     void addDirectionBetweenStations(String stationFromName, String stationToName);
 

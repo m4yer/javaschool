@@ -26,7 +26,7 @@
                 <li class="nav-item">
                     <a class="nav-link js-scroll-trigger nav-link-stations" href="#"><i class="fa fa-map-marker"></i> Stations</a>
                     <div class="dropdown-content">
-                        <a href="/admin/station/list">Manage</a>
+                        <a href="/admin/station/list">Browse</a>
                         <a href="/admin/station/add">Add</a>
                     </div>
                 </li>
@@ -39,14 +39,14 @@
                 <li class="nav-item">
                     <a class="nav-link js-scroll-trigger nav-link-trains" href="#"><i class="fa fa-train"></i> Trains</a>
                     <div class="dropdown-content">
-                        <a href="/admin/train/list">Manage</a>
+                        <a href="/admin/train/list">Browse</a>
                         <a href="/admin/train/add">Add</a>
                     </div>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link js-scroll-trigger nav-link-users" href="#"><i class="fa fa-users"></i> Users</a>
                     <div class="dropdown-content">
-                        <a href="/admin/user/list">Manage</a>
+                        <a href="/admin/user/list">Browse</a>
                     </div>
                 </li>
             </ul>

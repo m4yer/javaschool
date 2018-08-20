@@ -190,8 +190,8 @@
             <div class="row">
                 <div class="partial-wrapper" ng-repeat="i in [] | range: partialTrips.length">
                     <div class="partial-block">
-                        <div class="partial-line">{{ stationFrom + ' [' + (partialTrips[i][0].timeArr.epochSecond * 1000 | date:'dd/MM/yyyy HH:mm') + ']' + ' &rarr; ' + transferStations[i] + ' [' + (partialTrips[i][0].timeDep.epochSecond * 1000 | date:'dd/MM/yyyy HH:mm') + ']' }}</div>
-                        <div class="partial-line">{{ transferStations[i] + ' [' + (partialTrips[i][1].timeArr.epochSecond * 1000 | date:'dd/MM/yyyy HH:mm') + ']' + ' &rarr; ' + stationTo + ' [' + (partialTrips[i][1].timeDep.epochSecond * 1000 | date:'dd/MM/yyyy HH:mm') + ']' }}</div>
+                        <div class="partial-line">{{ stationFromFixed + ' [' + (partialTrips[i][0].timeArr.epochSecond * 1000 | date:'dd/MM/yyyy HH:mm') + ']' + ' &rarr; ' + transferStations[i] + ' [' + (partialTrips[i][0].timeDep.epochSecond * 1000 | date:'dd/MM/yyyy HH:mm') + ']' }}</div>
+                        <div class="partial-line">{{ transferStations[i] + ' [' + (partialTrips[i][1].timeArr.epochSecond * 1000 | date:'dd/MM/yyyy HH:mm') + ']' + ' &rarr; ' + stationToFixed + ' [' + (partialTrips[i][1].timeDep.epochSecond * 1000 | date:'dd/MM/yyyy HH:mm') + ']' }}</div>
                         <form action="/user/ticket/buy/" method="get">
                             <input type="hidden" name="tripId" value="{{partialTrips[i][0].id}}"/>
                             <input type="hidden" name="carriageNum" value="1"/>
@@ -279,7 +279,7 @@
                                             dateEnd: '${dateEnd} 00:00'
                                         }
                                     }).then(function success(response) {
-                                        console.log(response.data);
+                                        // console.log(response.data);
                                         $scope.trips = response.data;
 
                                         for (var i = 0; i < $scope.trips.length; i++) {
@@ -291,14 +291,14 @@
                                             method: "GET"
                                         }).then(function success(response) {
                                             var list = response.data;
-                                            console.log('list: ', list);
+                                            // console.log('list: ', list);
 
                                             $http({
                                                 url: "/station/get/list/title",
                                                 method: "GET"
                                             }).then(function success(response) {
                                                 var list = response.data;
-                                                console.log('list: ', list);
+                                                // console.log('list: ', list);
                                                 new Awesomplete(document.querySelector(".autocomplete-from input"),{
                                                     list: list,
                                                     minChars: 1,
@@ -329,7 +329,7 @@
                 method: "GET"
             }).then(function success(response) {
                 var list = response.data;
-                console.log('list: ', list);
+                // console.log('list: ', list);
                 new Awesomplete(document.querySelector(".autocomplete-from input"), {
                     list: list,
                     minChars: 1,
@@ -377,9 +377,12 @@
                 for (var i = 0; i < $scope.trips.length; i++) {
                     closure(i);
                 }
-                console.log('We tried to find DIRECT trips, and foundDirectTripsCount: ', foundDirectTripsCount);
+                // console.log('We tried to find DIRECT trips, and foundDirectTripsCount: ', foundDirectTripsCount);
                 if (foundDirectTripsCount == undefined) {
-                    console.log('Due to DIRECT trips = 0, trying to find PARTIAL trips.');
+                    // console.log('Due to DIRECT trips = 0, trying to find PARTIAL trips.');
+                    pageLoading();
+                    $scope.stationFromFixed = $scope.stationFrom;
+                    $scope.stationToFixed = $scope.stationTo;
                     $http({
                         url: "/trip/get/partial/",
                         method: "GET",
@@ -402,15 +405,15 @@
                                 tempArray.push(station);
                             });
                             transferStations.push(tempArray);
-                            console.log('$scope.trips[counter]: ', $scope.trips[counter]);
-                            console.log('key: ', key);
-                            console.log('value: ', value);
+                            // console.log('$scope.trips[counter]: ', $scope.trips[counter]);
+                            // console.log('key: ', key);
+                            // console.log('value: ', value);
                             counter++;
                         });
                         $scope.partialTrips = tripsArray;
-                        console.log('$scope.partialTrips: ', $scope.partialTrips);
+                        // console.log('$scope.partialTrips: ', $scope.partialTrips);
                         $scope.transferStations = transferStations;
-                        console.log('$scope.transferStations: ', $scope.transferStations);
+                        // console.log('$scope.transferStations: ', $scope.transferStations);
 
                         for (var i = 0; i < $scope.partialTrips.length; i++) {
 
@@ -428,15 +431,22 @@
                     });
                 }
 
+            }, function (response) {
+                if(response.status == 500) {
+                    // console.log('STATUS FAILED');
+                    $scope.trips = [];
+                    $scope.partialTrips = [];
+                }
             });
         };
 
         var stationsTemp = [];
         function getArrivalTimePartialTrips(i, j) {
-            console.log('Params GET partial time:');
-            console.log('$scope.partialTrips[i][j][\'id\']: ', $scope.partialTrips[i][j]['id']);
-            console.log('$scope.stationFrom: ', $scope.stationFrom);
-            console.log('$scope.stationTo: ', $scope.stationTo);
+            pageLoading();
+            // console.log('Params GET partial time:');
+            // console.log('$scope.partialTrips[i][j][\'id\']: ', $scope.partialTrips[i][j]['id']);
+            // console.log('$scope.stationFrom: ', $scope.stationFrom);
+            // console.log('$scope.stationTo: ', $scope.stationTo);
             $http({
                 url: "/trip/partial-time",
                 method: "GET",
@@ -446,10 +456,11 @@
                     stationTo: stationsTemp[j+1]
                 }
             }).then(function success(response) {
-                console.log('response from get PARTIAL time: ', response.data);
+                // console.log('response from get PARTIAL time: ', response.data);
                 $scope.partialTrips[i][j]['timeDep'] = response.data[0];
                 $scope.partialTrips[i][j]['timeArr'] = response.data[1];
-                console.log('$scope.partialTrips AFTER get schedule: ', $scope.partialTrips);
+                // console.log('$scope.partialTrips AFTER get schedule: ', $scope.partialTrips);
+                pageLoaded();
             });
         }
 
@@ -462,7 +473,7 @@
                     tripId: chosenTripId
                 }
             }).then(function success(response) {
-                console.log('$scope.schedules: ', response.data);
+                // console.log('$scope.schedules: ', response.data);
                 $scope.schedules = response.data;
                 //create options
                 $scope.rtOptions = DTOptionsBuilder.newOptions()
@@ -485,8 +496,8 @@
                     stationTo: $scope.stationTo
                 }
             }).then(function success(response) {
-                console.log(response.data);
-                console.log($scope.trips[i]);
+                // console.log(response.data);
+                // console.log($scope.trips[i]);
                 $scope.trips[i].arrival_time = response.data;
             });
         }

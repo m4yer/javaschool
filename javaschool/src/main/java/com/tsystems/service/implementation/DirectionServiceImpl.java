@@ -1,6 +1,7 @@
 package com.tsystems.service.implementation;
 
 import com.tsystems.dao.api.DirectionDAO;
+import com.tsystems.dao.api.RouteDAO;
 import com.tsystems.dao.api.StationDAO;
 import com.tsystems.dto.CoordinateDTO;
 import com.tsystems.entity.Direction;
@@ -17,11 +18,13 @@ import java.util.List;
 public class DirectionServiceImpl implements DirectionService {
     private DirectionDAO directionDAO;
     private StationDAO stationDAO;
+    private RouteDAO routeDAO;
 
     @Autowired
-    public DirectionServiceImpl(DirectionDAO directionDAO, StationDAO stationDAO) {
+    public DirectionServiceImpl(DirectionDAO directionDAO, StationDAO stationDAO, RouteDAO routeDAO) {
         this.directionDAO = directionDAO;
         this.stationDAO = stationDAO;
+        this.routeDAO = routeDAO;
     }
 
     @Transactional
@@ -45,8 +48,25 @@ public class DirectionServiceImpl implements DirectionService {
     }
 
     @Transactional
-    public void removeDirectionBetweenStations(String stationFromName, String stationToName) {
+    public boolean removeDirectionBetweenStations(String stationFromName, String stationToName) {
+        List<Integer> allRouteIds = routeDAO.getSingleRoutesId();
+        for (Integer routeId : allRouteIds) {
+            List<String> routeStations = new ArrayList<>();
+            routeDAO.findRouteByRouteId(routeId).forEach(route -> routeStations.add(route.getStation().getName()));
+
+            if (routeStations.contains(stationFromName)) {
+                if (routeStations.contains(stationToName)) {
+
+                    if (routeStations.indexOf(stationFromName) < routeStations.indexOf(stationToName)) {
+                        return false;
+                    }
+
+                }
+            }
+
+        }
         directionDAO.removeDirectionBetweenStations(stationFromName, stationToName);
+        return true;
     }
 
     @Transactional

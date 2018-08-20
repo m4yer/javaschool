@@ -60,7 +60,7 @@
         </div>
     </div>
 
-    <!-- User Information Modal Form -->
+    <!-- Result of route manage operation Modal Form -->
     <div id="brand-form-modal" class="brand-form-modal">
         <!-- Modal content -->
         <div class="brand-form-modal-content" style="width: 50%; margin-top: 6%;">

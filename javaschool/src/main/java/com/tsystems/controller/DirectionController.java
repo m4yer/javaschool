@@ -34,11 +34,11 @@ public class DirectionController {
 
     @PostMapping("/direction/remove")
     public @ResponseBody
-    void removeDirectionBetweenStations(
+    boolean removeDirectionBetweenStations(
             @RequestParam("stationFromName") String stationFromName,
             @RequestParam("stationToName") String stationToName) {
         log.info("Remove direction between: " + stationFromName + " and " + stationToName + ". [" + stationFromName + " -> " + stationToName + "]");
-        directionService.removeDirectionBetweenStations(stationFromName, stationToName);
+        return directionService.removeDirectionBetweenStations(stationFromName, stationToName);
     }
 
 }
