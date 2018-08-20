@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Dispatches queries related to directions
+ */
 @Controller
 @RequestMapping("/admin")
 public class DirectionController {
@@ -18,11 +21,22 @@ public class DirectionController {
 
     private static final Logger log = Logger.getLogger(DirectionController.class);
 
+    /**
+     * Returns the rail roads page.
+     *
+     * @return admin/rail_map.jsp
+     */
     @GetMapping("/directions/map")
     public String directionsMapPage() {
         return "admin/rails_map";
     }
 
+    /**
+     * Allows to add direction between to stations
+     *
+     * @param stationFromName stationFrom
+     * @param stationToName stationTo
+     */
     @PostMapping("/direction/add")
     public @ResponseBody
     void addDirectionBetweenStations(
@@ -32,6 +46,12 @@ public class DirectionController {
         directionService.addDirectionBetweenStations(stationFromName, stationToName);
     }
 
+    /**
+     * Allows to remove direction between to stations
+     *
+     * @param stationFromName stationFrom
+     * @param stationToName stationTo
+     */
     @PostMapping("/direction/remove")
     public @ResponseBody
     boolean removeDirectionBetweenStations(

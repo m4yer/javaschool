@@ -4,6 +4,9 @@ import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Train entity
+ */
 @Entity
 @Table(name = "train")
 public class Train {

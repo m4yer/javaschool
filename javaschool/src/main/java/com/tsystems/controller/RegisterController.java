@@ -31,11 +31,28 @@ public class RegisterController {
 
     private static final Logger log = Logger.getLogger(RegisterController.class);
 
+    /**
+     * Returns the register page
+     *
+     * @param user user
+     * @param result result
+     * @return register.jsp
+     */
     @GetMapping("/register")
     public String registerPage(@ModelAttribute("user") User user, BindingResult result) {
         return "register";
     }
 
+    /**
+     * Registration core, this method adds user if entered data is valid
+     *
+     * @param request request
+     * @param user user
+     * @param result result
+     * @param birthday birthday
+     * @return index.jsp
+     * @throws RegisterFailedException if data is invalid
+     */
     @PostMapping("/register")
     public String addUser(HttpServletRequest request, @ModelAttribute("user") User user, BindingResult result, @RequestParam("birthday") String birthday) throws RegisterFailedException {
         String userPassword = user.getPassword();

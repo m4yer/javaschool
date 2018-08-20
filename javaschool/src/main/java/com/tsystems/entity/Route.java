@@ -3,6 +3,9 @@ package com.tsystems.entity;
 import javax.persistence.*;
 import java.util.Objects;
 
+/**
+ * Route entity
+ */
 @Entity
 @Table(name = "route")
 public class Route {

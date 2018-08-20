@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Dispatches the user related rest-queries
+ */
 @RestController
 public class UserRestController {
     private UserService userService;
@@ -16,6 +19,11 @@ public class UserRestController {
         this.userService = userService;
     }
 
+    /**
+     * Returns all users
+     *
+     * @return list of all users in JSON
+     */
     @GetMapping("/admin/user/list/get")
     public @ResponseBody
     String getAllUsers() {

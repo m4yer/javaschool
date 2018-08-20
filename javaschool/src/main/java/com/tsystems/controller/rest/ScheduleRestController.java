@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * Dispatches the schedule related rest-queries
+ */
 @RestController
 public class ScheduleRestController {
     private ScheduleService scheduleService;
@@ -23,11 +26,23 @@ public class ScheduleRestController {
 
     private static final Logger log = Logger.getLogger(ScheduleRestController.class);
 
+    /**
+     * Returns list of schedules for specified tripId
+     *
+     * @param tripId tripId
+     * @return list of schedules in JSON
+     */
     @GetMapping("/route/schedule/get/")
     public String getSchedulesByTripId(@RequestParam("tripId") Integer tripId) {
         return ConverterUtil.parseJson(scheduleService.getSchedulesByTripId(tripId));
     }
 
+    /**
+     * Returns list of schedules for specified stationName for TODAY
+     *
+     * @param stationName stationName
+     * @return list of schedules in JSON
+     */
     @GetMapping("/schedule/get/")
     public String getScheduleByStationNameForToday(@RequestParam("stationName") String stationName) {
         List<ScheduleDTO> schedules = scheduleService.getScheduleByStationNameForDate(stationName, null);
@@ -35,6 +50,13 @@ public class ScheduleRestController {
         return ConverterUtil.parseJson(schedules);
     }
 
+    /**
+     *  Returns list of schedules for specified stationName for specified date
+     *
+     * @param stationName stationName
+     * @param desiredDate desiredDate
+     * @return list of schedules in JSON
+     */
     @GetMapping("/schedule/get-by-date/")
     public String getScheduleByStationNameForDate(
             @RequestParam("stationName") String stationName,
@@ -44,6 +66,12 @@ public class ScheduleRestController {
         return ConverterUtil.parseJson(schedules);
     }
 
+    /**
+     * Allows to set time late of specified scheduleId
+     *
+     * @param scheduleId scheduleId
+     * @param time_late time_late
+     */
     @PostMapping("/admin/schedule/late")
     public void editLateStationSchedule(
             @RequestParam("scheduleId") Integer scheduleId,

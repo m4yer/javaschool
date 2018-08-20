@@ -12,9 +12,19 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+/**
+ * An implementation of ScheduleDAO api
+ */
 @Repository
 public class ScheduleDAOImpl extends GenericDAOImpl<Schedule, Integer> implements ScheduleDAO {
 
+    /**
+     * Gets schedule for specified station and date
+     *
+     * @param stationId stationId
+     * @param date date
+     * @return list of schedules
+     */
     public List<Schedule> getScheduleByStationIdForToday(Integer stationId, String date) {
         Query findSchedules = entityManager.createQuery("select schedule from Schedule schedule " +
                 "where schedule.station.id=:stationId and ((schedule.time_arrival between :desiredDate and :tomorrow) or (schedule.time_departure between :desiredDate and :tomorrow))");
@@ -37,12 +47,24 @@ public class ScheduleDAOImpl extends GenericDAOImpl<Schedule, Integer> implement
         return resultList;
     }
 
+    /**
+     * Get schedules for tripId
+     *
+     * @param tripId tripId
+     * @return list of schedules
+     */
     public List<Schedule> getSchedulesByTripId(Integer tripId) {
         Query findSchedules = entityManager.createQuery("select schedule from Schedule schedule where schedule.trip.id=:tripId order by schedule.id");
         findSchedules.setParameter("tripId", tripId);
         return (List<Schedule>) findSchedules.getResultList();
     }
 
+    /**
+     * Method for editing late time for scheduleId
+     *
+     * @param scheduleId scheduleId
+     * @param time_late time_late
+     */
     public void editLateStationSchedule(Integer scheduleId, LocalTime time_late) {
         Query updateTimeLate = entityManager.createQuery("update Schedule schedule set schedule.time_late=:time_late where schedule.id=:scheduleId");
         updateTimeLate.setParameter("scheduleId", scheduleId);

@@ -3,6 +3,9 @@ package com.tsystems.entity;
 import javax.persistence.*;
 import java.util.Objects;
 
+/**
+ * Direction entity
+ */
 @Entity
 @Table(name = "direction")
 public class Direction {

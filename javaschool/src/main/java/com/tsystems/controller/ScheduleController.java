@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+/**
+ * Dispatches queries related to schedule
+ */
 @Controller
 public class ScheduleController {
     private ScheduleService scheduleService;
@@ -17,6 +20,11 @@ public class ScheduleController {
 
     private static final Logger log = Logger.getLogger(ScheduleController.class);
 
+    /**
+     * Returns schedule stations
+     *
+     * @return user/station_schedule.jsp
+     */
     @GetMapping("/user/schedule")
     public String scheduleStationPage() {
         return "user/station_schedule";

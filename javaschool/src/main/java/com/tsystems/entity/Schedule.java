@@ -4,6 +4,9 @@ import javax.persistence.*;
 import java.time.Instant;
 import java.time.LocalTime;
 
+/**
+ * Schedule entity
+ */
 @Entity
 @Table(name = "schedule")
 public class Schedule {

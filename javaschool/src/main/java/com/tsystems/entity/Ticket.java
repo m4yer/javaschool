@@ -3,6 +3,9 @@ package com.tsystems.entity;
 import javax.persistence.*;
 import java.util.Objects;
 
+/**
+ * Ticket entity
+ */
 @Entity
 @Table(name = "ticket")
 public class Ticket {

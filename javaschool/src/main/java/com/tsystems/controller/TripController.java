@@ -18,6 +18,9 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Dispatches queries related to trips
+ */
 @Controller
 public class TripController {
     private TripService tripService;
@@ -34,6 +37,16 @@ public class TripController {
     private static final Logger log = Logger.getLogger(TripController.class);
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
+    /**
+     * Returns find trip page
+     *
+     * @param model model
+     * @param stationFromName stationFromName
+     * @param stationToName stationToName
+     * @param startSearchInterval startSearchInterval
+     * @param endSearchInterval endSearchInterval
+     * @return search_trip.jsp
+     */
     @GetMapping("/user/trip/find/")
     public ModelAndView findTripPage(ModelAndView model,
                                      @RequestParam(value = "stationFrom", required = false) String stationFromName,
@@ -57,6 +70,15 @@ public class TripController {
         return model;
     }
 
+    /**
+     * Returns valid trips for specified parameters
+     *
+     * @param stationFromName stationFromName
+     * @param stationToName stationToName
+     * @param startSearchInterval startSearchInterval
+     * @param endSearchInterval endSearchInterval
+     * @return valid trips matched parameters in JSON
+     */
     @GetMapping("/trip/get/")
     public @ResponseBody
     String findTrips(
@@ -73,6 +95,15 @@ public class TripController {
         }
     }
 
+    /**
+     * Returns valid partial-trips for specified parameters
+     *
+     * @param stationFromName stationFromName
+     * @param stationToName stationToName
+     * @param startSearchInterval startSearchInterval
+     * @param endSearchInterval endSearchInterval
+     * @return valid partial trips matched parameters in JSON
+     */
     @GetMapping("/trip/get/partial/")
     public @ResponseBody
     String findPartialTrips(
@@ -90,17 +121,33 @@ public class TripController {
         }
     }
 
+    /**
+     * Returns trip list page
+     *
+     * @return admin/trip_list.jsp
+     */
     @GetMapping("/admin/trip/list")
     public String allRoutesPage() {
         return "admin/trip_list";
     }
 
+    /**
+     * Returns all trips in JSON
+     *
+     * @return list of trips in JSON
+     */
     @GetMapping("/admin/trip/list/get")
     public @ResponseBody
     String getAllTrips() {
         return ConverterUtil.parseJson(tripService.getAll());
     }
 
+    /**
+     * Returns create trip page for specified routeId
+     *
+     * @param routeId routeId
+     * @return admin/trip_create.jsp
+     */
     @GetMapping("/admin/trip/create/{routeId}")
     public ModelAndView createTripPageNew(@PathVariable("routeId") Integer routeId) {
         if (routeService.findRouteByRouteId(routeId) != null) {
@@ -110,6 +157,15 @@ public class TripController {
         }
     }
 
+    /**
+     * Processes creating new trip and returns trip list page
+     *
+     * @param trainId trainId
+     * @param routeId routeId
+     * @param stationStopTimes list of stop times for stations
+     * @param tripStartTime tripStartTime
+     * @return admin/trip_list.jsp
+     */
     @PostMapping("/admin/trip/create")
     public String createTripPost(
             @RequestParam("trainId") Integer trainId,
@@ -121,12 +177,25 @@ public class TripController {
         return "redirect:/admin/trip/list";
     }
 
+    /**
+     * Processes cancelling of specified tripId
+     *
+     * @param tripId tripId
+     * @return admin/trip_list.jsp
+     */
     @PostMapping("/admin/trip/cancel")
     public String cancelTrip(@RequestParam("tripId") Integer tripId) {
         tripService.cancelTrip(tripId);
         return "redirect:/admin/trip/list";
     }
 
+    /**
+     * Returns departure time for specified tripId and station
+     *
+     * @param tripId tripId
+     * @param stationFrom stationFrom
+     * @return departure time in JSON
+     */
     @GetMapping("/trip/departure-time")
     public @ResponseBody
     Instant getDepartureTime(
@@ -135,6 +204,13 @@ public class TripController {
         return tripService.getDepartureTime(tripId, stationFrom);
     }
 
+    /**
+     * Returns arrival time for specified tripId and station
+     *
+     * @param tripId tripId
+     * @param stationTo stationTo
+     * @return arrival time in JSON
+     */
     @GetMapping("/trip/arrival-time")
     public @ResponseBody
     Instant getArrivalTime(
@@ -143,6 +219,14 @@ public class TripController {
         return tripService.getArrivalTime(tripId, stationTo);
     }
 
+    /**
+     * Returns [departure-time, arrival-time] for specified tripId, stationFrom and stationTo
+     *
+     * @param tripId tripId
+     * @param stationFrom stationFrom
+     * @param stationTo stationTo
+     * @return [departure-time, arrival-time] in JSON
+     */
     @GetMapping("/trip/partial-time")
     public @ResponseBody
     List<Instant> getPartialTime(
@@ -158,6 +242,14 @@ public class TripController {
         return tripService.getPartialTime(tripId, stationFrom, stationTo);
     }
 
+    /**
+     * Returns passengers page for specified tripId and carriageNum
+     *
+     * @param model model
+     * @param tripId tripId
+     * @param carriageNum carriageNum
+     * @return admin/passengers_list.jsp
+     */
     @GetMapping("/admin/trip/passengers")
     public ModelAndView passengersPage(
             ModelAndView model,
@@ -169,6 +261,13 @@ public class TripController {
         return model;
     }
 
+    /**
+     * Returns list of passengers for specified tripId and carriageNum in JSON
+     *
+     * @param tripId tripId
+     * @param carriageNum carriageNum
+     * @return list of passengers for specified tripId and carriageNum in JSON
+     */
     @GetMapping("/admin/trip/passengers/get")
     public @ResponseBody
     String getTripPassengersByCarriageNum(
@@ -176,11 +275,6 @@ public class TripController {
             @RequestParam("carriageNum") Integer carriageNum
     ) {
         return ConverterUtil.parseJson(tripService.getTicketsByTripAndCarriageNum(tripId, carriageNum));
-    }
-
-    @GetMapping("/template")
-    public String templatePage() {
-        return "template";
     }
 
 }

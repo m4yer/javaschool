@@ -12,9 +12,17 @@ import javax.persistence.Query;
 import java.time.Instant;
 import java.util.List;
 
+/**
+ * An implementation of TripDAO api
+ */
 @Repository
 public class TripDAOImpl extends GenericDAOImpl<Trip, Integer> implements TripDAO {
 
+    /**
+     * Get last trip id
+     *
+     * @return last trip id
+     */
     @Transactional
     public Integer getLastId() {
         Query getLastId = entityManager.createQuery("select trip.id from Trip trip order by trip.id desc");
@@ -23,6 +31,14 @@ public class TripDAOImpl extends GenericDAOImpl<Trip, Integer> implements TripDA
         return lastId;
     }
 
+    /**
+     * Finds and returns valid trips for specified parameters
+     *
+     * @param searchedRouteId searchedRouteId
+     * @param startTime startTime
+     * @param endTime endTime
+     * @return list of valid trips
+     */
     @Transactional
     public List<Trip> findValidTrips(Integer searchedRouteId, Instant startTime, Instant endTime) {
         Query findTrips = entityManager.createQuery("select trip from Trip trip where (trip.route_id=:routeId) " +
@@ -33,6 +49,13 @@ public class TripDAOImpl extends GenericDAOImpl<Trip, Integer> implements TripDA
         return findTrips.getResultList();
     }
 
+    /**
+     * Checks if trip available for user
+     *
+     * @param tripId tripId
+     * @param userName userName
+     * @return true if available, false otherwise
+     */
     public boolean isTripAvailableForUser(Integer tripId, String userName) {
         Query findUserInTrip = entityManager.createQuery("select ticket from Ticket ticket where ticket.user.username=:userName and ticket.trip.id=:tripId");
         findUserInTrip.setParameter("userName", userName);
@@ -43,6 +66,12 @@ public class TripDAOImpl extends GenericDAOImpl<Trip, Integer> implements TripDA
         return false;
     }
 
+    /**
+     * Cancels trip by tripId and returns its startTime
+     *
+     * @param tripId tripId
+     * @return cancelled trip startTime
+     */
     public Instant cancelTrip(Integer tripId) {
         Query setTripInactive = entityManager.createQuery("update Trip trip set trip.active=:bool where trip.id=:tripId");
         setTripInactive.setParameter("bool", false);
@@ -53,6 +82,13 @@ public class TripDAOImpl extends GenericDAOImpl<Trip, Integer> implements TripDA
         return (Instant) getTripStartTime.getSingleResult();
     }
 
+    /**
+     * Gets departure time for tripId and stationName
+     *
+     * @param tripId tripId
+     * @param stationFromName stationFromName
+     * @return arrival time
+     */
     public Instant getDepartureTime(Integer tripId, String stationFromName) {
         Query getDepartureTime = entityManager.createQuery("select schedule.time_departure from Schedule schedule where schedule.trip.id=:tripId and schedule.station.name=:stationFromName");
         getDepartureTime.setParameter("tripId", tripId);
@@ -73,6 +109,13 @@ public class TripDAOImpl extends GenericDAOImpl<Trip, Integer> implements TripDA
         }
     }
 
+    /**
+     * Gets arrival time for tripId and stationName
+     *
+     * @param tripId tripId
+     * @param stationToName stationToName
+     * @return arrival time
+     */
     public Instant getArrivalTime(Integer tripId, String stationToName) {
         Query getArrivalTime = entityManager.createQuery("select schedule.time_arrival from Schedule schedule where schedule.trip.id=:tripId and schedule.station.name=:stationToName");
         getArrivalTime.setParameter("tripId", tripId);
@@ -91,6 +134,13 @@ public class TripDAOImpl extends GenericDAOImpl<Trip, Integer> implements TripDA
         }
     }
 
+    /**
+     * Gets tickets by tripId and carriageNum
+     *
+     * @param tripId tripId
+     * @param carriageNum carriageNum
+     * @return list of tickets
+     */
     public List<Ticket> getTicketsByTripAndCarriageNum(Integer tripId, Integer carriageNum) {
         Query getTickets = entityManager.createQuery("select ticket from Ticket ticket where ticket.trip.id=:tripId and ticket.carriage_num=:carriageNum");
         getTickets.setParameter("tripId", tripId);
@@ -98,6 +148,12 @@ public class TripDAOImpl extends GenericDAOImpl<Trip, Integer> implements TripDA
         return (List<Ticket>) getTickets.getResultList();
     }
 
+    /**
+     * Finds and returns active trips by routeId
+     *
+     * @param routeId routeId
+     * @return list of activeTrips
+     */
     public List<Trip> findActiveTripsByRouteId(Integer routeId) {
         Query findActiveTrips = entityManager.createQuery("select trip from Trip trip where trip.route_id=:routeId and trip.active=:active");
         findActiveTrips.setParameter("routeId", routeId);

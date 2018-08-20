@@ -4,6 +4,9 @@ import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Station entity
+ */
 @Entity
 @Table(name = "station")
 @NamedQuery(name = "Station.findByName",

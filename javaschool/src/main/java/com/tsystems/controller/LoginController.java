@@ -11,14 +11,27 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.util.function.Predicate;
 
+/**
+ * Dispatches queries related to authentication
+ */
 @Controller
 public class LoginController {
 
+    /**
+     * Returns the login page
+     *
+     * @return login.jsp
+     */
     @GetMapping("/login")
-    public String loginPage(@ModelAttribute User user, BindingResult result) {
+    public String loginPage() {
         return "login";
     }
 
+    /**
+     * Returns page depends on user role
+     *
+     * @return if admin - returns admin/trip_list.jsp, user - redirects to index page
+     */
     @GetMapping("/login-forward")
     public String processLoginForwarding() {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

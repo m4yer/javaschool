@@ -14,6 +14,9 @@ import java.net.URL;
 import java.util.Map;
 import java.util.stream.Stream;
 
+/**
+ * Class for generating pdf report
+ */
 public class ITextPdfView extends AbstractITextPdfView {
 
     private static final BaseColor BRAND_PINK = new BaseColor(255, 90, 95, 60);

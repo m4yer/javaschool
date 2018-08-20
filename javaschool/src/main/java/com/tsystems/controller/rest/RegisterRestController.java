@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Dispatches the registration related rest-queries
+ */
 @RestController
 public class RegisterRestController {
     private UserService userService;
@@ -15,6 +18,12 @@ public class RegisterRestController {
         this.userService = userService;
     }
 
+    /**
+     * Checks if there is already registered specific username
+     *
+     * @param username username
+     * @return true if such username already registered, false otherwise
+     */
     @GetMapping("/register/is-allowed/username")
     public boolean isUsernameRegistered(@RequestParam("username") String username) {
         try {
@@ -24,6 +33,12 @@ public class RegisterRestController {
         }
     }
 
+    /**
+     * Checks if there is already registered specific email
+     *
+     * @param email email
+     * @return true if such email already registered, false otherwise
+     */
     @GetMapping("/register/is-allowed/email")
     public boolean isEmailRegistered(@RequestParam("email") String email) {
         String checkEmail = email.replaceAll("%40", "@");

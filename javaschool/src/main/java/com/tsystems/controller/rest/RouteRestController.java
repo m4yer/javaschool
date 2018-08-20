@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Dispatches the route related rest-queries
+ */
 @RestController
 public class RouteRestController {
     private RouteService routeService;
@@ -24,11 +27,22 @@ public class RouteRestController {
         this.stationService = stationService;
     }
 
+    /**
+     * Returns all routes (1st and last row from db)
+     *
+     * @return list of routes in JSON
+     */
     @GetMapping("/route/list/get")
     public String getAllRoutes() {
         return ConverterUtil.parseJson(routeService.getFirstAndLastRoutesRows());
     }
 
+    /**
+     * Returns the List<String> of route Stations
+     *
+     * @param id routeId
+     * @return list of route station names in JSON
+     */
     @GetMapping("/route/get/{id}")
     public String getRouteStationsById(@PathVariable("id") Integer id) {
         List<RouteDTO> routes = routeService.findRouteByRouteId(id);
@@ -37,6 +51,12 @@ public class RouteRestController {
         return ConverterUtil.parseJson(stations);
     }
 
+    /**
+     * Returns the distance of the specified routeId
+     *
+     * @param id routeId
+     * @return double distance in JSON
+     */
     @GetMapping("/route/distance/{id}")
     public double getRouteDistanceById(@PathVariable("id") Integer id) {
         return RoundUtil.round(routeService.getRouteDistanceById(id), 2);

@@ -11,6 +11,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.persistence.EntityNotFoundException;
 
+/**
+ * Dispatches queries related to routes
+ */
 @Controller
 @RequestMapping("/admin")
 public class RouteController {
@@ -27,12 +30,22 @@ public class RouteController {
 
     private static final Logger log = Logger.getLogger(RouteController.class);
 
+    /**
+     * Returns routes list page
+     *
+     * @return admin/route_list.jsp
+     */
     @GetMapping("/route/list")
     public String allRoutesPage() {
         return "admin/route_list";
     }
 
-
+    /**
+     * Returns add route page
+     *
+     * @param model model
+     * @return admin/route_add.jsp
+     */
     @GetMapping("/route/add")
     public ModelAndView addRoutePage(ModelAndView model) {
         model.addObject("stations", stationService.getAll());
@@ -41,6 +54,12 @@ public class RouteController {
         return model;
     }
 
+    /**
+     * Processes adding route and returns list of routes page
+     *
+     * @param stationSequence sequence of stations
+     * @return admin/route_list.jsp
+     */
     @PostMapping("/route/create")
     public String createRoute(@RequestParam("stationSequence") String stationSequence) {
         log.info("Creating new route. stationSequence: " + stationSequence);
@@ -48,6 +67,12 @@ public class RouteController {
         return "redirect:/admin/route/list";
     }
 
+    /**
+     * Returns edit route page for specified routeId
+     *
+     * @param routeId routeId
+     * @return admin/route_edit.jsp
+     */
     @GetMapping("/route/edit/{id}")
     public ModelAndView editRoutePage(@PathVariable("id") Integer routeId) {
         if (routeService.findRouteByRouteId(routeId) != null) {
@@ -63,6 +88,13 @@ public class RouteController {
         }
     }
 
+    /**
+     * Processes editing route and returns route list page
+     *
+     * @param routeId routeId
+     * @param stationSequence new sequence of stations
+     * @return admin/route_list.jsp
+     */
     @PostMapping("/route/edit")
     public String editRoutePost(
             @RequestParam("routeId") Integer routeId,
@@ -71,7 +103,12 @@ public class RouteController {
         return "redirect:/admin/route/list";
     }
 
-
+    /**
+     * Processes deleting of route and returns route list page
+     *
+     * @param routeId routeId
+     * @return admin/route_list.jsp
+     */
     @GetMapping("/route/delete/{id}")
     public ModelAndView deleteRouteAndReloadPage(@PathVariable("id") Integer routeId) {
         if (routeService.findRouteByRouteId(routeId) != null) {

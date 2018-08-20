@@ -29,6 +29,11 @@ public class RouteServiceImpl implements RouteService {
         this.stationDAO = stationDAO;
     }
 
+    /**
+     * Creates route with specified stationSequence
+     *
+     * @param stationSequence
+     */
     @Transactional
     public void createRoute(String stationSequence) {
         Integer newRouteId = routeDAO.getLastRouteId() + 1;
@@ -38,6 +43,12 @@ public class RouteServiceImpl implements RouteService {
         }
     }
 
+    /**
+     * Edits specified route with specified stationSequence
+     *
+     * @param routeId routeId
+     * @param stationSequence stationSequence
+     */
     @Transactional
     public void editRoute(Integer routeId, String stationSequence) {
         String[] split = stationSequence.split(",");
@@ -66,6 +77,11 @@ public class RouteServiceImpl implements RouteService {
 
     }
 
+    /**
+     * Get all first and last routeRows
+     *
+     * @return list of routes
+     */
     @Transactional
     public List<RouteDTO> getFirstAndLastRoutesRows() {
         List<Integer> singleRouteIds = routeDAO.getSingleRoutesId();
@@ -77,22 +93,43 @@ public class RouteServiceImpl implements RouteService {
         return Converter.getRouteDtos(resultRouteList);
     }
 
-
+    /**
+     * Finds and returns route by routeId
+     *
+     * @param id routeId
+     * @return list of route rows
+     */
     @Transactional
     public List<RouteDTO> findRouteByRouteId(Integer id) {
         return Converter.getRouteDtos(routeDAO.findRouteByRouteId(id));
     }
 
+    /**
+     * Returns route distance by id
+     *
+     * @param id routeId
+     * @return distance
+     */
     @Transactional
     public double getRouteDistanceById(Integer id) {
         return routeDAO.getRouteDistanceByRouteId(id);
     }
 
+    /**
+     * Deletes route by it's id
+     *
+     * @param id routeId
+     */
     @Transactional
     public void deleteRoute(Integer id) {
         routeDAO.deleteRoute(id);
     }
 
+    /**
+     * Returns last routeId
+     *
+     * @return last route Id
+     */
     @Transactional
     public Integer getLastRouteId() {
         return routeDAO.getLastRouteId();

@@ -47,23 +47,34 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     private static final Logger log = Logger.getLogger(ScheduleServiceImpl.class);
 
+    /**
+     * Returns schedule by id
+     *
+     * @param id scheduleId
+     * @return schedule
+     */
     @Transactional
     public Schedule findById(Integer id) {
         return scheduleDAO.findById(id);
     }
 
+    /**
+     * Returns all schedules
+     *
+     * @return list of schedules
+     */
     @Transactional
     public List<Schedule> getAll() {
         return scheduleDAO.getAll();
     }
 
-    @Transactional
-    public List<ScheduleDTO> getScheduleByStationNameForToday(String stationName) {
-        Station station = stationDAO.findByName(stationName);
-        List<Schedule> schedules = scheduleDAO.getScheduleByStationIdForToday(station.getId(), null);
-        return Converter.getScheduleDtos(schedules);
-    }
-
+    /**
+     * Returns schedule of specified station for specified date
+     *
+     * @param stationName stationName
+     * @param date date
+     * @return list of schedules
+     */
     @Transactional
     public List<ScheduleDTO> getScheduleByStationNameForDate(String stationName, String date) {
         Station station = stationDAO.findByName(stationName);
@@ -86,6 +97,15 @@ public class ScheduleServiceImpl implements ScheduleService {
         return resultScheduleDtoList;
     }
 
+    /**
+     * Method for adding schedule for just created trip
+     *
+     * @param tripId tripId
+     * @param routeId routeId
+     * @param stationStopTimes stationStopTimes
+     * @param tripStartTime tripStartTime
+     * @param trainId trainId
+     */
     @Transactional
     public void addScheduleForTrip(Integer tripId, Integer routeId, String stationStopTimes, String tripStartTime, Integer trainId) {
         log.info("Adding schedule for new just created trip:");
@@ -166,11 +186,23 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     }
 
+    /**
+     * Method for getting schedule by tripId
+     *
+     * @param tripId tripId
+     * @return schedule
+     */
     @Transactional
     public List<ScheduleDTO> getSchedulesByTripId(Integer tripId) {
         return Converter.getScheduleDtos(scheduleDAO.getSchedulesByTripId(tripId));
     }
 
+    /**
+     * Method for managing lateness for specified scheduleId
+     *
+     * @param scheduleId scheduleId
+     * @param time_late time_late
+     */
     @Transactional
     public void editLateStationSchedule(Integer scheduleId, String time_late) {
         LocalTime timeLate = LocalTime.parse(time_late, DateTimeFormatter.ofPattern("HH:mm"));

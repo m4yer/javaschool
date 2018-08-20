@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Dispatches the station related rest-queries
+ */
 @RestController
 public class StationRestController {
     private StationService stationService;
@@ -23,6 +26,11 @@ public class StationRestController {
 
     private static final Logger log = Logger.getLogger(StationRestController.class);
 
+    /**
+     * Returns list string of all station names
+     *
+     * @return list of all station names in JSON
+     */
     @GetMapping("/station/get/list/title")
     public String getAllStations() {
         log.info("REST: Getting all stations [names]");
@@ -32,6 +40,12 @@ public class StationRestController {
         return ConverterUtil.parseJson(stationNames);
     }
 
+    /**
+     * Return list of all stations for specified routeId
+     *
+     * @param routeId routeId
+     * @return list of all stations in JSON
+     */
     @GetMapping("/route/get/station/list/")
     public String getAllRouteStations(@RequestParam("routeId") Integer routeId) {
         log.info("REST: Getting all stations [StationDTO] for Route with ID: " + routeId);

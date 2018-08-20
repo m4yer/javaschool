@@ -5,6 +5,9 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Trip entity
+ */
 @Entity
 @Table(name = "trip")
 public class Trip {

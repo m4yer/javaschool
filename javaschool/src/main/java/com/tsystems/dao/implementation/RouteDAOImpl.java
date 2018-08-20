@@ -12,16 +12,30 @@ import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * An implementation of RouteDAO api
+ */
 @Repository
 public class RouteDAOImpl extends GenericDAOImpl<Route, Integer> implements RouteDAO {
 
     private static final Logger log = Logger.getLogger(RouteDAOImpl.class);
 
+    /**
+     * Get all route ids
+     *
+     * @return integer list of all route ids
+     */
     public List<Integer> getSingleRoutesId() {
         Query query = entityManager.createQuery("select distinct second.route_id from Route second order by second.route_id asc");
         return query.getResultList();
     }
 
+    /**
+     * Gets first and last route rows for specified routeId
+     *
+     * @param routeId routeId
+     * @return list of routes
+     */
     @Override
     public List<Route> getFirstAndLastRouteRows(Integer routeId) {
         List<Route> resultList = new ArrayList<>();
@@ -37,6 +51,12 @@ public class RouteDAOImpl extends GenericDAOImpl<Route, Integer> implements Rout
         return resultList;
     }
 
+    /**
+     * Finds and gets route by routeId
+     *
+     * @param id routeId
+     * @return returns list of route rows
+     */
     @Override
     public List<Route> findRouteByRouteId(Integer id) {
         Query query = entityManager.createQuery("select route from Route route where route.route_id=:id order by route.station_order asc");
@@ -44,6 +64,12 @@ public class RouteDAOImpl extends GenericDAOImpl<Route, Integer> implements Rout
         return (query.getResultList().size() > 0) ? (List<Route>) query.getResultList() : null;
     }
 
+    /**
+     * Gets route distance by it's id
+     *
+     * @param id routeId
+     * @return distance
+     */
     public double getRouteDistanceByRouteId(Integer id) {
         double result = 0;
         List<Route> routes = findRouteByRouteId(id);
@@ -53,6 +79,11 @@ public class RouteDAOImpl extends GenericDAOImpl<Route, Integer> implements Rout
         return result;
     }
 
+    /**
+     * Deletes route by id
+     *
+     * @param id routeId
+     */
     public void deleteRoute(Integer id) {
         List<Route> routes = this.findRouteByRouteId(id);
         for (Route routeToDelete : routes) {
@@ -60,6 +91,13 @@ public class RouteDAOImpl extends GenericDAOImpl<Route, Integer> implements Rout
         }
     }
 
+    /**
+     * Updates route's station order by routeId
+     *
+     * @param routeId routeId
+     * @param station station
+     * @param stationOrder stationOrder
+     */
     public void updateRouteRow(Integer routeId, Station station, Integer stationOrder) {
         log.info("Updating route row. route_id: " + routeId + ", station: " + station.getName() + ", stationOrder: " + stationOrder);
         Query updateRouteRow = entityManager.createQuery("update Route route set route.station_order=:stationOrder where route.route_id=:routeId and route.station.id=:stationId");
@@ -69,6 +107,11 @@ public class RouteDAOImpl extends GenericDAOImpl<Route, Integer> implements Rout
         updateRouteRow.executeUpdate();
     }
 
+    /**
+     * Gets last routeId
+     *
+     * @return last routeId
+     */
     public Integer getLastRouteId() {
         Query findLastId = entityManager.createQuery("select route.route_id from Route route order by route.route_id desc");
         return (Integer) findLastId.getResultList().get(0);

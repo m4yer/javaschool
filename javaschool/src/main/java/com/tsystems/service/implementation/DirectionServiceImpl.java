@@ -27,6 +27,12 @@ public class DirectionServiceImpl implements DirectionService {
         this.routeDAO = routeDAO;
     }
 
+    /**
+     * Gets departure station names of specified station
+     *
+     * @param stationName stationName
+     * @return list string of departure stations
+     */
     @Transactional
     public List<String> getDepartureStationNames(String stationName) {
         List<Station> stations = directionDAO.getDepartures(stationName);
@@ -37,6 +43,12 @@ public class DirectionServiceImpl implements DirectionService {
         return stationNames;
     }
 
+    /**
+     * Gets departure station coordinates of specified station
+     *
+     * @param stationName stationName
+     * @return list coordinates of departures from station
+     */
     @Transactional
     public List<CoordinateDTO> getDepartureStationCoordinates(String stationName) {
         List<Station> stations = directionDAO.getDepartures(stationName);
@@ -47,6 +59,13 @@ public class DirectionServiceImpl implements DirectionService {
         return coordinates;
     }
 
+    /**
+     * Method for removing direction between two stations
+     *
+     * @param stationFromName stationFromName
+     * @param stationToName stationToName
+     * @return true if direction was removed, false otherwise
+     */
     @Transactional
     public boolean removeDirectionBetweenStations(String stationFromName, String stationToName) {
         List<Integer> allRouteIds = routeDAO.getSingleRoutesId();
@@ -69,6 +88,12 @@ public class DirectionServiceImpl implements DirectionService {
         return true;
     }
 
+    /**
+     * Method for adding direction between two stations
+     *
+     * @param stationFromName stationFromName
+     * @param stationToName stationToName
+     */
     @Transactional
     public void addDirectionBetweenStations(String stationFromName, String stationToName) {
         Station stationFrom = stationDAO.findByName(stationFromName);
