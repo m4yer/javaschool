@@ -1,10 +1,20 @@
 package com.tsystems.utils;
 
+/**
+ * Performs rounding operations
+ */
 public class RoundUtil {
 
     private RoundUtil() {
     }
 
+    /**
+     * Returns rounded double by places
+     *
+     * @param value value to round
+     * @param places places
+     * @return rounded double
+     */
     public static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
 

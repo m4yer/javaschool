@@ -52,21 +52,48 @@ public class TripServiceImpl implements TripService {
 
     private static final Logger log = Logger.getLogger(TripServiceImpl.class);
 
+    /**
+     * Finds and returns trip by id
+     *
+     * @param id tripId
+     * @return trip
+     */
     @Transactional
     public TripDTO findById(Integer id) {
         return Converter.getTripDto(tripDAO.findById(id));
     }
 
+    /**
+     * Returns all trips
+     *
+     * @return list of trips
+     */
     @Override
     public List<TripDTO> getAll() {
         return Converter.getTripDtos(tripDAO.getAll());
     }
 
+    /**
+     * For checking if user can buy ticket for this trip
+     *
+     * @param tripId tripId
+     * @param userName userName
+     * @return true if he can, false otherwise
+     */
     @Transactional
     public boolean isTripAvailableForUser(Integer tripId, String userName) {
         return tripDAO.isTripAvailableForUser(tripId, userName);
     }
 
+    /**
+     * Method for finding valid trips by specified parameters
+     *
+     * @param stationFromName stationFromName
+     * @param stationToName stationToName
+     * @param startSearchInterval startSearchInterval
+     * @param endSearchInterval endSearchInterval
+     * @return list of valid trips
+     */
     @Transactional
     public List<TripDTO> findValidTrips(String stationFromName,
                                         String stationToName,
@@ -120,6 +147,15 @@ public class TripServiceImpl implements TripService {
         return validTripDtos;
     }
 
+    /**
+     * Method for finding valid partial-trips by specified parameters
+     *
+     * @param stationFromName stationFromName
+     * @param stationToName stationToName
+     * @param startSearchInterval startSearchInterval
+     * @param endSearchInterval endSearchInterval
+     * @return list of valid partial-trips
+     */
     @Transactional
     public Map<String, String> findValidPartialTrips(String stationFromName, String stationToName, String startSearchInterval, String endSearchInterval) {
         List<Integer> allRouteIds = routeDAO.getSingleRoutesId();
@@ -253,6 +289,11 @@ public class TripServiceImpl implements TripService {
         return tripDAO.getLastId();
     }
 
+    /**
+     * For cancelling trip by id
+     *
+     * @param tripId tripId
+     */
     @Transactional
     public void cancelTrip(Integer tripId) {
         Trip currentTrip = tripDAO.findById(tripId);
@@ -291,16 +332,38 @@ public class TripServiceImpl implements TripService {
         }
     }
 
+    /**
+     * For getting departure time by tripId and stationFrom
+     *
+     * @param tripId tripId
+     * @param stationFromName stationFromName
+     * @return departure time
+     */
     @Transactional
     public Instant getDepartureTime(Integer tripId, String stationFromName) {
         return tripDAO.getDepartureTime(tripId, stationFromName);
     }
 
+    /**
+     * For getting arrival time by tripId and stationTo
+     *
+     * @param tripId tripId
+     * @param stationToName stationToName
+     * @return arrival time
+     */
     @Transactional
     public Instant getArrivalTime(Integer tripId, String stationToName) {
         return tripDAO.getArrivalTime(tripId, stationToName);
     }
 
+    /**
+     * For getting [departure time, arrival time] specified by trip id, station from and station to
+     *
+     * @param tripId tripId
+     * @param stationFromName stationFromName
+     * @param stationToName stationToName
+     * @return list: [departure time, arrival time]
+     */
     @Transactional
     public List<Instant> getPartialTime(Integer tripId, String stationFromName, String stationToName) {
         List<Instant> resultList = new ArrayList<>();
@@ -309,11 +372,24 @@ public class TripServiceImpl implements TripService {
         return resultList;
     }
 
+    /**
+     * For getting all tickets by tripId and carriageNum
+     *
+     * @param tripId tripId
+     * @param carriageNum carriageNum
+     * @return list of tickets
+     */
     @Transactional
     public List<TicketDTO> getTicketsByTripAndCarriageNum(Integer tripId, Integer carriageNum) {
         return Converter.getTicketDtos(tripDAO.getTicketsByTripAndCarriageNum(tripId, carriageNum));
     }
 
+    /**
+     * For getting all active trips by routeId
+     *
+     * @param routeId routeId
+     * @return list of active trips
+     */
     @Transactional
     public List<TripDTO> findActiveTripsByRouteId(Integer routeId) {
         return Converter.getTripDtos(tripDAO.findActiveTripsByRouteId(routeId));

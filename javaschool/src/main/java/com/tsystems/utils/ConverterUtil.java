@@ -17,6 +17,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Util class for processing some converter operations
+ *
+ */
 public class ConverterUtil {
     private static final Logger log = Logger.getLogger(ConverterUtil.class);
     private static ObjectMapper objectMapper = new ObjectMapper();
@@ -24,6 +28,12 @@ public class ConverterUtil {
     private ConverterUtil() {
     }
 
+    /**
+     * Converts string to Instant
+     *
+     * @param timestamp timestamp
+     * @return parsed Instant
+     */
     public static Instant parseInstant(String timestamp) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm");
         TemporalAccessor temporalAccessor = formatter.parse(timestamp);
@@ -32,6 +42,12 @@ public class ConverterUtil {
         return Instant.from(zonedDateTime);
     }
 
+    /**
+     * Converts instant to formatted string
+     *
+     * @param input - instant which needs to be parsed
+     * @return formatted string
+     */
     public static String getFormattedString(Instant input) {
         DateTimeFormatter formatter =
                 DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)
@@ -40,6 +56,12 @@ public class ConverterUtil {
         return formatter.format(input);
     }
 
+    /**
+     * Parse list of milliseconds to list<long>
+     *
+     * @param hoursAndMinutes hoursAndMinutes
+     * @return list long of milliseconds
+     */
     public static List<Long> parseMilliseconds(List<String> hoursAndMinutes) {
         List<Long> resultMillisecondsList = new ArrayList<>();
         for (String timeElement : hoursAndMinutes) {
@@ -52,6 +74,12 @@ public class ConverterUtil {
         return resultMillisecondsList;
     }
 
+    /**
+     * Converts list to json
+     *
+     * @param inputList inputList
+     * @return string json
+     */
     public static String parseJson(List<?> inputList) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {

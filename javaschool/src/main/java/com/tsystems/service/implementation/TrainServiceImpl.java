@@ -20,26 +20,53 @@ public class TrainServiceImpl implements TrainService {
         this.trainDAO = trainDAO;
     }
 
+    /**
+     * Adds new train
+     *
+     * @param train train
+     */
     @Transactional
     public void addTrain(Train train) {
         trainDAO.add(train);
     }
 
+    /**
+     * Finds and return train by id
+     *
+     * @param id trainId
+     * @return train found by id
+     */
     @Transactional
     public Train findById(Integer id) {
         return trainDAO.findById(id);
     }
 
+    /**
+     * Deletes train
+     *
+     * @param train train
+     */
     @Transactional
     public void deleteTrain(Train train) {
         trainDAO.delete(train);
     }
 
+    /**
+     * Method for getting all trains
+     *
+     * @return list of trains
+     */
     @Transactional
     public List<TrainDTO> getAll() {
         return Converter.getTrainDtos(trainDAO.getAll());
     }
 
+    /**
+     * Method for getting train speed by id
+     *
+     * @param id trainId
+     * @return train speed
+     */
     @Transactional
     public double getTrainSpeedById(Integer id) {
         return trainDAO.getTrainSpeedById(id);

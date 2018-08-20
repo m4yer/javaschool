@@ -30,6 +30,12 @@ public class UserServiceImpl implements UserService {
 
     private static final Logger log = Logger.getLogger(UserServiceImpl.class);
 
+    /**
+     * Adds new user
+     *
+     * @param user user
+     * @param birthday birthday
+     */
     @Transactional
     public void addUser(User user, String birthday) {
         SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
@@ -54,21 +60,44 @@ public class UserServiceImpl implements UserService {
         log.info("User was successfully registered: " + user.toString());
     }
 
+    /**
+     * Finds and returns user by username
+     *
+     * @param username username
+     * @return user found by username
+     */
     @Transactional
     public UserDTO findByUsername(String username) {
         return Converter.getUserDto(userDAO.findByUsername(username));
     }
 
+    /**
+     * Finds and returns user by email
+     *
+     * @param email email
+     * @return user found by email
+     */
     @Transactional
     public UserDTO findByEmail(String email) {
         return Converter.getUserDto(userDAO.findByEmail(email));
     }
 
+    /**
+     * Finds and returns user by id
+     *
+     * @param id id
+     * @return user found by id
+     */
     @Transactional
     public UserDTO findById(Integer id) {
         return Converter.getUserDto(userDAO.findById(id));
     }
 
+    /**
+     * Returns all users
+     *
+     * @return list of users
+     */
     @Transactional
     public List<UserDTO> getAllUsers() {
         return Converter.getUserDtos(userDAO.getAll());

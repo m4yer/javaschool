@@ -11,6 +11,13 @@ import javax.servlet.http.HttpServletRequest;
 public class SecurityServiceImpl implements SecurityService {
     private static final Logger log = Logger.getLogger(SecurityServiceImpl.class);
 
+    /**
+     * Method for auto-logging
+     *
+     * @param request request
+     * @param username username
+     * @param password password
+     */
     @Override
     public void autoLogin(HttpServletRequest request, String username, String password) {
         try {

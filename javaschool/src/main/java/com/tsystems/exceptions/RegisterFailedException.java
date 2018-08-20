@@ -1,5 +1,8 @@
 package com.tsystems.exceptions;
 
+/**
+ * Exceptions occurs when something goes wrong while registration
+ */
 public class RegisterFailedException extends RuntimeException {
 
 

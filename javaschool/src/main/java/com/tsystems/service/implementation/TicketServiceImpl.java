@@ -36,16 +36,36 @@ public class TicketServiceImpl implements TicketService {
         this.smsAero = smsAero;
     }
 
+    /**
+     * Finds and returns ticket by id
+     *
+     * @param id ticketId
+     * @return ticket
+     */
     @Transactional
     public TicketDTO findById(Integer id) {
         return Converter.getTicketDto(ticketDAO.findById(id));
     }
 
+    /**
+     * Returns all tickets
+     *
+     * @return list of tickets
+     */
     @Transactional
     public List<Ticket> getAll() {
         return ticketDAO.getAll();
     }
 
+    /**
+     * Method for getting all booked tickets by tripId and carriageNum
+     *
+     * @param tripId tripId
+     * @param stationFromName stationFromName
+     * @param stationToName stationToName
+     * @param carriageNum carriageNum
+     * @return list of booked tickets
+     */
     @Transactional
     public List<TicketDTO> getBookedTicketsByTripAndCarriageNum(Integer tripId, String stationFromName, String stationToName, Integer carriageNum) {
         Trip trip = tripDAO.findById(tripId);
@@ -72,6 +92,17 @@ public class TicketServiceImpl implements TicketService {
         return Converter.getTicketDtos(ticketDAO.getBookedTicketsByTripAndCarriageNum(tripId, stationFromName, stationsInterval, carriageNum));
     }
 
+    /**
+     * Method for processing buying tickets and returning result of buying
+     *
+     * @param tripId tripId
+     * @param userName userName
+     * @param seatId seatId
+     * @param stationFromName stationFromName
+     * @param stationToName stationToName
+     * @param carriageNum carriageNum
+     * @return result of buying
+     */
     @Transactional
     public String buyTicket(Integer tripId, String userName, Integer seatId, String stationFromName, String stationToName, Integer carriageNum) {
         Trip chosenTrip = tripDAO.findById(tripId);
@@ -108,6 +139,14 @@ public class TicketServiceImpl implements TicketService {
         }
     }
 
+    /**
+     * Method for getting amount of booked tickets for trip
+     *
+     * @param tripId tripId
+     * @param stationFromName stationFromName
+     * @param stationToName stationToName
+     * @return map of <carriageNum, amount of booked tickets>
+     */
     @Transactional
     public Map<Integer, Integer> getBookedTicketsAmountForTrip(Integer tripId, String stationFromName, String stationToName) {
         Trip trip = tripDAO.findById(tripId);
@@ -122,11 +161,24 @@ public class TicketServiceImpl implements TicketService {
         return resultMap;
     }
 
+    /**
+     * Returns all user tickets
+     *
+     * @param userId userId
+     * @return list of user tickets
+     */
     @Transactional
     public List<TicketDTO> getUserTicketList(Integer userId) {
         return Converter.getTicketDtos(ticketDAO.getUserTicketList(userId));
     }
 
+    /**
+     * Checks if ticket belongs to user
+     *
+     * @param ticketId ticketId
+     * @param userId userId
+     * @return true if belongs, false otherwise
+     */
     @Transactional
     public boolean isTripBelongsUser(Integer ticketId, Integer userId) {
         Ticket ticket = ticketDAO.findById(ticketId);

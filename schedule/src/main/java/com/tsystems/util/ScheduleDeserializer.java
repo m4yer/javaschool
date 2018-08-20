@@ -15,12 +15,24 @@ import java.time.Instant;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Performs deserialization scheduleDTO objects
+ */
 public class ScheduleDeserializer extends StdDeserializer<ScheduleDTO> {
 
     public ScheduleDeserializer() {
         super(ScheduleDTO.class);
     }
 
+    /**
+     * Returns deserialized ScheduleDTO object from from json string
+     *
+     * @param jsonParser jsonParser
+     * @param deserializationContext deserializationContext
+     * @return ScheduleDTO object
+     * @throws IOException
+     * @throws JsonProcessingException
+     */
     public ScheduleDTO deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
 

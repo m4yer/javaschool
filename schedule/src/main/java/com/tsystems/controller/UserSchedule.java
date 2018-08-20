@@ -25,6 +25,9 @@ import java.time.format.FormatStyle;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Bean for storing user schedule
+ */
 @Named("userSchedule")
 @SessionScoped
 public class UserSchedule implements Serializable {
@@ -38,6 +41,11 @@ public class UserSchedule implements Serializable {
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final Logger log = Logger.getLogger(UserSchedule.class);
 
+    /**
+     * Invoked immediately after creating bean
+     * Creating message topic consumer which send instructions to frontend when schedule was updated on the first application
+     *
+     */
     @PostConstruct
     public void onInit() {
         log.info("Session bean was created");

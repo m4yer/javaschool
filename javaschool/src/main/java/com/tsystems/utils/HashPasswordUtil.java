@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * Performs password's hash operations
+ */
 @Service
 public class HashPasswordUtil {
     private static final Logger log = Logger.getLogger(HashPasswordUtil.class);
@@ -13,6 +16,12 @@ public class HashPasswordUtil {
     private HashPasswordUtil() {
     }
 
+    /**
+     * Returns hash of password
+     *
+     * @param password password
+     * @return string hash
+     */
     public static String getHash(String password) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
