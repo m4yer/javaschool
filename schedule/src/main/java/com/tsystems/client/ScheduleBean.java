@@ -14,11 +14,13 @@ import javax.inject.Named;
 import javax.jms.*;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+/**
+ * Central bean that store schedule
+ */
 @Named("scheduleBean")
 @ApplicationScoped
 public class ScheduleBean {
@@ -31,7 +33,11 @@ public class ScheduleBean {
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final Logger log = Logger.getLogger(ScheduleBean.class);
 
-
+    /**
+     * Invoked immediately after creating bean
+     * Creating message topic consumer which send instructions to frontend when schedule was updated on the first application
+     *
+     */
     @PostConstruct
     public void init() {
         SimpleModule module = new SimpleModule();
@@ -86,6 +92,12 @@ public class ScheduleBean {
         }
     }
 
+    /**
+     * Method invoked every time when there is new message was consumed by bean message consumer
+     * Adds new schedule to central map
+     *
+     * @param newScheduleDto
+     */
     private void onNewSchedule(ScheduleDTO newScheduleDto) {
         synchronized (schedules) {
             log.info("CENTRAL BEAN: invoked onNewSchedule()");
@@ -118,6 +130,12 @@ public class ScheduleBean {
         }
     }
 
+    /**
+     * Invokes when there is new scheduleDTO came in activeMq
+     *
+     * @param key
+     * @param scheduleList
+     */
     private void setScheduleListForMap(String key, List<ScheduleDTO> scheduleList) {
         log.info("setScheduleListForMap() invoked. Schedule was updated.");
         schedules.remove(key);
