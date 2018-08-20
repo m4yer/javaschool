@@ -166,6 +166,7 @@
 <script>
     $("#birthday").dateDropdowns({
         submitFormat: "mm/dd/yyyy",
+        minAge: 13,
         required: true
     });
     $("#birthday").prop('type', 'text');

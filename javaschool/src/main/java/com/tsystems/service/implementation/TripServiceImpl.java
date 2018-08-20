@@ -194,9 +194,13 @@ public class TripServiceImpl implements TripService {
                 List<Station> routeStationsB = new ArrayList<>();
                 routeDAO.findRouteByRouteId(routeIdB).forEach(routeB -> routeStationsB.add(routeB.getStation()));
 
+
                 routeStationsA.forEach(stationA -> {
 
+
                     routeStationsB.forEach(stationB -> {
+
+
                         if (stationA.getName().equals(stationB.getName())) {
                             int stationFromIndex = 0;
                             for (int i = 0; i < routeStationsA.size(); i++) {
@@ -213,8 +217,12 @@ public class TripServiceImpl implements TripService {
                                 }
                             }
                             if ((routeStationsA.indexOf(stationA) > stationFromIndex) && (routeStationsB.indexOf(stationB) < stationToIndex)) {
-                                stationTransfers.add(stationA.getName());
-                                routeSequence.add(routeId + "-" + routeIdB);
+                                String routeSequenceTemp = routeId + "-" + routeIdB;
+                                if (!routeSequence.contains(routeSequenceTemp)) {
+                                    routeSequence.add(routeId + "-" + routeIdB);
+                                    stationTransfers.add(stationA.getName());
+                                }
+
                             }
                         }
                     });
