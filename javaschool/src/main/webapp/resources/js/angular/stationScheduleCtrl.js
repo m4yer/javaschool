@@ -28,6 +28,7 @@ app.controller("stationScheduleCtrl", function($scope, $http, DTOptionsBuilder) 
     });
 
     $scope.getSchedule = function () {
+        pageLoading();
         $scope.userWasFindingSchedule = true;
         $http({
             url: "/schedule/get-by-date/",
@@ -39,6 +40,10 @@ app.controller("stationScheduleCtrl", function($scope, $http, DTOptionsBuilder) 
         }).then(function success(response) {
             console.log('$scope.schedules: ', response.data);
             $scope.schedules = response.data;
+            pageLoaded();
+        }, function (reason) {
+            $scope.schedules = [];
+            pageLoaded();
         });
     };
 

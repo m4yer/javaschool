@@ -75,20 +75,20 @@
         }
 
         .brand-form-modal-content {
-            width: 40%;
+            width: 62%;
             margin-top: 5%;
         }
 
         @media (max-width: 920px) {
             .brand-form-modal-content {
-                width: 52%;
+                width: 74%;
                 margin-top: 8%;
             }
         }
 
         @media (max-width: 708px) {
             .brand-form-modal-content {
-                width: 68%;
+                width: 90%;
                 margin-top: 8%;
             }
         }
@@ -99,7 +99,7 @@
 
 <div id="loader"></div>
 
-<div id="pageContent" class="animate-bottom" ng-app="stationScheduleApp" ng-controller="stationScheduleCtrl">
+<div id="pageContent" ng-app="stationScheduleApp" ng-controller="stationScheduleCtrl">
 
     <%@ include file="../navigation.jsp" %>
     <sec:authorize access="hasRole('ROLE_ADMIN')">
@@ -122,8 +122,12 @@
                                                    border-top-right-radius: 0px;
                                                    border-bottom-right-radius: 0px;" id="stationNameInput"/>
                                         </span>
-                                        <input type="text" placeholder="Date" id="datepicker" class="input-date" ng-model="searchDate" autocomplete="off" ng-click="dateWasClicked()" readonly/>
-                                        <input type="button" id="searchScheduleButton" class="brand-pink-button" value="Browse schedule" ng-disabled="!stationWasTyped || !dateClicked" ng-click="getSchedule()"/>
+                                        <input type="text" placeholder="Date" id="datepicker" class="input-date"
+                                               ng-model="searchDate" autocomplete="off" ng-click="dateWasClicked()"
+                                               readonly/>
+                                        <input type="button" id="searchScheduleButton" class="brand-pink-button"
+                                               value="Browse schedule" ng-disabled="!stationWasTyped || !dateClicked"
+                                               ng-click="getSchedule()"/>
                                     </div>
                                 </td>
                             </tr>
@@ -157,7 +161,7 @@
                         <td>{{ schedule.tripDto.trainDto.id }}</td>
                         <td>
                             <button style="font-size: 12px; padding: 4px 12px;" class="brand-pink-button"
-                                    id="trip-{{ schedule.tripDto.id }}" ng-click="showRoute($event)">ROUTE
+                                    id="trip-{{ schedule.tripDto.id }}" ng-click="showRoute($event)">TRIP DETAILS
                             </button>
                         </td>
                         <td>
@@ -181,17 +185,27 @@
         <div class="brand-form-modal-content">
             <div class="brand-form-modal-header" style="margin-bottom: 12px;">
                 <span class="close">&times;</span>
-                <span class="caption" style="margin-left: 32px;">Route stations</span>
+                <span class="caption" style="margin-left: 32px;">Trip details</span>
             </div>
             <div class="brand-form-modal-body">
-                <span ng-repeat="item in routeSchedule" class="span-wrapper">
-                    <span class="span-number">{{ $index + 1}}</span><span class="span-station">{{ item.stationDto.name }}</span><span ng-if="!item.time_arrival.epochSecond" class="span-time">-</span><span ng-if="item.time_arrival.epochSecond" class="span-time">{{ item.time_arrival.epochSecond * 1000 | date:'dd/MM/yyyy HH:mm' }}</span>
+                <span class="span-wrapper">
+                    <span class="span-number">#</span><span class="span-station">Station</span><span
+                        ng-if="!schedule.time_arrival.epochSecond" class="span-time">Arrival</span><span
+                        ng-if="!schedule.time_departure.epochSecond" class="span-time">Departure</span>
+                </span>
+
+                <span ng-repeat="schedule in routeSchedule" class="span-wrapper">
+                    <span class="span-number">{{ $index + 1}}</span><span class="span-station">{{ schedule.stationDto.name }}</span><span
+                        ng-if="!schedule.time_arrival.epochSecond" class="span-time">-</span><span
+                        ng-if="schedule.time_arrival.epochSecond" class="span-time">{{ schedule.time_arrival.epochSecond * 1000 | date:'dd/MM/yyyy HH:mm' }}</span><span
+                        ng-if="!schedule.time_departure.epochSecond" class="span-time">-</span><span
+                        ng-if="schedule.time_departure.epochSecond" class="span-time">{{ schedule.time_departure.epochSecond * 1000 | date:'dd/MM/yyyy HH:mm' }}</span>
                 </span>
             </div>
         </div>
     </div>
 
-<!-- div "pageContent" end -->
+    <!-- div "pageContent" end -->
 </div>
 
 <script src="<c:url value="/resources/js/jquery-3.3.1.min.js"/>"></script>
@@ -203,9 +217,9 @@
 <script src="<c:url value="/resources/js/angular/stationScheduleApp.js" />"></script>
 <script src="<c:url value="/resources/js/angular/stationScheduleCtrl.js" />"></script>
 <script>
-$(function () {
-    pageLoaded();
-});
+    $(function () {
+        pageLoaded();
+    });
 </script>
 </body>
 </html>

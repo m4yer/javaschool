@@ -69,20 +69,20 @@
         }
 
         .brand-form-modal-content {
-            width: 40%;
+            width: 62%;
             margin-top: 5%;
         }
 
         @media (max-width: 920px) {
             .brand-form-modal-content {
-                width: 52%;
+                width: 74%;
                 margin-top: 8%;
             }
         }
 
         @media (max-width: 708px) {
             .brand-form-modal-content {
-                width: 68%;
+                width: 90%;
                 margin-top: 8%;
             }
         }
@@ -221,11 +221,21 @@
                 <span class="caption" style="margin-left: 32px;">Trip details</span>
             </div>
             <div class="brand-form-modal-body">
+
+                <span class="span-wrapper">
+                    <span class="span-number">#</span><span class="span-station">Station</span><span
+                    ng-if="!schedule.time_arrival.epochSecond" class="span-time">Arrival</span><span
+                    ng-if="!schedule.time_departure.epochSecond" class="span-time">Departure</span>
+                </span>
+
                 <span ng-repeat="schedule in schedules" class="span-wrapper">
                     <span class="span-number">{{ $index + 1}}</span><span class="span-station">{{ schedule.stationDto.name }}</span><span
                         ng-if="!schedule.time_arrival.epochSecond" class="span-time">-</span><span
-                        ng-if="schedule.time_arrival.epochSecond" class="span-time">{{ schedule.time_arrival.epochSecond * 1000 | date:'dd/MM/yyyy HH:mm' }}</span>
+                        ng-if="schedule.time_arrival.epochSecond" class="span-time">{{ schedule.time_arrival.epochSecond * 1000 | date:'dd/MM/yyyy HH:mm' }}</span><span
+                        ng-if="!schedule.time_departure.epochSecond" class="span-time">-</span><span
+                        ng-if="schedule.time_departure.epochSecond" class="span-time">{{ schedule.time_departure.epochSecond * 1000 | date:'dd/MM/yyyy HH:mm' }}</span>
                 </span>
+
             </div>
         </div>
 
