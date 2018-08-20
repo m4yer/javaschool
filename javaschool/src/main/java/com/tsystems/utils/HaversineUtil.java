@@ -4,11 +4,10 @@ import com.tsystems.dto.StationDTO;
 
 public class HaversineUtil {
     private static final int PI_VALUE_IN_DEGREES = 180;
+    private final static int EARTH_RADIUS = 6371;
 
     private HaversineUtil() {
     }
-
-    private final static int EARTH_RADIUS = 6371; // Radius of the Earth
 
     public static double calculateDistanceInKm(StationDTO startPoint, StationDTO endPoint) {
         Double latitureStartPoint = startPoint.getLatitude();

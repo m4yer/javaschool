@@ -204,7 +204,7 @@
 </script>
 <script>
     $('#datepicker').datepicker({
-        startDate: '+1d'
+        startDate: 'now'
     });
     $('.clockpicker').clockpicker();
 

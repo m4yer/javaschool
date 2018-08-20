@@ -24,16 +24,16 @@
                     </div>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger nav-link-roads" href="#"><i class="fa fa-road"></i> Roads</a>
+                    <div class="dropdown-content">
+                        <a href="/admin/directions/map">Manage</a>
+                    </div>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link js-scroll-trigger nav-link-stations" href="#"><i class="fa fa-map-marker"></i> Stations</a>
                     <div class="dropdown-content">
                         <a href="/admin/station/list">Browse</a>
                         <a href="/admin/station/add">Add</a>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link js-scroll-trigger nav-link-roads" href="#"><i class="fa fa-road"></i> Roads</a>
-                    <div class="dropdown-content">
-                        <a href="/admin/directions/map">Manage</a>
                     </div>
                 </li>
                 <li class="nav-item">

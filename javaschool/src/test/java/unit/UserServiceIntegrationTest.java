@@ -1,4 +1,4 @@
-package integration;
+package unit;
 
 import com.tsystems.dao.api.UserDAO;
 import com.tsystems.dto.UserDTO;
