@@ -163,7 +163,7 @@
                     </tr>
                     <tr ng-repeat="trip in trips">
                         <td>{{ trip.trainDto.id }}</td>
-                        <td>{{ trip.start_time.epochSecond * 1000 | date:'dd/MM/yyyy HH:mm' }}</td>
+                        <td>{{ trip.departure_time.epochSecond * 1000 | date:'dd/MM/yyyy HH:mm' }}</td>
                         <td>{{ trip.arrival_time.epochSecond * 1000 | date:'dd/MM/yyyy HH:mm' }}</td>
                         <td>
                             <button style="font-size: 12px; padding: 4px 12px;" id="trip-{{ trip.id }}"
@@ -345,6 +345,7 @@
         </c:otherwise>
         </c:choose>
         $scope.findTrips = function () {
+            pageLoading();
             $scope.userWasFindingTrips = true;
             var dateTimeFrom;
             if ($scope.dateStart != null) {
@@ -376,6 +377,9 @@
                 var foundDirectTripsCount = $scope.trips.length;
                 for (var i = 0; i < $scope.trips.length; i++) {
                     closure(i);
+                }
+                for (var i = 0; i < $scope.trips.length; i++) {
+                    closureDepTime(i);
                 }
                 // console.log('We tried to find DIRECT trips, and foundDirectTripsCount: ', foundDirectTripsCount);
                 if (foundDirectTripsCount == undefined) {
@@ -429,6 +433,10 @@
                             }
                         }
                     });
+                }
+
+                if (foundDirectTripsCount != undefined) {
+                    $scope.partialTrips = [];
                 }
 
             }, function (response) {
@@ -500,6 +508,26 @@
                 // console.log($scope.trips[i]);
                 $scope.trips[i].arrival_time = response.data;
             });
+            if (i == $scope.trips.length - 1) {
+            }
+        }
+
+        function closureDepTime(i) {
+            $http({
+                url: "/trip/departure-time",
+                method: "GET",
+                params: {
+                    tripId: $scope.trips[i].id,
+                    stationFrom: $scope.stationFrom
+                }
+            }).then(function success(response) {
+                // console.log(response.data);
+                // console.log($scope.trips[i]);
+                $scope.trips[i].departure_time = response.data;
+            });
+            if (i == $scope.trips.length - 1) {
+                pageLoaded();
+            }
         }
     });
 </script>
