@@ -175,8 +175,9 @@
                 <c:choose>
                     <c:when test="${param.tripIds != null}">
                         var nextTicketTrip = '${param.tripIds}';
-                        nextTicketTrip.split('-').join('');
-                        var nextTrip = nextTicketTrip[2];
+                        var dirtyId = '${param.tripIds}';
+                        nextTicketTrip = nextTicketTrip.split('-');
+                        var nextTrip = nextTicketTrip[1];
                         console.log('next ticket buy: ', nextTrip);
                         window.location.replace("/user/ticket/buy/?tripId=" + nextTrip + "&carriageNum=1&stationFrom=" + stationTo + "&stationTo=" + '${lastStation}');
                     </c:when>

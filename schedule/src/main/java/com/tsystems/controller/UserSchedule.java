@@ -53,7 +53,7 @@ public class UserSchedule implements Serializable {
         module.addDeserializer(ScheduleDTO.class, new ScheduleDeserializer());
         objectMapper.registerModule(module);
         try {
-            ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("failover://(tcp://localhost:61616)?initialReconnectDelay=2000&maxReconnectAttempts=5");
+            ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("failover://(tcp://activemq:61616)?initialReconnectDelay=2000&maxReconnectAttempts=5");
             Connection connection = null;
             try {
                 connection = connectionFactory.createConnection();

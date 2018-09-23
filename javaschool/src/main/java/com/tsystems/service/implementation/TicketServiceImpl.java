@@ -128,7 +128,7 @@ public class TicketServiceImpl implements TicketService {
                 mailService.sendMail("from@from.ru",
                         "aspid888@gmail.com", "RW | Ticket details", "" +
                                 "Congratulations! You've just bought a ticket for a trip!\n" +
-                                "Details: " + ticket.toString());
+                                "Details: " + "http://localhost:8080/user/ticket/" + ticket.getId() + ".pdf");
 //                smsAero.sendSms("79992158347", "Ticket was bought");
                 return "success";
             } else {
